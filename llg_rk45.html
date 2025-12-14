@@ -1,0 +1,127 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Spin LLG Simulator</title>
+    <link rel="stylesheet" href="llg_rk45.css">
+    <!-- Import Three.js as an ES module via CDN -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <!-- MathJax for nice equation rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body oncontextmenu="return false;">
+    <div id="canvas-container"></div>
+
+    <!-- Title Panel -->
+    <div class="title-panel glass-panel">
+        <h2>Landau-Lifshitz-Gilbert RK45 Simulator</h2>
+        <p class="subtitle">Dr. Gerard Joseph Lim</p>
+    </div>
+
+    <!-- Equation Panel -->
+    <div class="equation-panel glass-panel">
+        <div id="equation">
+            \[ \frac{d\mathbf{m}}{dt} = -\frac{\gamma}{1+\alpha^2} \left[ \mathbf{m} \times \mathbf{H} + \alpha
+            \mathbf{m} \times (\mathbf{m} \times \mathbf{H}) \right] \]
+        </div>
+    </div>
+
+    <!-- Plots Panel -->
+    <div class="plots-panel glass-panel">
+        <h3>Magnetization Components</h3>
+        <canvas id="plot-canvas" width="300" height="200"></canvas>
+        <div class="legend">
+            <span style="color: #ff3366">Mx</span>
+            <span style="color: #00ff88">My</span>
+            <span style="color: #0088ff">Mz</span>
+        </div>
+    </div>
+
+    <div class="ui-panel glass-panel">
+        <h1>Controls</h1>
+
+        <div class="control-group">
+            <label>Initial Magnetization (m0)</label>
+            <div class="vector-inputs">
+                <input type="number" id="m0x" placeholder="x" value="1" step="0.1">
+                <input type="number" id="m0y" placeholder="y" value="0" step="0.1">
+                <input type="number" id="m0z" placeholder="z" value="0" step="0.1">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="alpha">Damping (&alpha;)</label>
+            <input type="number" id="alpha" value="0.1" step="0.01" min="0">
+        </div>
+
+        <div class="control-group">
+            <label for="gamma">Gyromagnetic Ratio (&gamma;)</label>
+            <input type="number" id="gamma" value="1.0" step="0.1">
+        </div>
+
+        <div class="control-group">
+            <label>Field H Vector</label>
+            <div class="vector-inputs">
+                <input type="number" id="hx" placeholder="x" value="0" step="0.1">
+                <input type="number" id="hy" placeholder="y" value="0" step="0.1">
+                <input type="number" id="hz" placeholder="z" value="1" step="0.1">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="dt">Time Step (dt)</label>
+            <input type="number" id="dt" value="0.01" step="0.001" min="0.0001">
+        </div>
+
+        <div class="control-group toggles">
+            <label class="toggle-label">
+                <input type="checkbox" id="show-trace" checked> Show Trace
+            </label>
+            <label class="toggle-label">
+                <input type="checkbox" id="show-forces"> Show Forces (Torques)
+            </label>
+            <label class="toggle-label">
+                <input type="checkbox" id="show-grid" checked> Show Sphere Grid
+            </label>
+        </div>
+
+        <div class="control-group">
+            <button id="start-btn" class="glass-btn primary-btn">Start Simulation</button>
+            <button id="reset-btn" class="glass-btn">Reset</button>
+        </div>
+
+        <div class="status-display">
+            <p>Time: <span id="time-display">0.00</span></p>
+            <p>Mag: <span id="mag-display">[1.00, 0.00, 0.00]</span></p>
+        </div>
+    </div>
+
+    <script type="module" src="llg_rk45.js"></script>
+    <script>
+        // Prevent right-click and keyboard shorcuts
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) { return false; } // F12
+            if (e.metaKey && e.altKey && e.code.toLowerCase() == 'keyi') { return false; } // Cmd+Opt+I
+            if (e.metaKey && e.code.toLowerCase() == 'keyu') { return false; } // Cmd+U
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U
+        }
+    </script>
+</body>
+
+</html>
+```

@@ -1,0 +1,244 @@
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --accent-color: #00ff88;
+    --text-color: #ffffff;
+    --input-bg: rgba(0, 0, 0, 0.3);
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #050510;
+    color: var(--text-color);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+#canvas-container {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    z-index: 10;
+}
+
+/* Title Panel */
+.title-panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 20px;
+    max-width: 300px;
+}
+
+.title-panel h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    background: linear-gradient(90deg, #fff, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+/* Equation Panel */
+.equation-panel {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    z-index: 10;
+    max-width: 600px;
+}
+
+#equation {
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+/* MJX overrides for dark mode */
+mjx-container {
+    color: white !important;
+}
+
+/* Plots Panel */
+.plots-panel {
+    position: absolute;
+    top: 150px;
+    left: 20px;
+    width: 320px;
+    padding: 15px;
+}
+
+.plots-panel h3 {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#plot-canvas {
+    width: 100%;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.legend {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* UI Panel (Controls) */
+.ui-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    max-height: 95vh;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+h1 {
+    margin: 0 0 24px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    background: linear-gradient(90deg, #fff, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+/* Toggles */
+.toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+input[type="number"] {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-family: inherit;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.vector-inputs {
+    display: flex;
+    gap: 8px;
+}
+
+.vector-inputs input {
+    width: 33%;
+}
+
+.glass-btn {
+    width: 100%;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.primary-btn {
+    background: rgba(0, 255, 136, 0.1);
+    border-color: rgba(0, 255, 136, 0.2);
+    color: var(--accent-color);
+}
+
+.glass-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    transform: translateY(-1px);
+}
+
+.glass-btn:active {
+    transform: translateY(0);
+}
+
+.status-display {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--glass-border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.status-display p {
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+}
