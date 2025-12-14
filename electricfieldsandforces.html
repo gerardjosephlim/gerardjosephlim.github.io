@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Field Simulation</title>
+    <link rel="stylesheet" href="electricfieldsandforces.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="simulation-container">
+        <canvas id="fieldCanvas"></canvas>
+
+        <div class="ui-overlay">
+            <div class="header liquid-glass">
+                <h1>Electric Charges and Field</h1>
+                <p>Visualize vector fields from point charges</p>
+                <p><i>Dr. Gerard Joseph Lim</i></p>
+            </div>
+
+
+
+            <!-- Trash Bin -->
+            <div id="trash-bin" class="trash-bin">
+                🗑️
+                <span class="trash-hint">Drop charge into trash to remove</span>
+            </div>
+
+            <div class="controls-wrapper">
+                <div class="controls liquid-glass" id="main-controls">
+                    <button id="add-charge" class="btn btn-primary">
+                        <span style="font-size: 1.2em;">+</span> Add Charged Particle
+                    </button>
+
+                    <div class="divider"></div>
+
+                    <div class="toggles-group">
+                        <div style="display: flex; flex-direction: row; gap: 4px; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="viz-mode-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label" id="viz-label">FIELD MAGNITUDE</span>
+                            </div>
+
+                            <!-- Grid Unit Selection -->
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label style="font-size: 0.9rem; color: var(--text-muted);">Grid Unit:</label>
+                                <select id="grid-unit"
+                                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 4px; font-family: 'Inter', sans-serif;">
+                                    <option value="mm">mm</option>
+                                    <option value="cm">cm</option>
+                                    <option value="m">m</option>
+                                </select>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="force-mode-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Show Forces</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button id="reset-btn" class="btn btn-danger">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Right Panel - Selected Charge Properties -->
+    <div id="charge-panel" class="charge-panel liquid-glass">
+        <div class="panel-header">
+            <span class="panel-title">Charge Properties</span>
+            <button id="close-panel" class="close-btn">&times;</button>
+        </div>
+
+        <div class="control-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label>Charge Magnitude</label>
+                <select id="charge-unit"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-family: 'Inter', sans-serif;">
+                    <option value="nC">nC</option>
+                    <option value="uC" selected>μC</option>
+                    <option value="mC">mC</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="range" id="charge-slider" min="-10" max="10" step="0.5" value="0" style="flex: 1;">
+                <input type="number" id="charge-number" min="-10" max="10" step="0.5" value="0">
+            </div>
+        </div>
+
+        <div id="force-display-group" class="control-group" style="display: none;">
+            <label>Net Force Components</label>
+            <div
+                style="display: flex; justify-content: space-between; gap: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-muted);">
+                <div>Fx: <span id="force-x" style="color: var(--text-main);">0.0</span></div>
+                <div>Fy: <span id="force-y" style="color: var(--text-main);">0.0</span></div>
+            </div>
+        </div>
+
+        <button id="delete-charge" class="btn btn-danger"
+            style="width: 100%; justify-content: center; margin-top: 8px;">
+            Remove Charge
+        </button>
+    </div>
+    </div>
+
+    <script src="electricfieldsandforces.js"></script>
+</body>
+
+</html>
