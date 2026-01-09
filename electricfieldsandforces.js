@@ -21,7 +21,7 @@ const CHARGE_RADIUS = 15;
 const MAX_ARROW_LENGTH = 30;
 
 // Units State
-let gridUnit = 'm'; // mm, cm, m
+let gridUnit = 'mm'; // mm, cm, m
 let chargeUnit = 'uC'; // nC, uC, mC, C
 
 // UI Elements
@@ -37,6 +37,8 @@ const forceXVal = document.getElementById('force-x');
 const forceYVal = document.getElementById('force-y');
 const gridUnitSelect = document.getElementById('grid-unit');
 const chargeUnitSelect = document.getElementById('charge-unit');
+const distancePanel = document.getElementById('distance-panel');
+const distanceTableBody = document.querySelector('#distance-table tbody');
 
 // Initialization
 function init() {
@@ -76,6 +78,7 @@ function init() {
 
     forceModeToggle.addEventListener('change', (e) => {
         showForces = e.target.checked;
+        updatePanelUI();
         updatePanelUI();
         draw();
     });
@@ -118,9 +121,34 @@ function resize() {
 
 // Logic
 function addCharge(x, y, q) {
+    if (charges.length >= 20) {
+        alert("Maximum of 20 particles allowed.");
+        return;
+    }
     const id = Date.now() + Math.random();
+    // Assign next available alphabet label
+    // If charges have labels, find the max char code and increment. Or just re-label all? 
+    // Best to just assign based on length if no deletions, but with deletions, we might want to fill gaps or append.
+    // Let's simple append: A, B, C... 
+    // Actually, to keep it clean let's re-calculate labels dynamically or just assign based on current count + index logic?
+    // Let's just assign based on index in array effectively, but since we delete, let's allow "gaps" but try to pick first available?
+    // Simplest reliable way for "reference" is A, B, C based on creation order or simple index.
+    // Let's use simple index-based approach for stability during drag? No, better unique per charge.
+
+    // Find first unused label
+    const usedLabels = new Set(charges.map(c => c.label));
+    let label = 'A';
+    for (let i = 0; i < 26 * 2; i++) {
+        let candidate = String.fromCharCode(65 + i); // A, B, C...
+        if (!usedLabels.has(candidate)) {
+            label = candidate;
+            break;
+        }
+    }
+
     charges.push({
         id: id,
+        label: label,
         x: x,
         y: y,
         q: q,
@@ -146,6 +174,7 @@ function selectCharge(charge) {
 function deselectCharge() {
     selectedCharge = null;
     chargePanel.classList.remove('active');
+    distancePanel.style.display = 'none'; // Hide distance table
 }
 
 function deleteSelectedCharge() {
@@ -203,6 +232,45 @@ function updatePanelUI() {
 
     forceXVal.textContent = formatForce(fx);
     forceYVal.textContent = formatForce(fy);
+
+    updateDistanceTable();
+}
+
+function updateDistanceTable() {
+    if (!selectedCharge) {
+        distancePanel.style.display = 'none';
+        return;
+    }
+    distancePanel.style.display = 'block';
+
+    // Clear
+    distanceTableBody.innerHTML = '';
+
+    const distScale = getDistanceScale();
+
+    charges.forEach(other => {
+        if (other === selectedCharge) return;
+
+        const dx_px = other.x - selectedCharge.x;
+        const dy_px = other.y - selectedCharge.y;
+        const r_px = Math.hypot(dx_px, dy_px);
+
+        // Use Grid Units
+        const dx_val = dx_px / GRID_SPACING; // Keep raw sign for direction? "Distance" implies mag, "displacement" implies sign. dx/dy should probably be signed coordinates.
+        const dy_val = - (dy_px / GRID_SPACING); // Flip Y because screen Y is down
+        const dist_val = r_px / GRID_SPACING;
+
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+
+        tr.innerHTML = `
+            <td style="padding: 4px; font-weight: bold; color: ${other.q > 0 ? '#f87171' : (other.q < 0 ? '#60a5fa' : '#94a3b8')}">${other.label}</td>
+            <td style="padding: 4px;">${dx_val.toFixed(2)}${gridUnit}</td>
+            <td style="padding: 4px;">${dy_val.toFixed(2)}${gridUnit}</td>
+            <td style="padding: 4px;">${dist_val.toFixed(2)}${gridUnit}</td>
+        `;
+        distanceTableBody.appendChild(tr);
+    });
 }
 
 // --------------------------------------------------------------------------
@@ -407,6 +475,8 @@ function loop() {
     draw();
     // Update UI numbers continuously if dragging
     if (isDraggingCharge && showForces) updatePanelUI();
+    // Update Distance Table if selected
+    if (selectedCharge) updateDistanceTable();
     requestAnimationFrame(loop);
 }
 
@@ -606,8 +676,18 @@ function drawCharge(c) {
     ctx.textBaseline = 'middle';
     ctx.fillText(isNeutral ? '0' : (isPositive ? '+' : '−'), 0, 1);
 
+    // Draw Label (A, B, C...)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 14px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    // Draw outside, top right
+    ctx.globalAlpha = 1.0; // Ensure label is visible
+    ctx.fillText(c.label || '', 18, -18);
+
     ctx.restore();
 }
+
+
 
 // --------------------------------------------------------------------------
 // INTERACTION HANDLERS

@@ -56,7 +56,7 @@
                                 <label style="font-size: 0.9rem; color: var(--text-muted);">Grid Unit:</label>
                                 <select id="grid-unit"
                                     style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 4px; font-family: 'Inter', sans-serif;">
-                                    <option value="mm">mm</option>
+                                    <option value="mm" selected>mm</option>
                                     <option value="cm">cm</option>
                                     <option value="m">m</option>
                                 </select>
@@ -82,6 +82,28 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Left Panel - Distance Table -->
+    <div id="distance-panel" class="charge-panel liquid-glass"
+        style="left: 20px; right: auto; top: 180px; transform: none; display: none;">
+        <div class="panel-header">
+            <span class="panel-title">Component Distances</span>
+        </div>
+        <table id="distance-table"
+            style="width:100%; color: white; font-size: 0.9em; text-align: left; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding: 4px;">Charge</th>
+                    <th style="padding: 4px;">dx</th>
+                    <th style="padding: 4px;">dy</th>
+                    <th style="padding: 4px;">Dist</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
     </div>
 
     <!-- Right Panel - Selected Charge Properties -->
@@ -117,7 +139,7 @@
             </div>
         </div>
 
-   
+
     </div>
     </div>
 
