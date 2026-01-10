@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplified Model of a Conductor in an Electric Field - Interactive Physics Simulation</title>
+    <meta name="description"
+        content="Interactive physics simulation showing electron redistribution in a neutral conductor placed in an external electric field">
+    <link rel="stylesheet" href="conductorinanelectricfield.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Simplified Model of a Conductor in an Electric Field</h1>
+            <div class="header-metadata">
+                <p class="subtitle">Interactive Electrostatic Equilibrium Simulation</p>
+                <div class="author-tag">
+                    <span class="author-name">Dr. Gerard Joseph Lim</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Control Panel -->
+            <aside class="control-panel">
+                <div class="panel-section">
+                    <h2>External Field</h2>
+                    <div class="control-group">
+                        <label for="fieldStrength">Field Strength</label>
+                        <input type="range" id="fieldStrength" min="0" max="100" value="0" step="1">
+                        <span class="value-display" id="fieldStrengthValue">0.0 kV/m</span>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>View Options</h2>
+                    <div class="control-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showElectrons" checked>
+                            <span>Show Electrons</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showIons" checked>
+                            <span>Show Ion Cores</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showFieldLines" checked>
+                            <span>Show Field Lines</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showSurfaceCharges">
+                            <span>Surface Charge Indicators</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="panel-section info-panel">
+                    <h2>Current State</h2>
+                    <div class="info-item" style="display: none;">
+                        <span class="info-label">Time:</span>
+                        <span class="info-value" id="timeValue">0.00 ns</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">External Field:</span>
+                        <span class="info-value" id="externalFieldValue">0.0 kV/m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Induced (Internal):</span>
+                        <span class="info-value" id="inducedFieldValue">0.0 kV/m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Net Field (Inside):</span>
+                        <span class="info-value" id="netFieldValue">0.0 kV/m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Equilibrium:</span>
+                        <span class="info-value" id="equilibriumValue">Not Reached</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Simulation Canvas -->
+            <div class="canvas-container">
+                <canvas id="simulationCanvas"></canvas>
+                <div class="canvas-overlay">
+                    <div class="physics-note" id="physicsNote">
+                        Adjust field strength to observe electron redistribution
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="info-section">
+            <div class="info-card">
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>No Ionization:</strong> Individual atoms remain electrically neutral; no atoms lose or
+                        gain whole electrons. Any charge imbalance is a tiny, collective redistribution of electron
+                        density.</li>
+                    <li><strong>Electron Redistribution:</strong> Delocalized conduction electrons respond collectively
+                        to an external electric field with an infinitesimal shift in their average distribution.
+                    </li>
+                    <li><strong>Surface Charges:</strong> Extremely small excess and deficit charges appear primarily at
+                        the conductor’s surfaces, while the bulk remains locally charge neutral.</li>
+                    <li><strong>Field Cancellation:</strong> In electrostatic equilibrium, these surface charges
+                        rearrange to cancel the electric field inside the conductor.
+                    </li>
+                </ul>
+            </div>
+            <div class="info-card disclaimer"
+                style="margin-top: var(--spacing-lg); padding-top: var(--spacing-md); border-top: 1px solid var(--glass-border);">
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; font-style: italic;">
+                    <strong>Note:</strong> This simulator uses a simplified picture. In an actual conductor, conduction
+                    electrons are already delocalized across the crystal and do not "leave" particular atoms when an
+                    electric field is applied. The field causes only a very small, collective shift in electron density,
+                    leading to minute surface charge rearrangements. Individual atoms are not ionized, and the interior
+                    of the conductor remains electrically neutral.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="conductorinanelectricfield.js"></script>
+</body>
+
+</html>
