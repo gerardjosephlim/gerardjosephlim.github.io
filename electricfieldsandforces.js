@@ -2,16 +2,19 @@ const canvas = document.getElementById('fieldCanvas');
 const ctx = canvas.getContext('2d');
 
 // State
-let charges = []; // {x, y, q, id, opacity}
+let charges = []; // {x, y, vx, vy, q, id, opacity, isFixed}
 let sparks = []; // {x, y, vx, vy, life, color, type, targetX, targetY, startX, startY}
 let selectedCharge = null;
 let isDraggingCharge = false;
+let isRunning = false;
+let simSpeed = 0.05;
+let showAxes = false;
 let dragOffset = { x: 0, y: 0 };
 let width, height;
 
 // Visualization Config
 let useFixedLength = false;
-let showForces = false;
+let showForces = true;
 
 // Physics Config
 const GRID_SPACING = 40;
@@ -39,6 +42,16 @@ const gridUnitSelect = document.getElementById('grid-unit');
 const chargeUnitSelect = document.getElementById('charge-unit');
 const distancePanel = document.getElementById('distance-panel');
 const distanceTableBody = document.querySelector('#distance-table tbody');
+
+const playPauseBtn = document.getElementById('play-pause');
+const playIcon = document.getElementById('play-icon');
+const fixedDynamicToggle = document.getElementById('fixed-dynamic-toggle');
+const stateLabel = document.getElementById('state-label');
+const simSpeedSlider = document.getElementById('sim-speed');
+const axesToggle = document.getElementById('axes-toggle');
+const posXInput = document.getElementById('pos-x');
+const posYInput = document.getElementById('pos-y');
+const energyVal = document.getElementById('energy-val');
 
 // Initialization
 function init() {
@@ -79,9 +92,54 @@ function init() {
     forceModeToggle.addEventListener('change', (e) => {
         showForces = e.target.checked;
         updatePanelUI();
-        updatePanelUI();
         draw();
     });
+
+    axesToggle.addEventListener('change', (e) => {
+        showAxes = e.target.checked;
+        draw();
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+        isRunning = !isRunning;
+        if (isRunning) {
+            playPauseBtn.classList.remove('btn-success');
+            playPauseBtn.classList.add('btn-warning');
+            playPauseBtn.innerHTML = '<span>⏸</span> Pause';
+        } else {
+            playPauseBtn.classList.remove('btn-warning');
+            playPauseBtn.classList.add('btn-success');
+            playPauseBtn.innerHTML = '<span>▶</span> Play';
+        }
+    });
+
+    fixedDynamicToggle.addEventListener('change', (e) => {
+        if (selectedCharge) {
+            selectedCharge.isFixed = !e.target.checked; // If checked, it's dynamic, so isFixed = false
+            stateLabel.textContent = e.target.checked ? 'Dynamic' : 'Static';
+            updatePanelUI();
+        }
+    });
+
+    simSpeedSlider.addEventListener('input', (e) => {
+        simSpeed = parseFloat(e.target.value);
+    });
+
+    const updateChargePos = () => {
+        if (selectedCharge) {
+            const originX = width / 2;
+            const originY = height / 2;
+            selectedCharge.x = originX + (parseFloat(posXInput.value) || 0) * GRID_SPACING;
+            selectedCharge.y = originY - (parseFloat(posYInput.value) || 0) * GRID_SPACING;
+            selectedCharge.vx = 0;
+            selectedCharge.vy = 0;
+            updatePanelUI();
+            draw();
+        }
+    };
+
+    posXInput.addEventListener('input', updateChargePos);
+    posYInput.addEventListener('input', updateChargePos);
 
     // Unit Selectors
     gridUnitSelect.addEventListener('change', (e) => {
@@ -151,8 +209,11 @@ function addCharge(x, y, q) {
         label: label,
         x: x,
         y: y,
+        vx: 0,
+        vy: 0,
         q: q,
-        opacity: 0 // Start invisible for fade-in
+        opacity: 0, // Start invisible for fade-in
+        isFixed: true
     });
 
     const color = q > 0 ? '#f87171' : '#60a5fa';
@@ -232,6 +293,40 @@ function updatePanelUI() {
 
     forceXVal.textContent = formatForce(fx);
     forceYVal.textContent = formatForce(fy);
+
+    // Update fixed/dynamic toggle
+    fixedDynamicToggle.checked = !selectedCharge.isFixed;
+    stateLabel.textContent = selectedCharge.isFixed ? 'Static' : 'Dynamic';
+
+    // Update position inputs
+    const originX = width / 2;
+    const originY = height / 2;
+    posXInput.value = ((selectedCharge.x - originX) / GRID_SPACING).toFixed(1);
+    posYInput.value = (-(selectedCharge.y - originY) / GRID_SPACING).toFixed(1);
+
+    // Update Potential Energy
+    let totalU = 0;
+    const q1 = selectedCharge.q * getChargeScale();
+    const dScale = getDistanceScale() / GRID_SPACING;
+
+    charges.forEach(other => {
+        if (other === selectedCharge) return;
+        const dx = (other.x - selectedCharge.x) * dScale;
+        const dy = (other.y - selectedCharge.y) * dScale;
+        const r = Math.hypot(dx, dy);
+        if (r > 1e-6) {
+            const q2 = other.q * getChargeScale();
+            totalU += (COULOMB_K * q1 * q2) / r;
+        }
+    });
+
+    const formatEnergy = (val) => {
+        const abs = Math.abs(val);
+        if (abs === 0) return "0.00 J";
+        if (abs < 0.01 || abs > 1e6) return val.toExponential(2) + " J";
+        return val.toFixed(4) + " J";
+    };
+    energyVal.textContent = formatEnergy(totalU);
 
     updateDistanceTable();
 }
@@ -472,18 +567,156 @@ function calculateVisualForce(target) {
 function loop() {
     updateSparks();
     updateChargeFades();
+
+    if (isRunning) {
+        updatePhysics();
+    }
+
     draw();
-    // Update UI numbers continuously if dragging
-    if (isDraggingCharge && showForces) updatePanelUI();
+    // Update UI numbers continuously if dragging, running, or just selected
+    if (selectedCharge && (isDraggingCharge || isRunning)) updatePanelUI();
     // Update Distance Table if selected
     if (selectedCharge) updateDistanceTable();
     requestAnimationFrame(loop);
+}
+
+function updatePhysics() {
+    const dt = simSpeed; // Simulation step
+    const DAMPING = 0.98; // Basic damping to prevent infinite energy gain from numerical errors
+    const MASS = 1.0;
+
+    handleCollisions();
+
+    charges.forEach(c => {
+        if (c.isFixed || c === selectedCharge) {
+            c.vx = 0;
+            c.vy = 0;
+            return;
+        }
+
+        const { fx, fy } = calculatePhysicalForce(c);
+
+        // Simple Euler Integration
+        // a = F / m
+        const ax = fx / MASS;
+        const ay = fy / MASS;
+
+        // Since F refers to real units, we need to map ax/ay back to pixel-space/step-space
+        // But for a dynamic simulation that "feels" good, we might want to scale these forces for the visual context
+        // Let's use a visual physics constant for the movement if the real one is too stiff/fast
+        const visualForceScale = 0.0001;
+
+        c.vx = (c.vx + ax * visualForceScale * dt) * DAMPING;
+        c.vy = (c.vy + ay * visualForceScale * dt) * DAMPING;
+
+        c.x += c.vx * dt;
+        c.y += c.vy * dt;
+
+        // Wall Collisions
+        if (c.x < CHARGE_RADIUS) {
+            c.x = CHARGE_RADIUS;
+            c.vx *= -0.5;
+        } else if (c.x > width - CHARGE_RADIUS) {
+            c.x = width - CHARGE_RADIUS;
+            c.vx *= -0.5;
+        }
+        if (c.y < CHARGE_RADIUS) {
+            c.y = CHARGE_RADIUS;
+            c.vy *= -0.5;
+        } else if (c.y > height - CHARGE_RADIUS) {
+            c.y = height - CHARGE_RADIUS;
+            c.vy *= -0.5;
+        }
+    });
+}
+
+function handleCollisions() {
+    const threshold = CHARGE_RADIUS * 2;
+
+    for (let i = 0; i < charges.length; i++) {
+        for (let j = i + 1; j < charges.length; j++) {
+            const c1 = charges[i];
+            const c2 = charges[j];
+
+            const dx = c2.x - c1.x;
+            const dy = c2.y - c1.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < threshold) {
+                // If they are unlike charges or one is neutral, they stick (merge)
+                if (c1.q * c2.q < 0 || (c1.q === 0 && c2.q !== 0) || (c2.q === 0 && c1.q !== 0)) {
+                    // Check if either is being dragged
+                    if (c1 === selectedCharge && isDraggingCharge) continue;
+                    if (c2 === selectedCharge && isDraggingCharge) continue;
+
+                    mergeCharges(i, j);
+                    return handleCollisions(); // Recurse since array changed
+                }
+            }
+        }
+    }
+}
+
+function mergeCharges(idx1, idx2) {
+    const c1 = charges[idx1];
+    const c2 = charges[idx2];
+
+    const newQ = c1.q + c2.q;
+    const newX = (c1.x + c2.x) / 2;
+    const newY = (c1.y + c2.y) / 2;
+    const newVx = (c1.vx + c2.vx) / 2;
+    const newVy = (c1.vy + c2.vy) / 2;
+    const newIsFixed = c1.isFixed && c2.isFixed;
+
+    // Create effects
+    implode(newX, newY, newQ > 0 ? '#f87171' : (newQ < 0 ? '#60a5fa' : '#94a3b8'));
+    spawnRipple(newX, newY, '#fff');
+
+    // Remove old charges
+    const high = Math.max(idx1, idx2);
+    const low = Math.min(idx1, idx2);
+
+    if (selectedCharge === c1 || selectedCharge === c2) {
+        deselectCharge();
+    }
+
+    charges.splice(high, 1);
+    charges.splice(low, 1);
+
+    // Add new charge
+    const id = Date.now() + Math.random();
+    const usedLabels = new Set(charges.map(c => c.label));
+    let label = 'A';
+    for (let k = 0; k < 26 * 2; k++) {
+        let candidate = String.fromCharCode(65 + k);
+        if (!usedLabels.has(candidate)) {
+            label = candidate;
+            break;
+        }
+    }
+
+    charges.push({
+        id: id,
+        label: label,
+        x: newX,
+        y: newY,
+        vx: newVx,
+        vy: newVy,
+        q: newQ,
+        opacity: 1,
+        isFixed: newIsFixed
+    });
 }
 
 function draw() {
     // Clear
     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
     ctx.fillRect(0, 0, width, height);
+
+    // Draw Axes if enabled
+    if (showAxes) {
+        drawAxes();
+    }
 
     // Draw Vector Field
     drawVectorField();
@@ -619,6 +852,52 @@ function drawNetForces() {
             ctx.restore();
         }
     });
+}
+
+function drawAxes() {
+    const originX = width / 2;
+    const originY = height / 2;
+    const color = 'rgba(255, 255, 255, 0.15)';
+    const textColor = 'rgba(255, 255, 255, 0.4)';
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+
+    // Grid lines (vertical)
+    for (let x = originX % GRID_SPACING; x < width; x += GRID_SPACING) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+    }
+    // Grid lines (horizontal)
+    for (let y = originY % GRID_SPACING; y < height; y += GRID_SPACING) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+    }
+
+    // Main Axes
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 2;
+
+    // X-Axis
+    ctx.beginPath();
+    ctx.moveTo(0, originY);
+    ctx.lineTo(width, originY);
+    ctx.stroke();
+
+    // Y-Axis
+    ctx.beginPath();
+    ctx.moveTo(originX, 0);
+    ctx.lineTo(originX, height);
+    ctx.stroke();
+
+    // Origin Mark
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillText('(0,0)', originX + 5, originY - 5);
 }
 
 function drawArrow(ctx, len) {

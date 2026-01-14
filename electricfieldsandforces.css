@@ -117,6 +117,7 @@ canvas {
   font-weight: 700;
   background: linear-gradient(135deg, #fff, #ccc);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
@@ -139,12 +140,14 @@ canvas {
 .controls {
   pointer-events: auto;
   align-self: flex-end;
-  padding: 16px 24px;
+  padding: 12px 20px;
   display: flex;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
   margin-bottom: 24px;
-  /* Removed absolute positioning */
+  max-width: calc(100vw - 48px);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .controls:active {
@@ -290,9 +293,10 @@ input[type="number"] {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-main);
-  padding: 6px 12px;
+  padding: 6px 8px;
   border-radius: 8px;
-  width: 80px;
+  min-width: 40px;
+  max-width: 80px;
   text-align: right;
   font-family: 'Inter', monospace;
   font-size: 0.95rem;
@@ -355,6 +359,28 @@ input[type="number"]:focus {
 .btn-danger:hover {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.2));
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+  color: #ccffcc;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.2));
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
+  color: #fff8cc;
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.4), rgba(234, 179, 8, 0.2));
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.4);
 }
 
 .divider {
@@ -449,6 +475,7 @@ input[type="number"]:focus {
 input[type="range"] {
   width: 100%;
   -webkit-appearance: none;
+  appearance: none;
   background: rgba(0, 0, 0, 0.3);
   height: 8px;
   border-radius: 4px;
