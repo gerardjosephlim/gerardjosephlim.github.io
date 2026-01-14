@@ -9,6 +9,7 @@ let isDraggingCharge = false;
 let isRunning = false;
 let simSpeed = 0.05;
 let showAxes = false;
+let showEquipotentials = false;
 let dragOffset = { x: 0, y: 0 };
 let width, height;
 
@@ -49,6 +50,7 @@ const fixedDynamicToggle = document.getElementById('fixed-dynamic-toggle');
 const stateLabel = document.getElementById('state-label');
 const simSpeedSlider = document.getElementById('sim-speed');
 const axesToggle = document.getElementById('axes-toggle');
+const equipotentialToggle = document.getElementById('equipotential-toggle');
 const posXInput = document.getElementById('pos-x');
 const posYInput = document.getElementById('pos-y');
 const energyVal = document.getElementById('energy-val');
@@ -97,6 +99,11 @@ function init() {
 
     axesToggle.addEventListener('change', (e) => {
         showAxes = e.target.checked;
+        draw();
+    });
+
+    equipotentialToggle.addEventListener('change', (e) => {
+        showEquipotentials = e.target.checked;
         draw();
     });
 
@@ -718,6 +725,11 @@ function draw() {
         drawAxes();
     }
 
+    // Draw Equipotentials if enabled
+    if (showEquipotentials) {
+        drawEquipotentials();
+    }
+
     // Draw Vector Field
     drawVectorField();
 
@@ -786,6 +798,64 @@ function drawVectorField() {
 
                 ctx.restore();
             }
+        }
+    }
+}
+
+function calculatePotential(x, y) {
+    let V = 0;
+    for (const c of charges) {
+        const dx = x - c.x;
+        const dy = y - c.y;
+        const r = Math.hypot(dx, dy);
+        if (r < 5) continue;
+        const alpha = c.opacity !== undefined ? c.opacity : 1;
+        V += (VISUAL_K * c.q / r) * alpha;
+    }
+    return V;
+}
+
+function drawEquipotentials() {
+    if (charges.length === 0) return;
+
+    // Use a grid-based approach to draw contour lines (Marching Squares-ish)
+    const step = 20;
+    const levels = [40, 80, 160, 320, 640, 1280, 2560];
+    const allLevels = [...levels.map(l => -l), ...levels];
+
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x < width; x += step) {
+        for (let y = 0; y < height; y += step) {
+            const v00 = calculatePotential(x, y);
+            const v10 = calculatePotential(x + step, y);
+            const v01 = calculatePotential(x, y + step);
+            const v11 = calculatePotential(x + step, y + step);
+
+            allLevels.forEach(level => {
+                const b00 = v00 > level;
+                const b10 = v10 > level;
+                const b01 = v01 > level;
+                const b11 = v11 > level;
+
+                let points = [];
+
+                if (b00 !== b10) points.push({ x: x + step * (level - v00) / (v10 - v00), y: y });
+                if (b10 !== b11) points.push({ x: x + step, y: y + step * (level - v10) / (v11 - v10) });
+                if (b11 !== b01) points.push({ x: x + step * (level - v01) / (v11 - v01), y: y + step });
+                if (b01 !== b00) points.push({ x: x, y: y + step * (level - v00) / (v01 - v00) });
+
+                if (points.length >= 2) {
+                    // Match charge colors but with lower opacity
+                    ctx.strokeStyle = level > 0 ? 'rgba(248, 113, 113, 0.4)' : 'rgba(96, 165, 250, 0.4)';
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (let i = 1; i < points.length; i++) {
+                        ctx.lineTo(points[i].x, points[i].y);
+                    }
+                    ctx.stroke();
+                }
+            });
         }
     }
 }
