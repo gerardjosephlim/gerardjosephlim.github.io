@@ -132,6 +132,48 @@ class SolarPanel {
         ctx.strokeStyle = '#1e293b';
         ctx.stroke();
 
+        // Effective area visualization (vertical projection)
+        const fluxVal = parseInt(fluxSlider.value);
+        if (fluxVal > 0) {
+            const { x1, y1, x2, y2 } = this.getNormals();
+            const topY = Math.min(y1, y2);
+            const bottomY = Math.max(y1, y2);
+            const projX = this.x + 150; // Distance to the right
+
+            // Dashed connecting lines
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(projX, y1);
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(projX, y2);
+            ctx.strokeStyle = 'rgba(76, 201, 240, 0.3)';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Projection line (Effective Area)
+            ctx.beginPath();
+            ctx.moveTo(projX, topY);
+            ctx.lineTo(projX, bottomY);
+            ctx.strokeStyle = '#ffd700'; // Gold color to match flux
+            ctx.lineWidth = 4;
+            ctx.setLineDash([]);
+            ctx.stroke();
+
+            // Label
+            ctx.fillStyle = '#ffd700';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Draw label to the right of the projection line
+            ctx.save();
+            ctx.translate(projX + 15, (topY + bottomY) / 2);
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText("Effective Area", 0, 0);
+            ctx.restore();
+        }
+
         ctx.lineWidth = 1;
     }
 
