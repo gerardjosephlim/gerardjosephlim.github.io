@@ -24,6 +24,9 @@
                 <p><i>Dr. Gerard Joseph Lim</i></p>
             </div>
 
+            <!-- Help Button -->
+            <button id="help-btn" class="help-btn liquid-glass" title="Show Instructions">?</button>
+
 
 
             <!-- Trash Bin -->
@@ -106,7 +109,7 @@
                     <div class="divider"></div>
 
                     <button id="reset-btn" class="btn btn-danger">
-                        Reset
+                        Clear
                     </button>
                 </div>
             </div>
@@ -175,6 +178,20 @@
         </div>
 
         <div class="control-group">
+            <label>Initial Velocity (grid/s)</label>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">Vx</span>
+                    <input type="number" id="vel-x" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">Vy</span>
+                    <input type="number" id="vel-y" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
             <label>Electric Potential Energy</label>
             <div
                 style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
@@ -205,9 +222,33 @@
                 </div>
             </div>
         </div>
-
-
     </div>
+
+    <!-- Splash Screen Pop-up -->
+    <div id="splash-overlay" class="splash-overlay">
+        <div class="splash-modal liquid-glass">
+            <div class="splash-header">
+                <h1>Electric Fields and Forces</h1>
+                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+            </div>
+
+            <div class="splash-body">
+                <h3>Instructions</h3>
+                <ul>
+                    <li><strong>Add Charge:</strong> Click the "+ Add Charged Particle" button.</li>
+                    <li><strong>Move Charge:</strong> Drag the particles around the canvas.</li>
+                    <li><strong>Adjust Properties:</strong> Select a charge to change its magnitude and state.</li>
+                    <li><strong>Simulate:</strong> Click "Play" to observe dynamic behavior.</li>
+                    <li><strong>Delete:</strong> Drag a particle into the trash bin to remove it.</li>
+                </ul>
+            </div>
+
+            <div class="splash-footer">
+                <button id="splash-ok-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    OK, Let's Go!
+                </button>
+            </div>
+        </div>
     </div>
 
     <script src="electricfieldsandforces.js"></script>

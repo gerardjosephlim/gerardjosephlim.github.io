@@ -115,6 +115,37 @@ class SolarPanel {
         ctx.fill();
         ctx.restore();
 
+        // Draw angle visualization
+        const arcRadius = 70;
+
+        // Horizontal reference line (flux direction)
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + arcRadius + 20, this.y);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.setLineDash([2, 5]);
+        ctx.stroke();
+
+        if (this.angle > 0) {
+            // Angle Arc
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, arcRadius, 0, rad);
+            ctx.strokeStyle = '#4cc9f0';
+            ctx.setLineDash([]);
+            ctx.stroke();
+
+            // Label
+            const midAngle = rad / 2;
+            const labelX = this.x + (arcRadius + 20) * Math.cos(midAngle);
+            const labelY = this.y + (arcRadius + 20) * Math.sin(midAngle);
+
+            ctx.fillStyle = '#4cc9f0';
+            ctx.font = '14px "JetBrains Mono", monospace';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`θ = ${this.angle}°`, labelX, labelY);
+        }
+
         // Draw panel
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -165,7 +196,7 @@ class SolarPanel {
             ctx.font = '12px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            
+
             // Draw label to the right of the projection line
             ctx.save();
             ctx.translate(projX + 15, (topY + bottomY) / 2);
@@ -274,6 +305,17 @@ const bulbGlow = document.getElementById('bulbGlow');
 const ammeterNeedle = document.getElementById('ammeterNeedle');
 const lightningGroup = document.getElementById('lightningGroup');
 const sparkGroup = document.getElementById('sparkGroup');
+const introModal = document.getElementById('introModal');
+const startButton = document.getElementById('startButton');
+const helpButton = document.getElementById('helpButton');
+
+startButton.addEventListener('click', () => {
+    introModal.classList.add('hidden');
+});
+
+helpButton.addEventListener('click', () => {
+    introModal.classList.remove('hidden');
+});
 
 let width, height;
 let photons = [];

@@ -53,6 +53,8 @@ const axesToggle = document.getElementById('axes-toggle');
 const equipotentialToggle = document.getElementById('equipotential-toggle');
 const posXInput = document.getElementById('pos-x');
 const posYInput = document.getElementById('pos-y');
+const velXInput = document.getElementById('vel-x');
+const velYInput = document.getElementById('vel-y');
 const energyVal = document.getElementById('energy-val');
 
 // Initialization
@@ -148,6 +150,23 @@ function init() {
     posXInput.addEventListener('input', updateChargePos);
     posYInput.addEventListener('input', updateChargePos);
 
+    const updateChargeVel = () => {
+        if (selectedCharge) {
+            selectedCharge.vx = parseFloat(velXInput.value) || 0;
+            selectedCharge.vy = - (parseFloat(velYInput.value) || 0); // Flip Y input to match screen coords (Up is negative Y)
+
+            // Auto-switch to Dynamic if velocity is non-zero
+            if ((selectedCharge.vx !== 0 || selectedCharge.vy !== 0) && selectedCharge.isFixed) {
+                selectedCharge.isFixed = false;
+                updatePanelUI();
+            }
+            // If users sets 0,0 do we auto switch to static? Maybe not, let them choose.
+        }
+    };
+
+    velXInput.addEventListener('input', updateChargeVel);
+    velYInput.addEventListener('input', updateChargeVel);
+
     // Unit Selectors
     gridUnitSelect.addEventListener('change', (e) => {
         gridUnit = e.target.value;
@@ -172,6 +191,23 @@ function init() {
     chargeNumberInfo.addEventListener('input', (e) => updateChargeValue(e.target.value));
 
     closePanelBtn.addEventListener('click', deselectCharge);
+
+    // Splash Screen Logic
+    const splashOverlay = document.getElementById('splash-overlay');
+    const splashOkBtn = document.getElementById('splash-ok-btn');
+    const helpBtn = document.getElementById('help-btn');
+
+    if (splashOverlay && splashOkBtn) {
+        splashOkBtn.addEventListener('click', () => {
+            splashOverlay.classList.add('hidden');
+        });
+    }
+
+    if (helpBtn && splashOverlay) {
+        helpBtn.addEventListener('click', () => {
+            splashOverlay.classList.remove('hidden');
+        });
+    }
 
     // Start loop
     requestAnimationFrame(loop);
@@ -310,6 +346,12 @@ function updatePanelUI() {
     const originY = height / 2;
     posXInput.value = ((selectedCharge.x - originX) / GRID_SPACING).toFixed(1);
     posYInput.value = (-(selectedCharge.y - originY) / GRID_SPACING).toFixed(1);
+
+    // Update velocity inputs
+    // Display as simple units? The physics uses raw pixel/step. 
+    // Let's just expose the raw values for now, but maybe flipped Y for intuition (Up is +)
+    velXInput.value = (selectedCharge.vx).toFixed(1);
+    velYInput.value = (-selectedCharge.vy).toFixed(1);
 
     // Update Potential Energy
     let totalU = 0;
@@ -1032,6 +1074,31 @@ function drawCharge(c) {
     // Draw outside, top right
     ctx.globalAlpha = 1.0; // Ensure label is visible
     ctx.fillText(c.label || '', 18, -18);
+
+    // Lock Icon for Static
+    if (c.isFixed) {
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('🔒', 32, -18);
+    }
+
+    // Velocity Vector
+    const vMag = Math.hypot(c.vx, c.vy);
+    if (vMag > 0.1) {
+        const vAngle = Math.atan2(c.vy, c.vx);
+        const vLen = Math.min(vMag * 10, 60); // Scale factor 10, max 60px
+
+        ctx.save();
+        ctx.rotate(vAngle);
+        ctx.strokeStyle = '#10b981'; // Emerald-500
+        ctx.lineWidth = 4; // Thicker
+
+        // Start from edge (radius is 15)
+        // drawArrow draws centered (-len/2 to +len/2). To start tail at "Radius + 2", we must translate center to "Radius + 2 + len/2"
+        ctx.translate(CHARGE_RADIUS + 2 + vLen / 2, 0);
+
+        drawArrow(ctx, vLen);
+        ctx.restore();
+    }
 
     ctx.restore();
 }

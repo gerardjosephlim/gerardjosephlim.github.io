@@ -10,8 +10,8 @@ const ctx = canvas.getContext('2d');
 // We use arbitrary units to make the simulation visually pleasing and numerically stable.
 // Mass = 1, Charge = 1.
 const PHYS = {
-    timeStep: 0.5, // Time scaling
-    baseSpeed: 2,  // Base pixel speed for 1 unit of energy
+    timeStep: 0.2, // Time scaling
+    baseSpeed: 3,  // Base pixel speed for 1 unit of energy
 };
 
 const state = {
@@ -23,6 +23,7 @@ const state = {
     plateVoltage: 2.0, // Controls acceleration (kV) -> Multiplier
     emissionRate: 50, // Now represents particles per second approx
     energySpread: 0.1, // Added Energy Spread
+    particleType: 'electron', // 'electron' or 'positron'
 
 
     // UI State
@@ -66,7 +67,12 @@ class Electron {
         this.passedPlate = false;
 
         // Aesthetic
-        this.color = `hsl(${180 + Math.random() * 20}, 100%, 75%)`;
+        this.charge = state.particleType === 'positron' ? 1 : -1;
+        if (this.charge === -1) {
+            this.color = `hsl(${180 + Math.random() * 20}, 100%, 75%)`; // Blue/Cyan
+        } else {
+            this.color = `hsl(${0 + Math.random() * 20}, 100%, 65%)`;   // Red
+        }
         this.trail = [];
     }
 
@@ -78,12 +84,16 @@ class Electron {
         // Or simplified: It just gets a boost when passing the plate x-coord?
         // Let's do a smooth acceleration zone before the plate for visual effect.
 
-        if (!this.passedPlate && this.x < state.plateX) {
+        if (this.x < state.plateX) {
             // Apply force from Plate Voltage
             // Higher voltage = stronger pull to right
             // F = ma => a = F. 
             // V is roughly proportional to F here for simplicity.
-            const accel = state.plateVoltage * 0.1; // Tuning factor
+            // Electrons (-1) are attracted to Positive Plate (which we assume is at right)
+            // So if Charge is -1, Force is +X. 
+            // If Charge is +1 (Positron), Force is -X (Repelled).
+            const chargeFactor = -this.charge; // Electron (-1) -> Factor 1. Positron (1) -> Factor -1.
+            const accel = state.plateVoltage * 0.1 * chargeFactor;
             this.vx += accel * PHYS.timeStep;
         }
 
@@ -115,13 +125,16 @@ class Electron {
 
         // Apply Lorentz force if in B-field
         if (Math.abs(B_total) > 0.001) {
-            // B is scaled. 100 slider = 0.1 actual force factor?
             const k = 0.0005; // Coupling constant
-            const ax = B_total * this.vy * k;
-            const ay = -B_total * this.vx * k;
+            // F = q(v x B). 
+            // Electron q = -1. Positron q = +1.
+            // Our existing 'k' was implicitly for Electrons.
+            // If q flips, force flips.
+            const chargeFactor = -this.charge; // Electron (-1) -> 1. Positron (1) -> -1.
 
-            this.vx += ax * PHYS.timeStep;
-            this.vy += ay * PHYS.timeStep;
+            const ax = B_total * this.vy * k * chargeFactor;
+            const ay = -B_total * this.vx * k * chargeFactor;
+
             this.vx += ax * PHYS.timeStep;
             this.vy += ay * PHYS.timeStep;
         }
@@ -137,7 +150,15 @@ class Electron {
                 const E_field = er.voltage / er.gap;
                 // Force factor
                 const kE = 200; // Tuning constant
-                const ay = E_field * kE;
+                // Existing: ay = -E_field * kE. 
+                // Implicitly assuming electron (q=-1) moves opposite to E-field? 
+                // E-field direction typically High V to Low V.
+                // If Top is +V, Bot is -V -> E is Down.
+                // Electron should go Up (Force opposite E).
+                // Formula below: ay = -E * kE. If E is + (Down), ay is - (Up). Correct for Electron.
+
+                const chargeFactor = -this.charge; // Electron (-1) -> 1. Positron (1) -> -1.
+                const ay = -E_field * kE * chargeFactor;
                 this.vy += ay * PHYS.timeStep;
             }
         }
@@ -147,7 +168,8 @@ class Electron {
         this.y += this.vy * PHYS.timeStep;
 
         // 4. Bounds Check
-        if (this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        // 4. Bounds Check
+        if (this.x > canvas.width || this.x < 0 || this.y < 0 || this.y > canvas.height) {
             this.dead = true;
         }
 
@@ -174,7 +196,7 @@ class Electron {
         // Particle
         if (!this.dead) {
             ctx.beginPath();
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#ffffff';
             ctx.shadowColor = this.color;
             ctx.shadowBlur = 10;
             ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
@@ -207,8 +229,8 @@ class MagneticRegion {
         // Define color based on B-Field polarity
         // Positive (Out) = Blue, Negative (In) = Red
         let baseColor = '255, 255, 255'; // white default
-        if (this.strength > 0) baseColor = '0, 243, 255'; // Neon Blue
-        if (this.strength < 0) baseColor = '255, 0, 85';  // Neon Pink/Red
+        if (this.strength > 0) baseColor = '56, 189, 248'; // Primary (Blueish)
+        if (this.strength < 0) baseColor = '255, 77, 77';  // Positive/Red (using Positive color for negative B-field to contrast)
 
         const alpha = Math.min(Math.abs(this.strength) / 500 * 0.5 + 0.1, 0.6);
 
@@ -300,8 +322,8 @@ class ElectricRegion {
         const botY = this.y + this.gap / 2;
 
         let color = '#fff';
-        if (this.voltage > 0) color = '#ff0055'; // Red for +
-        if (this.voltage < 0) color = '#00f3ff'; // Blue for -
+        if (this.voltage > 0) color = '#ff4d4d'; // --positive
+        if (this.voltage < 0) color = '#38bdf8'; // --primary
 
         ctx.strokeStyle = color;
         ctx.lineWidth = isSelected ? 4 : 2;
@@ -334,7 +356,7 @@ class ElectricRegion {
         // Signs (+/-)
         ctx.setLineDash([]);
         ctx.globalAlpha = 1.0;
-        ctx.font = 'bold 16px Inter';
+        ctx.font = 'bold 16px var(--font-family)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = color;
@@ -432,14 +454,18 @@ function loopOrdered(timestamp) {
     const alpha = 0.4 + factor * 0.6;
     const blur = 5 + factor * 15;
 
-    ctx.shadowColor = `rgba(0, 243, 255, ${alpha})`;
+    // Source Glow Color
+    const glowColor = state.particleType === 'positron' ? '255, 50, 50' : '0, 243, 255';
+
+    ctx.shadowColor = `rgba(${glowColor}, ${alpha})`;
     ctx.shadowBlur = blur;
     ctx.fillStyle = `rgba(255, 255, 255, ${alpha + 0.2})`;
 
-    ctx.font = '600 16px Inter'; // Bigger font
+    ctx.font = '600 16px var(--font-family)'; // Bigger font
     ctx.textAlign = 'left';
     // Shifted up and left to not obscure beam
-    ctx.fillText("Electron Source", 10, state.plateGapY - 40);
+    const sourceLabel = state.particleType === 'positron' ? "Positron Source" : "Electron Source";
+    ctx.fillText(sourceLabel, 10, state.plateGapY - 40);
 
     // Draw little nozzle
     ctx.shadowBlur = 0;
@@ -471,8 +497,8 @@ function loopOrdered(timestamp) {
 function drawPlate() {
     ctx.save();
     ctx.shadowBlur = 20;
-    ctx.shadowColor = 'rgba(0, 243, 255, 0.5)';
-    ctx.strokeStyle = '#fff';
+    ctx.shadowColor = 'rgba(56, 189, 248, 0.5)';
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 6;
 
     // Top
@@ -505,6 +531,37 @@ const btnClearParticles = document.getElementById('clear-particles-btn');
 if (btnClearParticles) {
     btnClearParticles.onclick = () => {
         state.electrons = [];
+    };
+}
+
+// Particle Type Toggle
+const btnElectron = document.getElementById('btn-type-electron');
+const btnPositron = document.getElementById('btn-type-positron');
+
+function updateTypeButtons() {
+    if (state.particleType === 'electron') {
+        btnElectron.classList.add('active');
+        btnElectron.style.opacity = '1.0';
+        btnPositron.classList.remove('active');
+        btnPositron.style.opacity = '0.5';
+    } else {
+        btnPositron.classList.add('active');
+        btnPositron.style.opacity = '1.0';
+        btnElectron.classList.remove('active');
+        btnElectron.style.opacity = '0.5';
+    }
+}
+
+if (btnElectron && btnPositron) {
+    btnElectron.onclick = () => {
+        state.particleType = 'electron';
+        state.electrons = []; // Clear older particles
+        updateTypeButtons();
+    };
+    btnPositron.onclick = () => {
+        state.particleType = 'positron';
+        state.electrons = []; // Clear older particles
+        updateTypeButtons();
     };
 }
 
@@ -777,4 +834,3 @@ canvas.addEventListener('mouseup', () => {
 
 // Start
 requestAnimationFrame(loopOrdered);
-

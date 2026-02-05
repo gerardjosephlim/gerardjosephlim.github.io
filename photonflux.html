@@ -27,14 +27,16 @@
                     <span class="unit">photons/s</span>
                 </div>
             </div>
+            <button id="helpButton" class="help-btn" aria-label="Help">?</button>
         </div>
 
         <div class="control-panel">
             <header class="main-header">
                 <div class="brand-box">
                     <h1>Photon Flux</h1>
-                    <p class="tagline">Simulating photon capture by a solar panel</p>
-                    <p></p>
+                    <p class="tagline">Simulating photon capture by a solar panel
+
+                    </p>
                     <p class="author">Dr. Gerard Joseph Lim</p>
                 </div>
             </header>
@@ -110,6 +112,18 @@
                 </svg>
                 <p>The flux is proportional to the projected area: Φ ∝ cos(θ).</p>
             </div>
+        </div>
+    </div>
+    <div id="introModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Photon Flux</h2>
+            <h3>Simulating photon capture by a solar panel</h3>
+            <p class="modal-descriptor">Explore how the angle of incidence affects the number of photons captured by a
+                solar panel. Adjust the flux intensity and panel tilt to see the change in effective area and energy
+                output.
+            </p>
+            <p class="modal-author">By Dr. Gerard Joseph Lim</p>
+            <button id="startButton">OK</button>
         </div>
     </div>
     <script src="photonflux.js"></script>
