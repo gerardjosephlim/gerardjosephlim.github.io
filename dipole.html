@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dipole Dynamics | Liquid Glass</title>
+    <meta name="description" content="A premium physics simulation of dipole dynamics in an electric field.">
+    <link rel="stylesheet" href="dipole.css">
+</head>
+
+<body>
+    <!-- Splash Overlay -->
+    <div id="splashOverlay" class="splash-overlay">
+        <div class="splash-content liquid-glass">
+            <header class="splash-header">
+                <h2>Dipole Dynamics</h2>
+                <p>By Dr. Gerard Joseph Lim</p>
+            </header>
+            <div class="splash-body">
+                <ul>
+                    <li>Adjust the <strong>External E-Field</strong> to observe torque and translation.</li>
+                    <li>Move charges manually to change the dipole orientation.</li>
+                    <li>Observe how the system aligns with the field lines.</li>
+                    <li>Experience physics through Liquid Glass aesthetics.</li>
+                </ul>
+            </div>
+            <footer class="splash-footer">
+                <button id="startBtn" class="btn-primary">START SIMULATION</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- UI Overlay -->
+    <div id="controls" class="liquid-glass">
+        <div class="control-group">
+            <label for="efield">External E-Field</label>
+            <input type="range" id="efield" min="-100" max="100" value="0">
+        </div>
+    </div>
+
+    <div id="helpBtn" class="help-btn liquid-glass">?</div>
+
+    <canvas id="atomCanvas"></canvas>
+
+    <!-- Signature Footer -->
+    <div class="signature-footer">
+        <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-link">www.gerardjosephlim.com</a>
+    </div>
+
+    <script src="dipole.js"></script>
+</body>
+
+</html>
