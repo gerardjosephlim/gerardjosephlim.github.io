@@ -176,34 +176,40 @@ class Electron {
         }
 
         // 6. Trail Smoothing
+        // Limit trail length
         if (Math.random() < 0.5) {
-            this.trail.push({ x: this.x, y: this.y });
-            if (this.trail.length > 40) this.trail.shift();
+            this.trail.push(this.x, this.y); // Push separate coordinates (flat array)
+            if (this.trail.length > 80) { // 40 points * 2 coords
+                this.trail.shift();
+                this.trail.shift();
+            }
         }
     }
 
     draw(ctx) {
         // Trail
-        if (this.trail.length > 1) {
+        if (this.trail.length > 2) {
             ctx.beginPath();
             ctx.strokeStyle = this.color;
             ctx.lineWidth = 2;
             ctx.globalAlpha = 0.4;
-            ctx.moveTo(this.trail[0].x, this.trail[0].y);
-            for (let i = 1; i < this.trail.length; i++) ctx.lineTo(this.trail[i].x, this.trail[i].y);
+            ctx.moveTo(this.trail[0], this.trail[1]);
+            for (let i = 2; i < this.trail.length; i += 2) {
+                ctx.lineTo(this.trail[i], this.trail[i + 1]);
+            }
             ctx.stroke();
             ctx.globalAlpha = 1.0;
         }
 
-        // Particle
+        // Particle - Optimized: No shadowBlur
         if (!this.dead) {
             ctx.beginPath();
             ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = this.color;
-            ctx.shadowBlur = 10;
+            // ctx.shadowColor = this.color; // Expensive
+            // ctx.shadowBlur = 10;          // Expensive
             ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
             ctx.fill();
-            ctx.shadowBlur = 0;
+            // ctx.shadowBlur = 0;
         }
     }
 }
@@ -792,15 +798,14 @@ const btnHelp = document.getElementById('help-btn');
 
 if (btnGetStarted) {
     btnGetStarted.onclick = () => {
-        const splashModal = splashOverlay.querySelector('.splash-modal');
+
         splashOverlay.classList.add('closing');
-        if (splashModal) splashModal.classList.add('closing');
+        // No need to add .closing to modal if we are just fading the overlay
 
         setTimeout(() => {
             splashOverlay.style.display = 'none';
             splashOverlay.classList.remove('closing');
-            if (splashModal) splashModal.classList.remove('closing');
-        }, 500);
+        }, 300);
     };
 }
 

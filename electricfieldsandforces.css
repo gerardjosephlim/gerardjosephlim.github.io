@@ -144,7 +144,7 @@ canvas {
   display: flex;
   gap: 16px;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 64px;
   max-width: calc(100vw - 48px);
   flex-wrap: wrap;
   justify-content: center;
@@ -226,7 +226,7 @@ input:checked+.slider:before {
 .trash-bin {
   pointer-events: auto;
   position: absolute;
-  bottom: 24px;
+  bottom: 88px;
   left: 24px;
   /* CHANGED FROM right: 24px */
   width: 80px;
@@ -648,4 +648,31 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .splash-body strong {
   color: var(--text-main);
+}
+
+/* Signature Footer */
+.signature-footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  z-index: 100;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.signature-footer:hover {
+  color: var(--primary);
+  background: rgba(56, 189, 248, 0.05);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }

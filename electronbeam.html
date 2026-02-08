@@ -108,16 +108,22 @@
         </aside>
 
         <div id="splash-overlay" class="splash-overlay" role="dialog" aria-modal="true">
-            <div class="splash-modal">
-                <h1>Electron Beam Simulator</h1>
-                <p><i>By Dr. Gerard Joseph Lim</i></p>
-                <ul>
-                    <li>Add magnetic and electric field regions to the canvas.</li>
-                    <li>Drag regions to move them; use the bottom-right handle to resize magnets.</li>
-                    <li>Adjust beam energy, emission rate, and plate voltage in the controls.</li>
-                    <li>Observe particle deflection based on Lorentz force (F = q(E + v × B)).</li>
-                </ul>
-                <button id="get-started-btn" class="w-full mt-15">Get Started</button>
+            <div class="splash-content liquid-glass">
+                <header class="splash-header">
+                    <h2>Electron Beam Simulator</h2>
+                    <p>By Dr. Gerard Joseph Lim</p>
+                </header>
+                <div class="splash-body">
+                    <ul>
+                        <li>Add magnetic and electric field regions to the canvas.</li>
+                        <li>Drag regions to move them; use the bottom-right handle to resize magnets.</li>
+                        <li>Adjust beam energy, emission rate, and plate voltage in the controls.</li>
+                        <li>Observe particle deflection based on Lorentz force (F = q(E + v × B)).</li>
+                    </ul>
+                </div>
+                <footer class="splash-footer">
+                    <button id="get-started-btn" class="btn-primary">START SIMULATION</button>
+                </footer>
             </div>
         </div>
 

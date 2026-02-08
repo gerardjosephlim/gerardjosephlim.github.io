@@ -11,6 +11,7 @@
     --glass-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), inset 0 0 5px rgba(255, 255, 255, 0.1), 0 5px 15px rgba(0, 0, 0, 0.5);
 
     --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    --transition-fast: 0.2s ease;
 }
 
 * {
@@ -197,6 +198,27 @@ button:active {
     transform: translateY(0) scale(0.98);
 }
 
+.btn-primary {
+    background: var(--primary);
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(56, 189, 248, 0.5);
+    background: var(--primary);
+    /* Maintain primary color on hover */
+    border-color: transparent;
+}
+
 button.danger {
     border-color: rgba(255, 77, 77, 0.4);
 }
@@ -267,6 +289,7 @@ button.danger:hover {
 }
 
 /* Splash Modal */
+/* Splash Modal */
 .splash-overlay {
     position: fixed;
     top: 0;
@@ -274,52 +297,82 @@ button.danger:hover {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-.splash-modal {
+.splash-overlay.closing {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.splash-content {
     max-width: 500px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 24px;
     padding: 40px;
-    background: var(--glass-bg);
-    box-shadow: var(--glass-shadow);
+    text-align: center;
+    animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.splash-modal h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-.splash-modal p {
-    margin-bottom: 2rem;
+.splash-header h2 {
+    font-size: 2rem;
+    margin: 0;
+    background: linear-gradient(to bottom, #fff, #aaa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+    border-bottom: none;
+    /* Override default h2 border */
 }
 
-.splash-modal ul {
+.splash-header p {
+    color: var(--primary);
+    font-weight: 600;
+    margin: 10px 0 30px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+.splash-body {
     text-align: left;
-    margin-bottom: 2rem;
-    color: var(--text-muted);
-    list-style: none;
-    line-height: 1.6;
+    margin-bottom: 30px;
 }
 
-.splash-modal li::before {
+.splash-body ul {
+    list-style: none;
+    padding: 0;
+}
+
+.splash-body li {
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+
+.splash-body li::before {
     content: "•";
     color: var(--primary);
-    margin-right: 10px;
-}
-
-.splash-modal .get-started-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-weight: bold;
 }
 
 /* Animations from spec */
@@ -352,21 +405,8 @@ button.danger:hover {
 }
 
 .controls-panel,
-.liquid-glass,
-.splash-modal {
-    animation: glassPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-.splash-modal.closing {
-    animation: glassPush 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-.splash-overlay {
-    transition: opacity 0.5s ease;
-}
-
-.splash-overlay.closing {
-    opacity: 0 !important;
+.liquid-glass {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .signature-footer {

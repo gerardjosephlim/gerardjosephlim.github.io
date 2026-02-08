@@ -12,6 +12,9 @@ let showAxes = false;
 let showEquipotentials = false;
 let dragOffset = { x: 0, y: 0 };
 let width, height;
+let lastTime = 0;
+const FPS = 30;
+const FPS_INTERVAL = 1000 / FPS;
 
 // Visualization Config
 let useFixedLength = false;
@@ -613,7 +616,14 @@ function calculateVisualForce(target) {
     return { fx: Fx, fy: Fy, mag: Math.sqrt(Fx * Fx + Fy * Fy) };
 }
 
-function loop() {
+function loop(timestamp) {
+    requestAnimationFrame(loop);
+
+    const elapsed = timestamp - lastTime;
+    if (elapsed < FPS_INTERVAL) return;
+
+    lastTime = timestamp - (elapsed % FPS_INTERVAL);
+
     updateSparks();
     updateChargeFades();
 
@@ -626,7 +636,6 @@ function loop() {
     if (selectedCharge && (isDraggingCharge || isRunning)) updatePanelUI();
     // Update Distance Table if selected
     if (selectedCharge) updateDistanceTable();
-    requestAnimationFrame(loop);
 }
 
 function updatePhysics() {

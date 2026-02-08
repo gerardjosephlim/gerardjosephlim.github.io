@@ -108,6 +108,8 @@ function drawAtom(centerX, centerY, size, fieldStrength) {
     // Nucleus Sign (+)
     ctx.fillStyle = 'white';
     ctx.font = 'bold 12px "Inter", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     ctx.fillText('+', nucleusX, centerY);
 }
 
