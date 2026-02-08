@@ -13,27 +13,29 @@
 
 <body>
 
-    <div id="app-container">
+    <main id="app-container">
         <canvas id="simulationCanvas"></canvas>
 
         <div class="ui-overlay">
-            <div class="header liquid-glass">
+            <header class="header liquid-glass">
                 <h1>Electron Beam Simulator</h1>
                 <p>Simulate electron beam in magnetic and electric fields</p>
                 <p><i>Dr. Gerard Joseph Lim</i></p>
-            </div>
+            </header>
         </div>
 
-        <div class="controls-panel">
+        <button id="help-btn" class="help-btn liquid-glass" aria-label="Help">?</button>
+
+        <aside class="controls-panel">
             <h1>Electron Beam</h1>
 
             <div class="control-group">
                 <h2>Beam Source</h2>
                 <label>
                     Particles/Second
-                    <span id="emission-val" class="value-display">50%</span>
+                    <span id="emission-val" class="value-display">25</span>
                 </label>
-                <input type="range" id="emissionRate" min="0" max="100" value="50">
+                <input type="range" id="emissionRate" min="0" max="50" value="25">
 
                 <label>
                     Energy (eV)
@@ -48,13 +50,13 @@
                 <input type="range" id="beamSpread" min="0" max="1.0" step="0.05" value="0.1">
 
                 <!-- Added Clear Button -->
-                <button id="clear-particles-btn" style="margin-top: 8px;">Clear Particles</button>
+                <button id="clear-particles-btn" class="mt-8">Clear Particles</button>
 
                 <!-- Particle Type Toggle -->
-                <label style="margin-top: 15px;">Particle Type</label>
-                <div class="toggle-group" style="display: flex; gap: 5px;">
-                    <button id="btn-type-electron" class="active" style="flex: 1;">Electron</button>
-                    <button id="btn-type-positron" style="flex: 1; opacity: 0.5;">Positron</button>
+                <label class="mt-15">Particle Type</label>
+                <div class="toggle-group">
+                    <button id="btn-type-electron" class="active">Electron</button>
+                    <button id="btn-type-positron">Positron</button>
                 </div>
             </div>
 
@@ -70,25 +72,22 @@
             <div class="control-group">
                 <h2>Magnetic Field Sections</h2>
                 <button id="add-magnet-btn">+ Add Field Region</button>
-                <div id="magnet-customizer"
-                    style="display: none; margin-top: 10px; border-top: 1px solid var(--glass-border); padding-top: 10px;">
+                <div id="magnet-customizer" class="customizer-panel">
                     <label>Selected Region B-Field</label>
                     <label>
                         Strength (mT)
                         <span id="b-field-val" class="value-display">0</span>
                     </label>
                     <input type="range" id="bFieldStrength" min="-1000" max="1000" value="0">
-                    <button id="reset-magnet-size-btn" style="width: 100%; margin-top: 5px;">Reset Size</button>
-                    <button id="delete-magnet-btn" class="danger" style="width: 100%; margin-top: 5px;">Remove
-                        Region</button>
+                    <button id="reset-magnet-size-btn" class="w-full mt-8">Reset Size</button>
+                    <button id="delete-magnet-btn" class="danger w-full mt-8">Remove Region</button>
                 </div>
             </div>
 
             <div class="control-group">
                 <h2>Electric Field Sections</h2>
                 <button id="add-electric-btn">+ Add E-Field Plate</button>
-                <div id="electric-customizer"
-                    style="display: none; margin-top: 10px; border-top: 1px solid var(--glass-border); padding-top: 10px;">
+                <div id="electric-customizer" class="customizer-panel">
                     <label>Selected E-Field</label>
 
                     <label>
@@ -103,25 +102,40 @@
                     </label>
                     <input type="range" id="eFieldGap" min="50" max="300" step="10" value="100">
 
-                    <button id="delete-electric-btn" class="danger" style="width: 100%; margin-top: 5px;">Remove
-                        Plate</button>
+                    <button id="delete-electric-btn" class="danger w-full mt-8">Remove Plate</button>
                 </div>
+            </div>
+        </aside>
+
+        <div id="splash-overlay" class="splash-overlay" role="dialog" aria-modal="true">
+            <div class="splash-modal">
+                <h1>Electron Beam Simulator</h1>
+                <p><i>By Dr. Gerard Joseph Lim</i></p>
+                <ul>
+                    <li>Add magnetic and electric field regions to the canvas.</li>
+                    <li>Drag regions to move them; use the bottom-right handle to resize magnets.</li>
+                    <li>Adjust beam energy, emission rate, and plate voltage in the controls.</li>
+                    <li>Observe particle deflection based on Lorentz force (F = q(E + v × B)).</li>
+                </ul>
+                <button id="get-started-btn" class="w-full mt-15">Get Started</button>
             </div>
         </div>
 
+        <footer class="signature-footer">
+            <a href="https://www.gerardjosephlim.com" target="_blank">www.gerardjosephlim.com</a>
+        </footer>
 
-    </div>
-
-    <script src="electronbeam.js"></script>
-    <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function (e) {
-            // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (e.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-        }
-    </script>
+        <script src="electronbeam.js"></script>
+        <script>
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.onkeydown = function (e) {
+                // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+                if (e.keyCode == 123) return false;
+                if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+            }
+        </script>
+    </main>
 </body>
 
 </html>

@@ -1,45 +1,86 @@
 /**
  * Electron Beam Simulator
- * Liquid Glass Theme
+ * Premium Liquid Glass Edition
  */
 
-const canvas = document.getElementById('simulationCanvas');
-const ctx = canvas.getContext('2d');
+// --- Configuration & DOM ---
+const CONFIG = {
+    canvas: document.getElementById('simulationCanvas'),
+    ctx: document.getElementById('simulationCanvas').getContext('2d'),
+    phys: {
+        timeStep: 0.2,
+        baseSpeed: 3,
+        fps: 30,
+        magneticStrengthScale: 0.0005,
+        electricStrengthScale: 200
+    },
+    dom: {
+        emissionInput: document.getElementById('emissionRate'),
+        emissionDisp: document.getElementById('emission-val'),
+        energyInput: document.getElementById('beamEnergy'),
+        energyDisp: document.getElementById('energy-val'),
+        voltageInput: document.getElementById('plateVoltage'),
+        voltageDisp: document.getElementById('voltage-val'),
+        spreadInput: document.getElementById('beamSpread'),
+        spreadDisp: document.getElementById('spread-val'),
 
-// --- Physics Constants (Simulation Units) ---
-// We use arbitrary units to make the simulation visually pleasing and numerically stable.
-// Mass = 1, Charge = 1.
-const PHYS = {
-    timeStep: 0.2, // Time scaling
-    baseSpeed: 3,  // Base pixel speed for 1 unit of energy
+        magnetPanel: document.getElementById('magnet-customizer'),
+        magnetStrengthInput: document.getElementById('bFieldStrength'),
+        magnetStrengthDisp: document.getElementById('b-field-val'),
+
+        electricPanel: document.getElementById('electric-customizer'),
+        electricVoltageInput: document.getElementById('eFieldVoltage'),
+        electricVoltageDisp: document.getElementById('e-voltage-val'),
+        electricGapInput: document.getElementById('eFieldGap'),
+        electricGapDisp: document.getElementById('e-gap-val'),
+
+        btnElectron: document.getElementById('btn-type-electron'),
+        btnPositron: document.getElementById('btn-type-positron'),
+        btnClear: document.getElementById('clear-particles-btn'),
+        btnAddMagnet: document.getElementById('add-magnet-btn'),
+        btnAddElectric: document.getElementById('add-electric-btn'),
+        btnDeleteMagnet: document.getElementById('delete-magnet-btn'),
+        btnResetMagnet: document.getElementById('reset-magnet-size-btn'),
+        btnDeleteElectric: document.getElementById('delete-electric-btn'),
+
+        splashOverlay: document.getElementById('splash-overlay'),
+        btnGetStarted: document.getElementById('get-started-btn'),
+        btnHelp: document.getElementById('help-btn')
+    }
 };
+
+const ctx = CONFIG.ctx;
+const canvas = CONFIG.canvas;
 
 const state = {
     electrons: [],
     magnets: [],
-    electricRegions: [], // New E-Field Regions
-    // Simulation Parameters
-    beamEnergy: 100, // Controls initial velocity
-    plateVoltage: 2.0, // Controls acceleration (kV) -> Multiplier
-    emissionRate: 50, // Now represents particles per second approx
-    energySpread: 0.1, // Added Energy Spread
-    particleType: 'electron', // 'electron' or 'positron'
+    electricRegions: [],
 
+    // Parameters
+    beamEnergy: 100,
+    plateVoltage: 2.0,
+    emissionRate: 25,
+    energySpread: 0.1,
+    particleType: 'electron',
 
-    // UI State
+    // Selection & UI
     selectedMagnet: null,
-    selectedElectric: null, // New Electric Selection
+    selectedElectric: null,
     isDragging: false,
-    isResizing: false, // New Resize Flag
+    isResizing: false,
     dragOffsetX: 0,
     dragOffsetY: 0,
 
     // Layout
-    plateX: 500, // Shifted Right
+    plateX: 500,
     plateGapY: 0,
     plateGapSize: 80,
 
-    lastFrameTime: 0
+    // Timing
+    lastFrameTime: 0,
+    fpsInterval: 1000 / CONFIG.phys.fps,
+    then: performance.now()
 };
 
 // --- Classes ---
@@ -56,7 +97,7 @@ class Electron {
         // New Energy = BaseEnergy * (1 + (random - 0.5) * spread)
         const spreadFactor = state.energySpread;
         const actualEnergy = initialEnergy * (1 + (Math.random() - 0.5) * spreadFactor);
-        const vMag = PHYS.baseSpeed * Math.sqrt(Math.max(0, actualEnergy) / 100);
+        const vMag = CONFIG.phys.baseSpeed * Math.sqrt(Math.max(0, actualEnergy) / 100);
 
         // Slight natural angular spread (fixed small amount)
         const angle = (Math.random() - 0.5) * 0.05; // reduced natural spread
@@ -79,43 +120,26 @@ class Electron {
     update() {
         if (this.dead) return;
 
-        // 1. Electric Field Acceleration (The Plate)
-        // If between x=0 and plateX, it accelerates? 
-        // Or simplified: It just gets a boost when passing the plate x-coord?
-        // Let's do a smooth acceleration zone before the plate for visual effect.
-
+        // 1. Electric Field Acceleration (Initial Plate)
         if (this.x < state.plateX) {
-            // Apply force from Plate Voltage
-            // Higher voltage = stronger pull to right
-            // F = ma => a = F. 
-            // V is roughly proportional to F here for simplicity.
-            // Electrons (-1) are attracted to Positive Plate (which we assume is at right)
-            // So if Charge is -1, Force is +X. 
-            // If Charge is +1 (Positron), Force is -X (Repelled).
-            const chargeFactor = -this.charge; // Electron (-1) -> Factor 1. Positron (1) -> Factor -1.
+            const chargeFactor = -this.charge;
             const accel = state.plateVoltage * 0.1 * chargeFactor;
-            this.vx += accel * PHYS.timeStep;
+            this.vx += accel * CONFIG.phys.timeStep;
         }
 
-        // Check for Plate Collision or Passing
+        // Check for Plate Collision
         if (!this.passedPlate && this.x >= state.plateX) {
-            // Check if within slit
             const distFromCenter = Math.abs(this.y - state.plateGapY);
             if (distFromCenter > state.plateGapSize / 2) {
-                // Hit the plate
                 this.dead = true;
-                this.x = state.plateX; // Snap to impact
+                this.x = state.plateX;
                 return;
             } else {
                 this.passedPlate = true;
             }
         }
 
-        // 2. Magnetic Field Interaction
-        // F = q(v x B). Force is perp to velocity.
-        // a_x =  (q/m) * B * vy
-        // a_y = -(q/m) * B * vx
-
+        // 2. Magnetic Field Interaction (Lorentz B)
         let B_total = 0;
         for (const m of state.magnets) {
             if (m.contains(this.x, this.y)) {
@@ -123,60 +147,38 @@ class Electron {
             }
         }
 
-        // Apply Lorentz force if in B-field
         if (Math.abs(B_total) > 0.001) {
-            const k = 0.0005; // Coupling constant
-            // F = q(v x B). 
-            // Electron q = -1. Positron q = +1.
-            // Our existing 'k' was implicitly for Electrons.
-            // If q flips, force flips.
-            const chargeFactor = -this.charge; // Electron (-1) -> 1. Positron (1) -> -1.
+            const chargeFactor = -this.charge;
+            const ax = B_total * this.vy * CONFIG.phys.magneticStrengthScale * chargeFactor;
+            const ay = -B_total * this.vx * CONFIG.phys.magneticStrengthScale * chargeFactor;
 
-            const ax = B_total * this.vy * k * chargeFactor;
-            const ay = -B_total * this.vx * k * chargeFactor;
-
-            this.vx += ax * PHYS.timeStep;
-            this.vy += ay * PHYS.timeStep;
+            this.vx += ax * CONFIG.phys.timeStep;
+            this.vy += ay * CONFIG.phys.timeStep;
         }
 
-        // 2b. Electric Field Sections
-        // F = qE, E = V/d (approx for parallel plates)
-        // Direction is vertical (perp to beam) for these plates
+        // 3. Electric Field Sections (Lorentz E)
         for (const er of state.electricRegions) {
             if (er.contains(this.x, this.y)) {
-                // F_y = q * E = q * (V / gap)
-                // We'll scale it to make it visible
-                // Voltage V is in kV, Gap in pixels
                 const E_field = er.voltage / er.gap;
-                // Force factor
-                const kE = 200; // Tuning constant
-                // Existing: ay = -E_field * kE. 
-                // Implicitly assuming electron (q=-1) moves opposite to E-field? 
-                // E-field direction typically High V to Low V.
-                // If Top is +V, Bot is -V -> E is Down.
-                // Electron should go Up (Force opposite E).
-                // Formula below: ay = -E * kE. If E is + (Down), ay is - (Up). Correct for Electron.
-
-                const chargeFactor = -this.charge; // Electron (-1) -> 1. Positron (1) -> -1.
-                const ay = -E_field * kE * chargeFactor;
-                this.vy += ay * PHYS.timeStep;
+                const chargeFactor = -this.charge;
+                const ay = -E_field * CONFIG.phys.electricStrengthScale * chargeFactor;
+                this.vy += ay * CONFIG.phys.timeStep;
             }
         }
 
-        // 3. Move
-        this.x += this.vx * PHYS.timeStep;
-        this.y += this.vy * PHYS.timeStep;
+        // 4. Movement (No Damping)
+        this.x += this.vx * CONFIG.phys.timeStep;
+        this.y += this.vy * CONFIG.phys.timeStep;
 
-        // 4. Bounds Check
-        // 4. Bounds Check
+        // 5. Bounds Check
         if (this.x > canvas.width || this.x < 0 || this.y < 0 || this.y > canvas.height) {
             this.dead = true;
         }
 
-        // 5. Trail
-        if (Math.random() < 0.3) {
+        // 6. Trail Smoothing
+        if (Math.random() < 0.5) {
             this.trail.push({ x: this.x, y: this.y });
-            if (this.trail.length > 30) this.trail.shift();
+            if (this.trail.length > 40) this.trail.shift();
         }
     }
 
@@ -382,115 +384,66 @@ class ElectricRegion {
     }
 }
 
-// --- Main Loop ---
+function loopOrdered(timestamp) {
+    requestAnimationFrame(loopOrdered);
 
-function loop(timestamp) {
-    if (!state.lastFrameTime) state.lastFrameTime = timestamp;
-    const dt = timestamp - state.lastFrameTime;
-    state.lastFrameTime = timestamp;
+    const now = performance.now();
+    const elapsed = now - state.then;
 
-    // Clear Screen with fade effect? No, clean clear for crisp glass look.
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (elapsed > state.fpsInterval) {
+        state.then = now - (elapsed % state.fpsInterval);
 
-    // 1. Draw Plate
-    drawPlate();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Spawn Electrons
-    // Emission rate is probability per frame? or per time?
-    const spawnChance = state.emissionRate / 100; // 0 to 1
-    if (Math.random() < spawnChance) {
-        state.electrons.push(new Electron(state.plateGapY, state.beamEnergy));
+        // 1. Fields
+        for (const m of state.magnets) m.draw(ctx, state.selectedMagnet === m);
+        for (const er of state.electricRegions) er.draw(ctx, state.selectedElectric === er);
+
+        // 2. Scene
+        drawPlate();
+        drawSourceLabel();
+
+        // 3. Electrons
+        if (state.electrons.length < 10000) {
+            const spawnCount = Math.ceil(state.emissionRate / 10);
+            if (Math.random() < 0.8) {
+                for (let k = 0; k < spawnCount; k++) {
+                    if (state.electrons.length < 10000) {
+                        state.electrons.push(new Electron(state.plateGapY + (Math.random() - 0.5) * 10, state.beamEnergy));
+                    }
+                }
+            }
+        }
+
+        for (let i = state.electrons.length - 1; i >= 0; i--) {
+            const e = state.electrons[i];
+            e.update();
+            e.draw(ctx);
+            if (e.dead) state.electrons.splice(i, 1);
+        }
     }
-
-    // 3. Update & Draw Electrons
-    for (let i = state.electrons.length - 1; i >= 0; i--) {
-        const e = state.electrons[i];
-        e.update();
-        e.draw(ctx);
-        if (e.dead) state.electrons.splice(i, 1);
-    }
-
-    // 4. Draw Regions
-    // Draw magnets on TOP of electrons? Or behind?
-    // Usually fields are transparent, so maybe behind is better for seeing particles?
-    // Let's draw Magnet regions BEFORE electrons actually.
-    // Move this block up if we want particles on top. 
-    // BUT we want to see the glass overlay. So magnets on TOP with transparency.
-    // However, clean physics lines often look better on top. 
-    // Let's draw magnets BEHIND for clarity of the beam path, 
-    // but the 'Glass' effect implies overlay.
-    // Decided: Magnets BEHIND electrons for physics clarity.
-    // (Wait, I just drew electrons first. I'll fix this in next cleanup if needed).
-
-    // Re-ordering: Draw Magnets first, then Plate, then Electrons.
-
-    requestAnimationFrame(loop);
 }
 
-function loopOrdered(timestamp) {
-    if (!state.lastFrameTime) state.lastFrameTime = timestamp;
-    state.lastFrameTime = timestamp;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 1. Magnets (Background Layer)
-    for (const m of state.magnets) {
-        m.draw(ctx, state.selectedMagnet === m);
-    }
-
-    // 1b. Electric Regions
-    for (const er of state.electricRegions) {
-        er.draw(ctx, state.selectedElectric === er);
-    }
-
-    // 2. Plate
-    drawPlate();
-
-    // 2b. Electron Source Label
+function drawSourceLabel() {
     ctx.save();
-    // Glow calculation
-    // Max brightness at high energy + high emission
     const factor = (state.beamEnergy / 500) * (state.emissionRate / 100);
     const alpha = 0.4 + factor * 0.6;
     const blur = 5 + factor * 15;
-
-    // Source Glow Color
     const glowColor = state.particleType === 'positron' ? '255, 50, 50' : '0, 243, 255';
 
     ctx.shadowColor = `rgba(${glowColor}, ${alpha})`;
     ctx.shadowBlur = blur;
     ctx.fillStyle = `rgba(255, 255, 255, ${alpha + 0.2})`;
 
-    ctx.font = '600 16px var(--font-family)'; // Bigger font
+    ctx.font = '600 16px var(--font-family)';
     ctx.textAlign = 'left';
-    // Shifted up and left to not obscure beam
     const sourceLabel = state.particleType === 'positron' ? "Positron Source" : "Electron Source";
     ctx.fillText(sourceLabel, 10, state.plateGapY - 40);
 
-    // Draw little nozzle
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#fff';
-    ctx.fillRect(0, state.plateGapY - 4, 30, 8); // Bigger nozzle
+    ctx.fillRect(0, state.plateGapY - 4, 30, 8);
     ctx.restore();
-
-    // 3. Electrons
-    // Spawn
-    const spawnChance = state.emissionRate / 100;
-    // Spawn multiple if rate is high to make a dense beam
-    const spawnCount = Math.ceil(state.emissionRate / 20);
-    if (Math.random() < 0.5) { // Throttle slightly
-        for (let k = 0; k < spawnCount; k++)
-            state.electrons.push(new Electron(state.plateGapY + (Math.random() - 0.5) * 10, state.beamEnergy));
-    }
-
-    for (let i = state.electrons.length - 1; i >= 0; i--) {
-        const e = state.electrons[i];
-        e.update();
-        e.draw(ctx);
-        if (e.dead) state.electrons.splice(i, 1);
-    }
-
-    requestAnimationFrame(loopOrdered);
 }
 
 // Draw Plate Helper
@@ -569,7 +522,7 @@ const inputEmission = document.getElementById('emissionRate');
 const dispEmission = document.getElementById('emission-val');
 inputEmission.oninput = (e) => {
     state.emissionRate = parseInt(e.target.value);
-    dispEmission.textContent = state.emissionRate + '%';
+    dispEmission.textContent = state.emissionRate;
 };
 
 const inputEnergy = document.getElementById('beamEnergy');
@@ -831,6 +784,34 @@ canvas.addEventListener('mouseup', () => {
     state.isResizing = false;
 });
 
+
+// Splash Logic
+const splashOverlay = document.getElementById('splash-overlay');
+const btnGetStarted = document.getElementById('get-started-btn');
+const btnHelp = document.getElementById('help-btn');
+
+if (btnGetStarted) {
+    btnGetStarted.onclick = () => {
+        const splashModal = splashOverlay.querySelector('.splash-modal');
+        splashOverlay.classList.add('closing');
+        if (splashModal) splashModal.classList.add('closing');
+
+        setTimeout(() => {
+            splashOverlay.style.display = 'none';
+            splashOverlay.classList.remove('closing');
+            if (splashModal) splashModal.classList.remove('closing');
+        }, 500);
+    };
+}
+
+if (btnHelp) {
+    btnHelp.onclick = () => {
+        splashOverlay.style.display = 'flex';
+        setTimeout(() => {
+            splashOverlay.style.opacity = '1';
+        }, 10);
+    };
+}
 
 // Start
 requestAnimationFrame(loopOrdered);

@@ -7,7 +7,7 @@
     --negative: #4d94ff;
 
     --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.2);
     --glass-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), inset 0 0 5px rgba(255, 255, 255, 0.1), 0 5px 15px rgba(0, 0, 0, 0.5);
 
     --font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -64,8 +64,29 @@ canvas {
     flex-direction: column;
     gap: 20px;
     z-index: 10;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: auto;
+}
+
+.controls-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.controls-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
 }
 
 .controls-panel:hover {
@@ -76,11 +97,12 @@ h1 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 8px;
-    background: linear-gradient(90deg, #38bdf8, #818cf8, #a855f7);
+    background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.5px;
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.3));
 }
 
 h2 {
@@ -165,14 +187,14 @@ button {
 }
 
 button:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(56, 189, 248, 0.2);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(56, 189, 248, 0.3);
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
 }
 
 button.danger {
@@ -202,6 +224,22 @@ button.danger:hover {
     pointer-events: none;
 }
 
+.help-btn {
+    position: fixed;
+    top: 20px;
+    right: 360px;
+    /* 20px padding + 320px width + 20px gap */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    z-index: 100;
+}
+
 .liquid-glass {
     background: var(--glass-bg);
     backdrop-filter: blur(20px) saturate(180%);
@@ -228,20 +266,127 @@ button.danger:hover {
     opacity: 0.8;
 }
 
+/* Splash Modal */
+.splash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.splash-modal {
+    max-width: 500px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 40px;
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow);
+}
+
+.splash-modal h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.splash-modal p {
+    margin-bottom: 2rem;
+}
+
+.splash-modal ul {
+    text-align: left;
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+    list-style: none;
+    line-height: 1.6;
+}
+
+.splash-modal li::before {
+    content: "•";
+    color: var(--primary);
+    margin-right: 10px;
+}
+
+.splash-modal .get-started-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
 /* Animations from spec */
 @keyframes glassPop {
     0% {
-        transform: scale(0.9);
+        transform: scale(0.85) translateY(20px);
         opacity: 0;
+        filter: blur(10px);
     }
 
     100% {
-        transform: scale(1);
+        transform: scale(1) translateY(0);
         opacity: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes glassPush {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    100% {
+        transform: scale(0.85) translateY(20px);
+        opacity: 0;
+        filter: blur(10px);
     }
 }
 
 .controls-panel,
-.liquid-glass {
-    animation: glassPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.liquid-glass,
+.splash-modal {
+    animation: glassPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.splash-modal.closing {
+    animation: glassPush 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.splash-overlay {
+    transition: opacity 0.5s ease;
+}
+
+.splash-overlay.closing {
+    opacity: 0 !important;
+}
+
+.signature-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.signature-footer:hover {
+    opacity: 1;
+    text-shadow: 0 0 10px var(--primary);
+}
+
+.signature-footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
 }
