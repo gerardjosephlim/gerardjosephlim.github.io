@@ -1,475 +1,314 @@
-:root {
-    --bg-color: #05070a;
-    --panel-bg: rgba(20, 25, 35, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --text-primary: #f0f4f8;
-    --text-secondary: #94a3b8;
-    --accent-color: #4cc9f0;
-    --accent-glow: rgba(76, 201, 240, 0.4);
-    --photon-color: #ffd700;
-    --photon-glow: rgba(255, 215, 0, 0.6);
-}
+/* Photon Flux - Simulation Specific Styles */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
 .app-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 }
 
+/* Simulation Space (Left Column) */
 .simulation-canvas-container {
-    flex: 1;
-    position: relative;
-    background: radial-gradient(circle at center, #0a0f1a 0%, #05070a 100%);
+  flex: 1;
+  position: relative;
+  background: radial-gradient(circle at center, #0a0f1a 0%, #000 100%);
+  z-index: 1;
 }
 
 #simulationCanvas {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
+/* HUD Overlay on Canvas */
 .info-overlay {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    display: flex;
-    gap: 1.5rem;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 15px;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .stat-card {
-    background: var(--panel-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    min-width: 160px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .stat-card .label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-    margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
 }
 
 .stat-card .value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--accent-color);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-family: var(--font-mono);
 }
 
 .stat-card .unit {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
+  font-size: 0.65rem;
+  color: var(--text-muted);
 }
 
+/* Floating Help Button Placement inside canvas */
+.simulation-canvas-container .help-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* Control Panel (Right Column) */
 .control-panel {
-    width: 380px;
-    background: var(--panel-bg);
-    backdrop-filter: blur(24px);
-    border-left: 1px solid var(--glass-border);
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    z-index: 10;
+  width: 380px;
+  border-left: 1px solid var(--glass-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 10;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
+  pointer-events: auto;
+}
+
+.control-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.control-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.control-panel::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+}
+
+.control-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 .main-header {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .brand-box {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 1.25rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .brand-box h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    background: linear-gradient(135deg, var(--accent-color), var(--photon-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+  background: linear-gradient(135deg, var(--primary) 0%, #ffd700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
 }
 
 .brand-box .tagline {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
-.author {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding-left: 0.25rem;
+.brand-box .author {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 6px;
 }
 
+/* Control Group Sliders styling */
 .control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .control-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .control-header label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.control-value {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--accent-color);
-    font-weight: bold;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    outline: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    background: var(--accent-color);
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--accent-glow);
-    transition: transform 0.1s ease;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
 }
 
 .ticks {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 2px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
 }
 
 .ticks span {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
-.physics-note {
-    margin-top: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+.equation-display {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--primary);
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.physics-note svg {
-    flex-shrink: 0;
-    color: var(--accent-color);
-    width: 24px;
-    height: 24px;
+.equation-display sub {
+  font-size: 0.7rem;
 }
 
-.physics-note p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
+/* Physical Outputs section */
 .visual-feedback {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    margin-top: auto;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--glass-border);
-    gap: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+  gap: 15px;
 }
 
 .ammeter-container,
 .lightbulb-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 .ammeter {
-    width: 80px;
-    height: 50px;
-    color: var(--text-secondary);
+  width: 90px;
+  height: 55px;
+  color: var(--text-muted);
 }
 
 #ammeterNeedle {
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: 50px 50px;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: 50px 50px;
 }
 
 .lightning-group {
-    opacity: 0;
-    pointer-events: none;
-    filter: drop-shadow(0 0 4px #4cc9f0);
-    transition: opacity 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px var(--primary));
+  transition: opacity 0.2s ease;
 }
 
 .lightning-group.active {
-    opacity: 1;
-    animation: lightning-flicker 0.15s infinite;
+  opacity: 1;
+  animation: lightning-flicker 0.15s infinite;
 }
 
 .ammeter-spark {
-    fill: var(--accent-color);
-    filter: drop-shadow(0 0 4px var(--accent-color)) drop-shadow(0 0 8px var(--photon-color));
+  fill: var(--primary);
+  filter: drop-shadow(0 0 4px var(--primary)) drop-shadow(0 0 8px #ffd700);
 }
 
 @keyframes lightning-flicker {
-    0% {
-        opacity: 0.4;
-        transform: scale(1) translate(0, 0);
-    }
-
-    20% {
-        opacity: 1;
-        transform: scale(1.05) translate(1px, -1px);
-    }
-
-    40% {
-        opacity: 0.6;
-        transform: scale(0.95) translate(-1px, 1px);
-    }
-
-    60% {
-        opacity: 1;
-        transform: scale(1.1) translate(0.5px, 0.5px);
-    }
-
-    80% {
-        opacity: 0.5;
-        transform: scale(1) translate(-0.5px, -0.5px);
-    }
-
-    100% {
-        opacity: 0.8;
-        transform: scale(1.05) translate(0, 0);
-    }
+  0% { opacity: 0.4; transform: scale(1) translate(0, 0); }
+  20% { opacity: 1; transform: scale(1.05) translate(1px, -1px); }
+  40% { opacity: 0.6; transform: scale(0.95) translate(-1px, 1px); }
+  60% { opacity: 1; transform: scale(1.1) translate(0.5px, 0.5px); }
+  80% { opacity: 0.5; transform: scale(1) translate(-0.5px, -0.5px); }
+  100% { opacity: 0.8; transform: scale(1.05) translate(0, 0); }
 }
 
 .lightbulb {
-    position: relative;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
 }
 
 .lightbulb svg {
-    width: 32px;
-    height: 32px;
-    z-index: 2;
+  width: 32px;
+  height: 32px;
+  z-index: 2;
 }
 
 .bulb-glow {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    background: var(--photon-color);
-    border-radius: 50%;
-    filter: blur(15px);
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #ffd700; /* Photon gold energy color */
+  border-radius: 50%;
+  filter: blur(15px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1;
 }
 
 .lightbulb-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-secondary);
-    white-space: nowrap;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
-.equation-display {
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--accent-color);
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+.physics-note-panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  text-align: center;
 }
 
-.equation-display sub {
-    font-size: 0.7rem;
-}
-
-.phi {
-    font-style: italic;
-    color: var(--photon-color);
-    font-weight: bold;
-}
-
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(5, 7, 10, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-}
-
-.modal-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.modal-content {
-    background: var(--panel-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(24px);
-    padding: 3rem;
-    border-radius: 1.5rem;
-    max-width: 500px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.modal-content h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-color), var(--photon-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: -0.5rem;
-}
-
-.modal-content h3 {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    font-weight: 400;
-}
-
-.modal-descriptor {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text-primary);
-    margin: 1rem 0;
-}
-
-.modal-author {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent-color);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-#startButton {
-    background: var(--accent-color);
-    color: var(--bg-color);
-    border: none;
-    padding: 0.75rem 3rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 1rem;
-    box-shadow: 0 0 20px var(--accent-glow);
-}
-
-#startButton:hover {
-    transform: scale(1.05);
-    background: #fff;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-}
-
-.help-btn {
-    position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--panel-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    color: var(--text-secondary);
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 100;
-}
-
-.help-btn:hover {
-    background: var(--accent-color);
-    color: var(--bg-color);
-    transform: scale(1.1);
-    box-shadow: 0 0 15px var(--accent-glow);
+/* Organic Signature footer position at sidebar bottom */
+.control-panel .signature-footer {
+  margin-top: 10px;
+  padding: 10px 0 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: static;
+  width: 100%;
 }

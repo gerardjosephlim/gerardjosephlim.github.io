@@ -6,18 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dipole Dynamics | Liquid Glass</title>
     <meta name="description" content="A premium physics simulation of dipole dynamics in an electric field.">
+    <link rel="stylesheet" href="../liquid-glass-components.css">
     <link rel="stylesheet" href="dipole.css">
 </head>
 
 <body>
     <!-- Splash Overlay -->
     <div id="splashOverlay" class="splash-overlay">
-        <div class="splash-content liquid-glass">
+        <div class="splash-modal liquid-glass">
             <header class="splash-header">
-                <h2>Dipole Dynamics</h2>
-                <p>By Dr. Gerard Joseph Lim</p>
+                <h1>Dipole Dynamics</h1>
+                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
             </header>
             <div class="splash-body">
+                <h3>Instructions</h3>
                 <ul>
                     <li>Adjust the external E-field to observe torque and translation.</li>
                     <li>Move charges manually to change the dipole orientation.</li>
@@ -26,7 +28,7 @@
                 </ul>
             </div>
             <footer class="splash-footer">
-                <button id="startBtn" class="btn-primary">START SIMULATION</button>
+                <button id="startBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">START SIMULATION</button>
             </footer>
         </div>
     </div>
@@ -44,9 +46,7 @@
     <canvas id="atomCanvas"></canvas>
 
     <!-- Signature Footer -->
-    <div class="signature-footer">
-        <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-link">www.gerardjosephlim.com</a>
-    </div>
+    <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
 
     <script src="dipole.js"></script>
 </body>

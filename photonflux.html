@@ -4,47 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar Flux Simulation</title>
+    <title>Photon Flux | Liquid Glass</title>
+    <meta name="description"
+        content="Interactive solar energy physics simulation showing photon capture as a function of incidence angle and flux intensity">
+    <link rel="stylesheet" href="../liquid-glass-components.css">
     <link rel="stylesheet" href="photonflux.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="glass-simulation-body">
     <div class="app-container">
-        <div class="simulation-canvas-container">
+        <!-- Simulation space -->
+        <main class="simulation-canvas-container" id="simulation-container">
             <canvas id="simulationCanvas"></canvas>
+            
+            <!-- Real-time HUD (Floating Left) -->
             <div class="info-overlay">
-                <div class="stat-card">
+                <div class="stat-card liquid-glass">
                     <span class="label">Absorption Rate</span>
                     <span id="absorptionRate" class="value">0.0</span>
                     <span class="unit">photons/s</span>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card liquid-glass">
                     <span class="label">Theoretical Flux</span>
                     <span id="theoreticalFlux" class="value">0.0</span>
                     <span class="unit">photons/s</span>
                 </div>
             </div>
-            <button id="helpButton" class="help-btn" aria-label="Help">?</button>
-        </div>
 
-        <div class="control-panel">
+            <!-- Floating Help Trigger -->
+            <button id="helpButton" class="help-btn liquid-glass" aria-label="Help">?</button>
+        </main>
+
+        <!-- Right Side Control Panel -->
+        <aside class="control-panel liquid-glass">
             <header class="main-header">
                 <div class="brand-box">
                     <h1>Photon Flux</h1>
-                    <p class="tagline">Simulating photon capture by a solar panel
-
-                    </p>
+                    <p class="tagline">Simulating photon capture by a solar panel</p>
                     <p class="author">Dr. Gerard Joseph Lim</p>
                 </div>
             </header>
 
+            <!-- Inputs -->
             <div class="control-group">
                 <div class="control-header">
                     <label for="fluxSlider">Photon Flux</label>
-                    <span id="fluxValue" class="control-value">25</span>
+                    <span id="fluxValue" class="value-display">25</span>
                 </div>
                 <input type="range" id="fluxSlider" min="0" max="100" step="1" value="25">
                 <div class="ticks">
@@ -57,7 +62,7 @@
             <div class="control-group">
                 <div class="control-header">
                     <label for="tiltSlider">Panel Tilt (θ)</label>
-                    <span id="tiltValue" class="control-value">0°</span>
+                    <span id="tiltValue" class="value-display">0°</span>
                 </div>
                 <input type="range" id="tiltSlider" min="0" max="90" step="1" value="0">
                 <div class="ticks">
@@ -67,10 +72,12 @@
                 </div>
             </div>
 
+            <!-- Mathematical Equation Display -->
             <div class="equation-display">
                 Φ = Φ<sub>0</sub> · cos(θ)
             </div>
 
+            <!-- Physical Meters and Indicators -->
             <div class="visual-feedback">
                 <div class="ammeter-container">
                     <svg class="ammeter" viewBox="0 0 100 60">
@@ -81,9 +88,9 @@
                         <line class="meter-tick" x1="90" y1="50" x2="85" y2="50" stroke="currentColor" />
                         <path id="lightningGroup" class="lightning-group"
                             d="M25 35 l-5 -10 l8 -2 l-4 -8 M75 35 l5 -10 l-8 -2 l4 -8 M45 15 l5 -10 l5 10" fill="none"
-                            stroke="#4cc9f0" stroke-width="1.5" />
+                            stroke="var(--primary)" stroke-width="1.5" />
                         <g id="sparkGroup"></g>
-                        <line id="ammeterNeedle" x1="50" y1="50" x2="50" y2="15" stroke="#f72585" stroke-width="2" />
+                        <line id="ammeterNeedle" x1="50" y1="50" x2="50" y2="15" stroke="var(--positive)" stroke-width="2" />
                         <circle cx="50" cy="50" r="3" fill="currentColor" />
                     </svg>
                     <span class="lightbulb-label">Absorption Rate</span>
@@ -104,28 +111,39 @@
                 </div>
             </div>
 
-            <div class="physics-note">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
+            <!-- Quick Concept Note -->
+            <div class="physics-note-panel">
                 <p>The flux is proportional to the projected area: Φ ∝ cos(θ).</p>
             </div>
+
+        </aside>
+
+        <!-- Signature Footer -->
+        <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
+    </div>
+
+    <!-- Instruction Splash Overlay -->
+    <div id="introModal" class="splash-overlay" role="dialog" aria-modal="true">
+        <div class="splash-modal liquid-glass">
+            <header class="splash-header">
+                <h1>Photon Flux</h1>
+                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+            </header>
+            <div class="splash-body">
+                <h3>Learning Objectives & Guide</h3>
+                <ul>
+                    <li><strong>Flux Intensity:</strong> Adjust the Photon Flux slider to change the density of incoming solar photons (gold particles).</li>
+                    <li><strong>Panel Tilt Angle:</strong> Rotate the solar panel using the Tilt slider to observe how inclination changes its cross-section.</li>
+                    <li><strong>Effective Projected Area:</strong> Note the visual gold vector showing the projected width of the panel orthogonal to incoming rays.</li>
+                    <li><strong>Flux Formula:</strong> Witness the cos(θ) dependency (Φ = Φ₀ · cos(θ)) directly reflected in the ammeter and lightbulb glow!</li>
+                </ul>
+            </div>
+            <footer class="splash-footer">
+                <button id="startButton" class="btn btn-primary" style="width: 100%; justify-content: center;">START SIMULATION</button>
+            </footer>
         </div>
     </div>
-    <div id="introModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>Photon Flux</h2>
-            <h3>Simulating photon capture by a solar panel</h3>
-            <p class="modal-descriptor">Explore how the angle of incidence affects the number of photons captured by a
-                solar panel. Adjust the flux intensity and panel tilt to see the change in effective area and energy
-                output.
-            </p>
-            <p class="modal-author">By Dr. Gerard Joseph Lim</p>
-            <button id="startButton">OK</button>
-        </div>
-    </div>
+
     <script src="photonflux.js"></script>
 </body>
 

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../liquid-glass-components.css">
     <link rel="stylesheet" href="electronbeam.css">
 </head>
 
@@ -26,7 +27,7 @@
 
         <button id="help-btn" class="help-btn liquid-glass" aria-label="Help">?</button>
 
-        <aside class="controls-panel">
+        <aside class="controls-panel liquid-glass">
             <h1>Electron Beam</h1>
 
             <div class="control-group">
@@ -50,7 +51,7 @@
                 <input type="range" id="beamSpread" min="0" max="1.0" step="0.05" value="0.1">
 
                 <!-- Added Clear Button -->
-                <button id="clear-particles-btn" class="mt-8">Clear Particles</button>
+                <button id="clear-particles-btn" class="btn w-full mt-8">Clear Particles</button>
 
                 <!-- Particle Type Toggle -->
                 <label class="mt-15">Particle Type</label>
@@ -71,7 +72,7 @@
 
             <div class="control-group">
                 <h2>Magnetic Field Sections</h2>
-                <button id="add-magnet-btn">+ Add Field Region</button>
+                <button id="add-magnet-btn" class="btn btn-primary w-full">+ Add Field Region</button>
                 <div id="magnet-customizer" class="customizer-panel">
                     <label>Selected Region B-Field</label>
                     <label>
@@ -79,14 +80,14 @@
                         <span id="b-field-val" class="value-display">0</span>
                     </label>
                     <input type="range" id="bFieldStrength" min="-1000" max="1000" value="0">
-                    <button id="reset-magnet-size-btn" class="w-full mt-8">Reset Size</button>
-                    <button id="delete-magnet-btn" class="danger w-full mt-8">Remove Region</button>
+                    <button id="reset-magnet-size-btn" class="btn w-full mt-8">Reset Size</button>
+                    <button id="delete-magnet-btn" class="btn btn-danger w-full mt-8">Remove Region</button>
                 </div>
             </div>
 
             <div class="control-group">
                 <h2>Electric Field Sections</h2>
-                <button id="add-electric-btn">+ Add E-Field Plate</button>
+                <button id="add-electric-btn" class="btn btn-primary w-full">+ Add E-Field Plate</button>
                 <div id="electric-customizer" class="customizer-panel">
                     <label>Selected E-Field</label>
 
@@ -102,18 +103,19 @@
                     </label>
                     <input type="range" id="eFieldGap" min="50" max="300" step="10" value="100">
 
-                    <button id="delete-electric-btn" class="danger w-full mt-8">Remove Plate</button>
+                    <button id="delete-electric-btn" class="btn btn-danger w-full mt-8">Remove Plate</button>
                 </div>
             </div>
         </aside>
 
         <div id="splash-overlay" class="splash-overlay" role="dialog" aria-modal="true">
-            <div class="splash-content liquid-glass">
+            <div class="splash-modal liquid-glass">
                 <header class="splash-header">
-                    <h2>Electron Beam Simulator</h2>
-                    <p>By Dr. Gerard Joseph Lim</p>
+                    <h1>Electron Beam Simulator</h1>
+                    <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
                 </header>
                 <div class="splash-body">
+                    <h3>Instructions</h3>
                     <ul>
                         <li>Add magnetic and electric field regions to the canvas.</li>
                         <li>Drag regions to move them; use the bottom-right handle to resize magnets.</li>
@@ -122,14 +124,10 @@
                     </ul>
                 </div>
                 <footer class="splash-footer">
-                    <button id="get-started-btn" class="btn-primary">START SIMULATION</button>
+                    <button id="get-started-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">START SIMULATION</button>
                 </footer>
             </div>
         </div>
-
-        <footer class="signature-footer">
-            <a href="https://www.gerardjosephlim.com" target="_blank">www.gerardjosephlim.com</a>
-        </footer>
 
         <script src="electronbeam.js"></script>
         <script>
@@ -142,6 +140,9 @@
             }
         </script>
     </main>
+
+    <!-- Signature Footer -->
+    <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
 </body>
 
 </html>
