@@ -255,6 +255,7 @@ class AmmeterSpark {
         this.container.appendChild(this.el);
         this.reset();
         this.opacity = 0;
+        this.el.style.opacity = 0;
     }
 
     reset() {
