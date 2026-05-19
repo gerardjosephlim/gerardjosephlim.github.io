@@ -617,23 +617,6 @@ fieldStrength.addEventListener('input', (e) => {
     fieldStrengthValue.textContent = externalFieldStrength.toFixed(1) + ' kV/m';
 });
 
-// Splash Overlay and Help Button Interactivity
-const splashOverlay = document.getElementById('splashOverlay');
-const startBtn = document.getElementById('startBtn');
-const helpBtn = document.getElementById('helpBtn');
-
-if (startBtn && splashOverlay) {
-    startBtn.addEventListener('click', () => {
-        splashOverlay.classList.add('hidden');
-    });
-}
-
-if (helpBtn && splashOverlay) {
-    helpBtn.addEventListener('click', () => {
-        splashOverlay.classList.remove('hidden');
-    });
-}
-
 // Initialize
 window.addEventListener('resize', () => {
     resizeCanvas();
