@@ -1,10 +1,13 @@
 // src/js/app.js
 import { AppState } from './state.js';
 import { runPhysicsValidationTests } from '../validation/tests.js';
-import { Combined3DView } from './views/combined-view.js';
+import { SplitDualView } from './views/split-dual-view.js';
 import { BandView } from './views/band-view.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+// Bootstrap: run immediately if DOM is already loaded (e.g. dynamic injection
+// from simulation.html), or defer via DOMContentLoaded for normal page loads.
+async function bootstrap() {
+
   console.log('Crystal Electronic Structure Explorer bootstrapping...');
   
   const state = new AppState();
@@ -33,23 +36,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   await state.loadMaterialData('silicon');
 
   // Instantiate Views
-  const combinedView = new Combined3DView('combined-canvas', state);
-  const bandView = new BandView('band-canvas', state);
+  const splitView = new SplitDualView('crystal-canvas', 'bz-canvas', state);
+  const bandView  = new BandView('band-canvas', state);
 
   // Trigger initial rendering
-  combinedView.renderStructure();
-  combinedView.renderBrillouinZone();
+  splitView.renderStructure();
+  splitView.renderBrillouinZone();
   bandView.renderBands();
-
-  // Blend Slider
-  const blendSlider = document.getElementById('blend-slider');
-  if (blendSlider) {
-    // Initial blend
-    combinedView.setBlendWeight(parseFloat(blendSlider.value));
-    blendSlider.addEventListener('input', (e) => {
-      combinedView.setBlendWeight(parseFloat(e.target.value));
-    });
-  }
 
   // Set initial display
   gapDisplay.textContent = `Calculated Gap: ${state.bands.calculatedGap.toFixed(3)} eV`;
@@ -185,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   resetCameraBtn.addEventListener('click', () => {
     console.log('Reset camera triggered');
-    if (combinedView.controls) combinedView.controls.reset();
+    splitView.resetCameras();
   });
 
   toggleThemeBtn.addEventListener('click', () => {
@@ -245,4 +238,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Trigger initial set K change log
   state.setPathDistance(state.bands.branches[0].distances[0], true);
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  // DOM already ready — execute immediately (e.g. when dynamically injected)
+  bootstrap();
+}

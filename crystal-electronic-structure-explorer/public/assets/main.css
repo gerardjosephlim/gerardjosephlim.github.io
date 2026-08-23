@@ -1,53 +1,47 @@
-/* src/css/main.css */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+@import "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap";
 
+/* src/css/main.css */
 :root {
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  
-  /* Sleek Dark Palette */
+  --font-sans:
+    "Outfit",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --bg-primary: #0a0c10;
   --bg-secondary: #141720;
   --bg-tertiary: #1f2330;
   --border-color: #2e3547;
-  
   --text-primary: #f0f3f8;
   --text-secondary: #a0aec0;
   --text-muted: #6b7280;
-  
-  /* Vibrant Semantic Accents */
   --accent-blue: #3b82f6;
   --accent-cyan: #06b6d4;
   --accent-purple: #8b5cf6;
   --accent-red: #ef4444;
   --accent-green: #10b981;
   --accent-orange: #f59e0b;
-
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
-
 .light-theme {
-  /* Light Theme Palette */
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
   --border-color: #cbd5e1;
-  
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
-  
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
@@ -58,8 +52,6 @@ body {
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-/* Header */
 .app-header {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
@@ -70,27 +62,27 @@ body {
   box-shadow: var(--shadow-sm);
   z-index: 10;
 }
-
 .app-header h1 {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent-cyan),
+      var(--accent-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
 .controls-area {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
 .controls-area label {
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
-
 select {
   background-color: var(--bg-tertiary);
   border: 1px solid var(--border-color);
@@ -102,7 +94,6 @@ select {
   outline: none;
   cursor: pointer;
 }
-
 button {
   background-color: var(--bg-tertiary);
   border: 1px solid var(--border-color);
@@ -116,22 +107,18 @@ button {
   transition: all 0.2s ease;
   outline: none;
 }
-
 button:hover {
   background-color: var(--border-color);
   border-color: var(--text-secondary);
 }
-
-/* Main Layout Grid */
 .app-container {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 0.9fr;
   gap: 1px;
   background-color: var(--border-color);
-  min-height: 0; /* Important for flex scrolling */
+  min-height: 0;
 }
-
 .panel-header-row {
   display: flex;
   justify-content: space-between;
@@ -140,11 +127,9 @@ button:hover {
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .panel-header-row .panel-title {
   margin-bottom: 0;
 }
-
 .slider-rule-container {
   display: flex;
   align-items: center;
@@ -154,13 +139,11 @@ button:hover {
   border-radius: 20px;
   border: 1px solid var(--border-color);
 }
-
 .slider-label {
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-secondary);
 }
-
 .blend-slider {
   -webkit-appearance: none;
   width: 140px;
@@ -169,7 +152,6 @@ button:hover {
   background: var(--border-color);
   outline: none;
 }
-
 .blend-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 14px;
@@ -179,12 +161,9 @@ button:hover {
   cursor: pointer;
   transition: transform 0.1s ease;
 }
-
 .blend-slider::-webkit-slider-thumb:hover {
   transform: scale(1.25);
 }
-
-/* Panel badge label (Real Space / Reciprocal Space) */
 .panel-badge {
   display: inline-flex;
   align-items: center;
@@ -198,37 +177,31 @@ button:hover {
   border: 1px solid currentColor;
   opacity: 0.85;
 }
-
 .panel-badge.real-space {
   color: var(--accent-cyan);
   background-color: rgba(6, 182, 212, 0.08);
   border-color: rgba(6, 182, 212, 0.3);
 }
-
 .panel-badge.reciprocal-space {
   color: var(--accent-purple);
   background-color: rgba(139, 92, 246, 0.08);
   border-color: rgba(139, 92, 246, 0.3);
 }
-
 .combined-controls {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-
 .control-group {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 .control-group strong {
   font-size: 0.8rem;
   color: var(--text-primary);
   margin-right: 5px;
 }
-
 .view-panel {
   background-color: var(--bg-primary);
   display: flex;
@@ -236,7 +209,6 @@ button:hover {
   padding: 1rem;
   min-height: 0;
 }
-
 .panel-title {
   font-size: 0.95rem;
   font-weight: 600;
@@ -247,7 +219,6 @@ button:hover {
   border-left: 3px solid var(--accent-cyan);
   padding-left: 0.5rem;
 }
-
 .canvas-container {
   flex: 1;
   background-color: var(--bg-secondary);
@@ -260,7 +231,6 @@ button:hover {
   align-items: center;
   color: var(--text-muted);
 }
-
 .panel-controls {
   margin-top: 0.75rem;
   display: flex;
@@ -268,7 +238,6 @@ button:hover {
   flex-wrap: wrap;
   align-items: center;
 }
-
 .panel-controls label {
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -277,7 +246,6 @@ button:hover {
   align-items: center;
   gap: 0.25rem;
 }
-
 .gap-info {
   margin-left: auto;
   font-family: var(--font-mono);
@@ -288,21 +256,17 @@ button:hover {
   border-radius: 0.25rem;
   border: 1px solid rgba(245, 158, 11, 0.2);
 }
-
-/* Footer / Info Panel */
 .app-footer {
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
   padding: 1rem 1.5rem;
   z-index: 10;
 }
-
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 1rem;
 }
-
 .tab-btn {
   background: none;
   border: none;
@@ -313,35 +277,28 @@ button:hover {
   font-weight: 500;
   font-size: 0.9rem;
 }
-
 .tab-btn:hover {
   background: none;
   color: var(--text-primary);
 }
-
 .tab-btn.active {
   color: var(--accent-cyan);
   border-bottom-color: var(--accent-cyan);
 }
-
 .tab-content {
   display: none;
   min-height: 80px;
   line-height: 1.6;
 }
-
 .tab-content.active {
   display: block;
 }
-
-/* Guided Tour Styles */
 .guided-tour-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
-
 #tour-step-indicator {
   font-size: 0.85rem;
   font-weight: 600;
@@ -350,20 +307,16 @@ button:hover {
   padding: 0.2rem 0.5rem;
   border-radius: 0.25rem;
 }
-
 .tour-text {
   font-size: 0.95rem;
   color: var(--text-primary);
 }
-
 .tour-text strong {
   display: block;
   font-size: 1.05rem;
   margin-bottom: 0.25rem;
   color: var(--text-primary);
 }
-
-/* Debug Overlay */
 .debug-overlay {
   position: fixed;
   top: 50%;
@@ -381,7 +334,6 @@ button:hover {
   display: flex;
   flex-direction: column;
 }
-
 .debug-overlay h3 {
   font-size: 1.1rem;
   margin-bottom: 1rem;
@@ -389,7 +341,6 @@ button:hover {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
 }
-
 .debug-overlay ul {
   flex: 1;
   overflow-y: auto;
@@ -398,17 +349,22 @@ button:hover {
   font-size: 0.8rem;
   margin-bottom: 1rem;
 }
-
 .debug-overlay li {
   padding: 0.35rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-.log-pass { color: var(--accent-green); }
-.log-fail { color: var(--accent-red); }
-.log-info { color: var(--accent-blue); }
-.log-error { color: var(--accent-orange); }
-
+.log-pass {
+  color: var(--accent-green);
+}
+.log-fail {
+  color: var(--accent-red);
+}
+.log-info {
+  color: var(--accent-blue);
+}
+.log-error {
+  color: var(--accent-orange);
+}
 .log-summary {
   margin-top: 1rem;
   padding: 0.75rem;
@@ -417,7 +373,6 @@ button:hover {
   border: 1px solid rgba(16, 185, 129, 0.2);
   font-size: 0.85rem;
 }
-
 .debug-overlay button {
   align-self: flex-end;
   background-color: var(--accent-blue);
@@ -425,27 +380,23 @@ button:hover {
   border: none;
   padding: 0.5rem 1rem;
 }
-
 .debug-overlay button:hover {
   background-color: #2563eb;
 }
-
-/* Responsiveness */
 @media (max-width: 1200px) {
   .app-container {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
   }
 }
-
 @media (max-width: 768px) {
   .app-container {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     overflow-y: auto;
   }
-
   .canvas-container {
     min-height: 280px;
   }
 }
+/*# sourceMappingURL=main.css.map */

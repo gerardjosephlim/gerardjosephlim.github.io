@@ -58,11 +58,12 @@ export class AppState {
   // Initialize data from PHP endpoints
   async loadMaterialData(materialId) {
     try {
-      const structRes = await fetch(`/api/material.php?id=${materialId}`);
+      const apiBase = window.location.protocol === 'file:' ? 'http://localhost:8000' : '';
+      const structRes = await fetch(`${apiBase}/api/material.php?id=${materialId}`);
       if (!structRes.ok) throw new Error(`HTTP error loading structure: ${structRes.status}`);
       this.material = await structRes.json();
 
-      const bandsRes = await fetch(`/api/bands.php?material=${materialId}`);
+      const bandsRes = await fetch(`${apiBase}/api/bands.php?material=${materialId}`);
       if (!bandsRes.ok) throw new Error(`HTTP error loading bands: ${bandsRes.status}`);
       this.bands = await bandsRes.json();
 

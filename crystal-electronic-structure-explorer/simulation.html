@@ -1,37 +1,122 @@
-<?php
-// public/index.php
-
-$config = require __DIR__ . '/../app/Config/config.php';
-$isDevelopment = $config['env'] === 'development';
-$debugEnabled = isset($_GET['debug']) && $_GET['debug'] == '1';
-
-// Load assets from manifest
-$appScript = '/assets/app.js';
-$appStylesheet = '/assets/main.css';
-
-$manifestPath = __DIR__ . '/assets/manifest.json';
-if (file_exists($manifestPath)) {
-    $manifest = json_decode(file_get_contents($manifestPath), true);
-    if (isset($manifest['app.js'])) {
-        $appScript = $manifest['app.js'];
-    }
-    if (isset($manifest['main.css'])) {
-        $appStylesheet = $manifest['main.css'];
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crystal Electronic Structure Explorer</title>
-    <link rel="stylesheet" href="<?php echo htmlspecialchars($appStylesheet); ?>">
+    <!-- Relative paths to assets built in public folder -->
+    <link rel="stylesheet" href="public/assets/main.css">
     <!-- Three.js and OrbitControls CDNs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        /* Server detection warning overlay */
+        #connection-warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(18, 18, 18, 0.95);
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .warning-card {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            border: 1px solid #e28743;
+            text-align: center;
+        }
+        .warning-icon {
+            font-size: 48px;
+            color: #e28743;
+            margin-bottom: 20px;
+        }
+        .warning-card h2 {
+            color: #fff;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .warning-card p {
+            color: #aaa;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .code-box {
+            background: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 12px 18px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            color: #38bdf8;
+            text-align: left;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .code-box::before {
+            content: "Terminal Command";
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            font-size: 10px;
+            color: #666;
+            font-family: sans-serif;
+        }
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #e28743;
+            animation: spin 1s ease-in-out infinite;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .pulse-text {
+            font-size: 14px;
+            color: #e28743;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body class="dark-theme">
+    <!-- Server detection warning overlay -->
+    <div id="connection-warning-overlay" style="display: none;">
+        <div class="warning-card">
+            <div class="warning-icon">⚠️</div>
+            <h2>Local Simulation Server Required</h2>
+            <p>
+                The 3D Crystal Explorer requires the PHP API backend to fetch material structures and band structures. 
+                We detected that the PHP server at <strong>http://localhost:8000</strong> is not running.
+            </p>
+            <div class="code-box">
+                npm run dev
+            </div>
+            <p style="font-size: 13px; color: #888;">
+                Please open your terminal, navigate to this project directory, and run the command above.
+            </p>
+            <div style="margin-top: 20px;">
+                <div class="spinner"></div>
+                <span class="pulse-text">Waiting for server to start...</span>
+            </div>
+        </div>
+    </div>
+
     <header class="app-header">
         <div class="logo-area">
             <h1>Crystal Electronic Structure Explorer</h1>
@@ -124,18 +209,55 @@ if (file_exists($manifestPath)) {
         </div>
     </footer>
 
-    <!-- Developer Validation Overlay -->
-    <?php if ($debugEnabled): ?>
-    <div id="debug-dashboard" class="debug-overlay">
+    <!-- Developer Validation Overlay (hidden by default) -->
+    <div id="debug-dashboard" class="debug-overlay" style="display: none;">
         <h3>Physics Validation Dashboard</h3>
         <ul id="validation-list">
             <li>Running physics tests...</li>
         </ul>
         <button id="close-debug">Close</button>
     </div>
-    <?php endif; ?>
 
-    <!-- Load main script as ES module -->
-    <script type="module" src="<?php echo htmlspecialchars($appScript); ?>"></script>
+    <!-- Active PHP server checker script -->
+    <script>
+        const serverUrl = 'http://localhost:8000';
+        const overlay = document.getElementById('connection-warning-overlay');
+        let appLoaded = false;
+
+        function checkServer() {
+            // Ping the API to see if the server is up and responding
+            fetch(serverUrl + '/api/material.php?id=silicon', { mode: 'cors' })
+                .then(response => {
+                    if (response.ok) {
+                        overlay.style.display = 'none';
+                        if (!appLoaded) {
+                            appLoaded = true;
+                            loadApp();
+                        }
+                    } else {
+                        showWarning();
+                        setTimeout(checkServer, 2000);
+                    }
+                })
+                .catch(error => {
+                    showWarning();
+                    setTimeout(checkServer, 2000);
+                });
+        }
+
+        function showWarning() {
+            overlay.style.display = 'flex';
+        }
+
+        function loadApp() {
+            console.log("PHP API Server detected. Injecting app.js...");
+            const script = document.createElement('script');
+            script.src = 'public/assets/app.js';
+            document.body.appendChild(script);
+        }
+
+        // Start connection checks as soon as the page HTML is parsed
+        document.addEventListener('DOMContentLoaded', checkServer);
+    </script>
 </body>
 </html>
