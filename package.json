@@ -1,0 +1,15 @@
+{
+  "name": "crystal-electronic-structure-explorer",
+  "version": "1.0.0",
+  "description": "Interactive, browser-based teaching application for crystal structures, Brillouin zones, and electronic band diagrams.",
+  "main": "public/index.php",
+  "scripts": {
+    "dev:server": "php -S localhost:8000 -t public",
+    "build": "node scripts/build.js --prod",
+    "build:dev": "node scripts/build.js",
+    "dev": "node scripts/build.js && php -S localhost:8000 -t public"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  }
+}
