@@ -84,15 +84,19 @@
                     <button id="btn-type-electron" class="active">Electron</button>
                     <button id="btn-type-positron">Positron</button>
                 </div>
+
+                <button id="select-anode-btn" class="btn w-full mt-8">⚡ Configure Anode Gate</button>
             </div>
 
-            <div class="control-group">
-                <h2>Accelerator</h2>
+            <!-- Contextual Accelerator Panel: Only shown when Anode / Gate is selected -->
+            <div id="accelerator-group" class="control-group customizer-panel" style="display: none;">
+                <h2>Accelerator (Anode Gate)</h2>
                 <label>
                     Plate Voltage (kV)
                     <span id="voltage-val" class="value-display">2.0</span>
                 </label>
                 <input type="range" id="plateVoltage" min="-10.0" max="10.0" step="0.1" value="2.0">
+                <button id="close-accelerator-btn" class="btn w-full mt-8">Done</button>
             </div>
 
             <div class="control-group">
@@ -120,7 +124,7 @@
                         Voltage (kV)
                         <span id="e-voltage-val" class="value-display">0</span>
                     </label>
-                    <input type="range" id="eFieldVoltage" min="-5" max="5" step="0.1" value="0">
+                    <input type="range" id="eFieldVoltage" min="-25" max="25" step="0.5" value="0">
 
                     <label>
                         Gap Size

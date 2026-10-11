@@ -574,18 +574,18 @@ canvas {
   display: block;
 }
 
-/* Controls Panel Custom Positioning (Standard 24px Window Margin) */
+/* Controls Panel Custom Positioning (Generous 40px Floating Margin from Window Edge) */
 .controls-panel {
   position: absolute;
-  top: 80px;
-  right: 24px;
+  top: 84px;
+  right: 40px;
   width: 310px;
   padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   z-index: 10;
-  max-height: calc(100vh - 160px);
+  max-height: calc(100vh - 170px);
   border-radius: 20px;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -725,7 +725,7 @@ canvas {
 .help-btn {
   position: fixed;
   top: 24px;
-  right: 24px;
+  right: 40px;
   z-index: 25;
 }
 
