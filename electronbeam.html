@@ -52,88 +52,99 @@
 
         <button id="help-btn" class="help-btn liquid-glass" aria-label="Help">?</button>
 
-        <aside class="controls-panel liquid-glass">
-            <h1>Electron Beam</h1>
+        <!-- Bottom Controller Bar (Aligned with Electric Fields and Forces) -->
+        <div class="controls-wrapper">
+            <div class="controls liquid-glass" id="main-controls">
+                <button id="add-magnet-btn" class="btn btn-primary">+ B-Field</button>
+                <button id="add-electric-btn" class="btn btn-primary">+ E-Plate</button>
+                <button id="select-anode-btn" class="btn">⚡ Anode Gate</button>
 
-            <div class="control-group">
-                <h2>Beam Source</h2>
-                <label>
-                    Particles/Second
-                    <span id="emission-val" class="value-display">25</span>
-                </label>
-                <input type="range" id="emissionRate" min="0" max="50" value="25">
-
-                <label>
-                    Energy (eV)
-                    <span id="energy-val" class="value-display">100</span>
-                </label>
-                <input type="range" id="beamEnergy" min="10" max="500" value="100">
-
-                <label>
-                    Spread
-                    <span id="spread-val" class="value-display">0.1</span>
-                </label>
-                <input type="range" id="beamSpread" min="0" max="1.0" step="0.05" value="0.1">
-
-                <!-- Added Clear Button -->
-                <button id="clear-particles-btn" class="btn w-full mt-8">Clear Particles</button>
+                <div class="divider"></div>
 
                 <!-- Particle Type Toggle -->
-                <label class="mt-15">Particle Type</label>
                 <div class="toggle-group">
-                    <button id="btn-type-electron" class="active">Electron</button>
-                    <button id="btn-type-positron">Positron</button>
+                    <button id="btn-type-electron" class="active">e⁻</button>
+                    <button id="btn-type-positron">e⁺</button>
                 </div>
 
-                <button id="select-anode-btn" class="btn w-full mt-8">⚡ Configure Anode Gate</button>
-            </div>
+                <div class="ctrl-slider-group">
+                    <label class="toggle-label">Energy</label>
+                    <input type="range" id="beamEnergy" min="10" max="500" value="100" style="width: 75px;">
+                    <span id="energy-val" class="value-display">100</span>
+                </div>
 
-            <!-- Contextual Accelerator Panel: Only shown when Anode / Gate is selected -->
-            <div id="accelerator-group" class="control-group customizer-panel" style="display: none;">
-                <h2>Accelerator (Anode Gate)</h2>
+                <div class="ctrl-slider-group">
+                    <label class="toggle-label">Flux</label>
+                    <input type="range" id="emissionRate" min="0" max="50" value="25" style="width: 65px;">
+                    <span id="emission-val" class="value-display">25</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Dot Grid Toggle Switch -->
+                <div class="grid-toggle-wrapper">
+                    <label class="switch">
+                        <input type="checkbox" id="grid-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Grid</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <button id="clear-particles-btn" class="btn">Reset Fields</button>
+            </div>
+        </div>
+
+        <!-- Floating Contextual Property Panel (Only appears when Hardware / Region is selected) -->
+        <aside id="property-panel" class="property-panel liquid-glass" style="display: none;">
+            <!-- Anode Gate Customizer -->
+            <div id="accelerator-group" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Accelerator Gate</span>
+                    <button id="close-accelerator-btn" class="close-btn" title="Close">✕</button>
+                </div>
                 <label>
                     Plate Voltage (kV)
                     <span id="voltage-val" class="value-display">2.0</span>
                 </label>
                 <input type="range" id="plateVoltage" min="-10.0" max="10.0" step="0.1" value="2.0">
-                <button id="close-accelerator-btn" class="btn w-full mt-8">Done</button>
             </div>
 
-            <div class="control-group">
-                <h2>Magnetic Field Sections</h2>
-                <button id="add-magnet-btn" class="btn btn-primary w-full">+ Add Field Region</button>
-                <div id="magnet-customizer" class="customizer-panel">
-                    <label>Selected Region B-Field</label>
-                    <label>
-                        Strength (mT)
-                        <span id="b-field-val" class="value-display">0</span>
-                    </label>
-                    <input type="range" id="bFieldStrength" min="-1000" max="1000" value="0">
-                    <button id="reset-magnet-size-btn" class="btn w-full mt-8">Reset Size</button>
-                    <button id="delete-magnet-btn" class="btn btn-danger w-full mt-8">Remove Region</button>
+            <!-- Magnet Customizer -->
+            <div id="magnet-customizer" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Magnetic Region</span>
+                    <button id="close-magnet-btn" class="close-btn" title="Close">✕</button>
                 </div>
+                <label>
+                    B-Field Strength (mT)
+                    <span id="b-field-val" class="value-display">0</span>
+                </label>
+                <input type="range" id="bFieldStrength" min="-1000" max="1000" value="0">
+                <button id="reset-magnet-size-btn" class="btn w-full mt-8">Reset Size</button>
+                <button id="delete-magnet-btn" class="btn btn-danger w-full mt-8">Remove Region</button>
             </div>
 
-            <div class="control-group">
-                <h2>Electric Field Sections</h2>
-                <button id="add-electric-btn" class="btn btn-primary w-full">+ Add E-Field Plate</button>
-                <div id="electric-customizer" class="customizer-panel">
-                    <label>Selected E-Field</label>
-
-                    <label>
-                        Voltage (kV)
-                        <span id="e-voltage-val" class="value-display">0</span>
-                    </label>
-                    <input type="range" id="eFieldVoltage" min="-25" max="25" step="0.5" value="0">
-
-                    <label>
-                        Gap Size
-                        <span id="e-gap-val" class="value-display">100</span>
-                    </label>
-                    <input type="range" id="eFieldGap" min="50" max="300" step="10" value="100">
-
-                    <button id="delete-electric-btn" class="btn btn-danger w-full mt-8">Remove Plate</button>
+            <!-- Electric Customizer -->
+            <div id="electric-customizer" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Electric Plates</span>
+                    <button id="close-electric-btn" class="close-btn" title="Close">✕</button>
                 </div>
+                <label>
+                    Voltage (kV)
+                    <span id="e-voltage-val" class="value-display">0</span>
+                </label>
+                <input type="range" id="eFieldVoltage" min="-25" max="25" step="0.5" value="0">
+
+                <label class="mt-8">
+                    Gap Size
+                    <span id="e-gap-val" class="value-display">100</span>
+                </label>
+                <input type="range" id="eFieldGap" min="50" max="300" step="10" value="100">
+
+                <button id="delete-electric-btn" class="btn btn-danger w-full mt-8">Remove Plate</button>
             </div>
         </aside>
 
