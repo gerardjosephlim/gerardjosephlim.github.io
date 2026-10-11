@@ -22,6 +22,32 @@
                 <p>Simulate electron beam in magnetic and electric fields</p>
                 <p><i>Dr. Gerard Joseph Lim</i></p>
             </header>
+
+            <!-- Dedicated Beam Telemetry Glass Card -->
+            <div id="telemetry-panel" class="telemetry-panel liquid-glass">
+                <div class="telemetry-header">
+                    <span class="telemetry-title">Beam Telemetry</span>
+                    <span id="telemetry-status" class="telemetry-badge badge-active">Transmitting</span>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <span class="item-label">Deflection ΔY</span>
+                        <span id="telemetry-deflection" class="item-val highlight">0.0 mm</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Exit Angle θ</span>
+                        <span id="telemetry-angle" class="item-val">0.0°</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Velocity v</span>
+                        <span id="telemetry-speed" class="item-val mono">0.0% c</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Field Status</span>
+                        <span id="telemetry-mode" class="item-val sub">Pure Drift</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <button id="help-btn" class="help-btn liquid-glass" aria-label="Help">?</button>
