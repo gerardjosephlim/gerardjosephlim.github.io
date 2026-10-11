@@ -225,12 +225,12 @@ body.glass-simulation-body {
 }
 
 .band-diagram-wrapper {
-  flex: 0.85;
-  min-height: 140px;
+  flex: 1;
+  min-height: 165px;
   margin-top: 10px;
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 8px 12px;
   display: flex;
   flex-direction: column;
