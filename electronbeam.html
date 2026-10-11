@@ -117,7 +117,11 @@
                     <span class="panel-title">Magnetic Region</span>
                     <button id="close-magnet-btn" class="close-btn" title="Close">✕</button>
                 </div>
-                <label>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Dimensions:</span>
+                    <span id="magnet-dim-val" class="value-display" style="font-size: 0.8rem;">160 × 160 mm</span>
+                </div>
+                <label class="mt-4">
                     B-Field Strength (mT)
                     <span id="b-field-val" class="value-display">0</span>
                 </label>
@@ -132,7 +136,11 @@
                     <span class="panel-title">Electric Plates</span>
                     <button id="close-electric-btn" class="close-btn" title="Close">✕</button>
                 </div>
-                <label>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Dimensions:</span>
+                    <span id="electric-dim-val" class="value-display" style="font-size: 0.8rem;">140 × 110 mm</span>
+                </div>
+                <label class="mt-4">
                     Voltage (kV)
                     <span id="e-voltage-val" class="value-display">0</span>
                 </label>
