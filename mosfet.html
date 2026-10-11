@@ -7,9 +7,9 @@
     <title>MOSFET Simulator - Dr. Gerard Joseph Lim</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <link rel="stylesheet" href="liquid-glass-components.css">
     <link rel="stylesheet" href="mosfet.css">
 </head>
@@ -59,7 +59,7 @@
                 <div id="band-diagram-section" class="band-diagram-wrapper">
                     <div class="band-header">
                         <span class="band-title">Surface Energy Band Diagram (Source &rarr; Channel &rarr; Drain)</span>
-                        <span id="band-telemetry" class="band-telemetry-text">E_C, E_F, E_Fi, E_V &bull; qV_DS Barrier Lowering</span>
+                        <span id="band-telemetry" class="band-telemetry-text"><span class="math-sym">E<sub>C</sub></span>, <span class="math-sym">E<sub>FS</sub></span>, <span class="math-sym">E<sub>i</sub></span>, <span class="math-sym">E<sub>V</sub></span> &bull; <span class="math-sym">qV<sub>DS</sub></span> Energy Separation</span>
                     </div>
                     <canvas id="bandCanvas"></canvas>
                 </div>
@@ -75,13 +75,13 @@
                             <span class="regime-dot"></span>
                             <span id="hud-regime-name" class="regime-name">Saturation / Pinch-Off</span>
                         </div>
-                        <span id="hud-condition-tag" class="hud-condition">V_DS &ge; V_DS(sat) = V_GS - V_T</span>
+                        <span id="hud-condition-tag" class="hud-condition">V_DS &ge; V_DS(sat)</span>
                     </div>
 
                     <!-- Live Dynamic Mathematical Equations -->
                     <div id="hud-math-box" class="math-display-box">
                         <div class="formula-row">
-                            <span class="math-label">Current:</span>
+                            <span class="math-label"><i>I<sub>D</sub></i> Formula:</span>
                             <span id="math-formula-current" class="math-expr">I_D = ½ μ_n C_ox (W/L) (V_GS - V_T)² (1 + λV_DS)</span>
                         </div>
                         <div class="formula-row">
@@ -97,19 +97,19 @@
                     <!-- Live Scalar Telemetry Grid -->
                     <div class="telemetry-compact-grid">
                         <div class="telemetry-cell">
-                            <span class="cell-label">Drain Current I_D</span>
+                            <span class="cell-label">Drain Current <span class="math-sym">I<sub>D</sub></span></span>
                             <span id="val-drain-current" class="cell-val highlight">1.42 mA</span>
                         </div>
                         <div class="telemetry-cell">
-                            <span class="cell-label">Pinch-Off V_DS(sat)</span>
+                            <span class="cell-label">Pinch-Off <span class="math-sym">V<sub>DS(sat)</sub></span></span>
                             <span id="val-vds-sat" class="cell-val">1.30 V</span>
                         </div>
                         <div class="telemetry-cell">
-                            <span class="cell-label">Transconductance g_m</span>
+                            <span class="cell-label">Transconductance <span class="math-sym">g<sub>m</sub></span></span>
                             <span id="val-gm" class="cell-val mono">1.85 mS</span>
                         </div>
                         <div class="telemetry-cell">
-                            <span class="cell-label">Output Resist. r_o</span>
+                            <span class="cell-label">Output Resist. <span class="math-sym">r<sub>o</sub></span></span>
                             <span id="val-ro" class="cell-val mono">45.2 k&Omega;</span>
                         </div>
                     </div>
@@ -118,12 +118,12 @@
                 <!-- I-V Graph Section with Tabs -->
                 <div class="graph-section">
                     <div class="graph-tabs">
-                        <button id="tab-output-curve" class="graph-tab active">Output (I_D vs V_DS)</button>
-                        <button id="tab-transfer-curve" class="graph-tab">Transfer (I_D vs V_GS)</button>
+                        <button id="tab-output-curve" class="graph-tab active">Output (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>DS</sub></span>)</button>
+                        <button id="tab-transfer-curve" class="graph-tab">Transfer (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>GS</sub></span>)</button>
                         <div class="graph-legend">
-                            <span class="legend-item"><span class="legend-dot" style="background: #38bdf8;"></span> V_GS Family</span>
-                            <span class="legend-item"><span class="legend-dot" style="background: #fbbf24;"></span> Pinch-off Locus</span>
-                            <span class="legend-item"><span class="legend-dot" style="background: #ff4d4d;"></span> Q-Point</span>
+                            <span class="legend-item"><span class="legend-dot" style="background: #38bdf8;"></span> <span class="math-sym">V<sub>GS</sub></span> Family</span>
+                            <span class="legend-item"><span class="legend-dot" style="background: #fbbf24;"></span> Pinch-off (<span class="math-sym">V<sub>DS(sat)</sub></span>)</span>
+                            <span class="legend-item"><span class="legend-dot" style="background: #ff4d4d;"></span> Operating Point (<span class="math-sym">Q</span>)</span>
                         </div>
                     </div>
 
@@ -143,8 +143,8 @@
                 <div class="ctrl-group">
                     <span class="ctrl-title">Channel Type</span>
                     <div class="segmented-control">
-                        <button id="btn-type-nmos" class="segment-btn active">NMOS (n⁺-p-n⁺)</button>
-                        <button id="btn-type-pmos" class="segment-btn">PMOS (p⁺-n-p⁺)</button>
+                        <button id="btn-type-nmos" class="segment-btn active">NMOS (<span class="math-sym">n⁺-p-n⁺</span>)</button>
+                        <button id="btn-type-pmos" class="segment-btn">PMOS (<span class="math-sym">p⁺-n-p⁺</span>)</button>
                     </div>
                 </div>
 
@@ -154,8 +154,8 @@
                 <div class="ctrl-group">
                     <span class="ctrl-title">Device Mode</span>
                     <div class="segmented-control">
-                        <button id="btn-mode-enh" class="segment-btn active">Enhancement (V_T > 0)</button>
-                        <button id="btn-mode-dep" class="segment-btn">Depletion (V_T < 0)</button>
+                        <button id="btn-mode-enh" class="segment-btn active">Enhancement (<span class="math-sym">V<sub>T</sub> &gt; 0</span>)</button>
+                        <button id="btn-mode-dep" class="segment-btn">Depletion (<span class="math-sym">V<sub>T</sub> &lt; 0</span>)</button>
                     </div>
                 </div>
 
@@ -164,7 +164,7 @@
                 <!-- Primary Voltage Sliders -->
                 <div class="ctrl-group slider-group">
                     <div class="slider-header">
-                        <label for="slider-vgs">Gate Voltage V_GS</label>
+                        <label for="slider-vgs">Gate Voltage <span class="math-sym">V<sub>GS</sub></span></label>
                         <span id="disp-vgs" class="slider-badge">2.00 V</span>
                     </div>
                     <input type="range" id="slider-vgs" min="-3.0" max="5.0" step="0.05" value="2.00">
@@ -172,7 +172,7 @@
 
                 <div class="ctrl-group slider-group">
                     <div class="slider-header">
-                        <label for="slider-vds">Drain Voltage V_DS</label>
+                        <label for="slider-vds">Drain Voltage <span class="math-sym">V<sub>DS</sub></span></label>
                         <span id="disp-vds" class="slider-badge">2.50 V</span>
                     </div>
                     <input type="range" id="slider-vds" min="0.0" max="6.0" step="0.05" value="2.50">
@@ -186,7 +186,7 @@
                     <div class="presets-row">
                         <button id="preset-cutoff" class="btn btn-preset" title="Subthreshold / Cutoff">Cutoff</button>
                         <button id="preset-triode" class="btn btn-preset" title="Linear / Ohmic Region">Triode</button>
-                        <button id="preset-pinchoff" class="btn btn-preset" title="Pinch-off Edge (V_DS = V_DS,sat)">Pinch-off</button>
+                        <button id="preset-pinchoff" class="btn btn-preset" title="Pinch-off Edge (V_DS = V_DS,sat)">Pinch-Off</button>
                         <button id="preset-saturation" class="btn btn-preset" title="Saturation Region">Saturation</button>
                     </div>
                 </div>
@@ -210,23 +210,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="param-row">
-                        <label>Threshold Voltage V_T (V):</label>
+                        <label>Threshold Voltage <span class="math-sym">V<sub>T</sub></span> (V):</label>
                         <input type="number" id="input-vt" step="0.05" value="0.70">
                     </div>
                     <div class="param-row">
-                        <label>Channel Modulation λ (V⁻¹):</label>
+                        <label>Channel Modulation <span class="math-sym">λ</span> (V⁻¹):</label>
                         <input type="number" id="input-lambda" step="0.01" min="0" max="0.2" value="0.04">
                     </div>
                     <div class="param-row">
-                        <label>Substrate Doping N_sub (cm⁻³):</label>
+                        <label>Substrate Doping <span class="math-sym">N<sub>sub</sub></span> (cm⁻³):</label>
                         <input type="text" id="input-nsub" value="2.0e16" disabled>
                     </div>
                     <div class="param-row">
-                        <label>Subthreshold Swing S (mV/dec):</label>
+                        <label>Subthreshold Swing <span class="math-sym">S</span> (mV/dec):</label>
                         <input type="number" id="input-subswing" step="5" min="60" max="150" value="75">
                     </div>
                     <div class="param-row toggle-row">
-                        <label>Velocity Saturation (v_sat = 10⁷ cm/s):</label>
+                        <label>Velocity Saturation (<span class="math-sym">v<sub>sat</sub> = 10<sup>7</sup> cm/s</span>):</label>
                         <input type="checkbox" id="chk-vsat">
                     </div>
                 </div>
@@ -244,10 +244,10 @@
                     <h3>Lecture Overview & Instructions</h3>
                     <ul>
                         <li><b>Physical Cross-Section</b>: Visualises donor/acceptor wells, expanding depletion boundaries, gate oxide, and the mobile inversion channel.</li>
-                        <li><b>Pinch-Off & Channel Modulation</b>: Observe the channel pinching off when $V_{DS} \ge V_{DS(sat)} = V_{GS} - V_T$, and watch $\Delta L$ shorten the effective channel length.</li>
-                        <li><b>NMOS vs PMOS & Modes</b>: Switch between $n^+ \text{-} p \text{-} n^+$ and $p^+ \text{-} n \text{-} p^+$ across both <b>Enhancement</b> (normally-off) and <b>Depletion</b> (normally-on) modes.</li>
-                        <li><b>Energy Band Diagram</b>: Examine conduction ($E_C$) and valence ($E_V$) band bending along the channel and observe Drain-Induced Barrier Lowering (DIBL).</li>
-                        <li><b>Synchronized I-V Curves</b>: Family of output curves ($I_D \text{ vs } V_{DS}$) and transfer curves ($I_D \text{ vs } V_{GS}$) with live Q-point tracking.</li>
+                        <li><b>Pinch-Off & Channel Modulation</b>: Observe the channel pinching off when <span class="math-sym"><i>V<sub>DS</sub></i> ≥ <i>V<sub>DS(sat)</sub></i> = <i>V<sub>GS</sub></i> - <i>V<sub>T</sub></i></span>, and watch <span class="math-sym">Δ<i>L</i></span> shorten the effective channel length.</li>
+                        <li><b>NMOS vs PMOS & Modes</b>: Switch between <span class="math-sym"><i>n</i>⁺ - <i>p</i> - <i>n</i>⁺</span> and <span class="math-sym"><i>p</i>⁺ - <i>n</i> - <i>p</i>⁺</span> across both <b>Enhancement</b> (normally-off) and <b>Depletion</b> (normally-on) modes.</li>
+                        <li><b>Energy Band Diagram</b>: Examine conduction (<span class="math-sym"><i>E<sub>C</sub></i></span>) and valence (<span class="math-sym"><i>E<sub>V</sub></i></span>) band bending along the channel and observe Drain-Induced Barrier Lowering (DIBL).</li>
+                        <li><b>Synchronized I-V Curves</b>: Family of output curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>DS</sub></i></span>) and transfer curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>GS</sub></i></span>) with live Q-point tracking.</li>
                     </ul>
                 </div>
                 <footer class="splash-footer">

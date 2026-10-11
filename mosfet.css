@@ -19,6 +19,8 @@
   --text-dim: #64748b;
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-math: 'Cambria Math', 'STIX Two Math', 'KaTeX_Math', 'Latin Modern Math', 'Times New Roman', serif;
+  --font-math-roman: 'Cambria', 'STIX Two Text', 'KaTeX_Main', 'Latin Modern Roman', 'Times New Roman', serif;
 }
 
 * {
@@ -38,14 +40,15 @@ body.glass-simulation-body {
   -webkit-user-select: none;
 }
 
-/* App Container */
+/* App Container (Sequential Flex Layout, Zero Overlap) */
 .mosfet-app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  padding: 16px 24px 0 24px;
+  padding: 10px 18px 6px 18px;
   position: relative;
+  overflow: hidden;
   background: radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
               radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
 }
@@ -55,9 +58,10 @@ body.glass-simulation-body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 24px;
-  border-radius: 16px;
-  margin-bottom: 14px;
+  padding: 8px 20px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
   z-index: 20;
 }
 
@@ -144,10 +148,11 @@ body.glass-simulation-body {
 .workspace-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.95fr;
-  gap: 16px;
+  gap: 12px;
   flex: 1;
   min-height: 0;
-  margin-bottom: 96px; /* space for floating bottom controls */
+  margin-bottom: 0;
+  overflow: hidden;
 }
 
 /* Left Pane: Device Cross-Section & Band Diagram */
@@ -321,12 +326,20 @@ body.glass-simulation-body {
 }
 
 .hud-condition {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.07);
-  padding: 3px 10px;
+  font-family: var(--font-math);
+  font-size: 0.95rem;
+  color: var(--accent-gold);
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.22);
+  padding: 3px 12px;
   border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hud-condition .katex {
+  font-size: 1.05em;
+  color: var(--accent-gold);
 }
 
 .math-display-box {
@@ -341,32 +354,47 @@ body.glass-simulation-body {
 
 .formula-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
 }
 
 .math-label {
-  font-size: 0.78rem;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--primary-cyan);
-  width: 90px;
+  width: 95px;
   flex-shrink: 0;
 }
 
 .math-expr {
-  font-size: 0.95rem;
+  font-family: var(--font-math);
+  font-size: 1.02rem;
   color: #f8fafc;
   overflow-x: auto;
   white-space: nowrap;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  letter-spacing: 0.02em;
 }
 
 .math-expr .katex {
-  font-size: 1.05em;
+  font-size: 1.1em;
   color: #f8fafc;
+}
+
+/* Cambria Math / LaTeX-Style Inline Math Symbols */
+.math-sym {
+  font-family: var(--font-math);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.math-roman {
+  font-family: var(--font-math-roman);
+  font-style: normal;
 }
 
 /* Fallback HTML Math Styling */
@@ -495,27 +523,26 @@ body.glass-simulation-body {
   display: block;
 }
 
-/* Bottom Controller Bar */
+/* Bottom Controller Bar (Non-overlapping relative flex dock) */
 .controls-wrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
-  pointer-events: none;
-  z-index: 100;
-  margin-bottom: 64px;
+  flex-shrink: 0;
+  z-index: 30;
+  margin-top: 6px;
+  margin-bottom: 2px;
 }
 
 .controls {
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 10px 22px;
-  border-radius: 20px;
-  max-width: 96vw;
+  gap: 14px;
+  padding: 8px 18px;
+  border-radius: 16px;
+  max-width: 98vw;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7),
               inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -823,21 +850,30 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: var(--primary-cyan);
 }
 
-/* Signature Footer Link */
-.signature-footer {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+/* Signature Footer Link (Override global liquid-glass-components.css fixed position) */
+.mosfet-app-container .signature-footer,
+.mosfet-app-container a.signature-footer,
+a.signature-footer {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  flex-shrink: 0;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 2px;
   font-size: 0.72rem;
   color: var(--text-dim);
   text-decoration: none;
   font-family: var(--font-main);
   letter-spacing: 0.05em;
   transition: color 0.2s ease;
+  z-index: 10;
+  display: block;
+  pointer-events: auto;
 }
 
-.signature-footer:hover {
-  color: var(--primary-cyan);
+.signature-footer:hover,
+a.signature-footer:hover {
+  color: var(--primary-cyan) !important;
 }
