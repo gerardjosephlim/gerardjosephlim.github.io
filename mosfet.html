@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSFET Simulator - Dr. Gerard Joseph Lim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../liquid-glass-components.css">
+    <link rel="stylesheet" href="mosfet.css">
+</head>
+
+<body class="glass-simulation-body">
+
+    <div class="mosfet-app-container">
+
+        <!-- Header Bar -->
+        <header class="app-header liquid-glass">
+            <div class="header-left">
+                <div class="badge-tag">SOLID-STATE DEVICE LAB</div>
+                <h1 class="header-title">MOSFET Visualisation & Simulation</h1>
+                <p class="header-sub">Depletion Regions, Inversion Layer, Pinch-Off & I-V Analytics &bull; <i>Dr. Gerard Joseph Lim</i></p>
+            </div>
+            <div class="header-right">
+                <div class="mode-badges">
+                    <span id="badge-device-type" class="status-badge badge-active">NMOS</span>
+                    <span id="badge-mode-type" class="status-badge">Enhancement</span>
+                    <span id="badge-regime" class="status-badge badge-regime">Pinch-Off</span>
+                </div>
+                <button id="btn-help" class="icon-btn liquid-glass" title="Instructions & Theory">?</button>
+            </div>
+        </header>
+
+        <!-- Main Workspace: Side-by-Side Split View -->
+        <main class="workspace-grid">
+
+            <!-- LEFT PANE: Physical Device Cross-Section & Band Diagram -->
+            <section class="left-pane liquid-glass">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <span class="pane-title">Semiconductor Cross-Section</span>
+                        <span id="device-subtitle" class="pane-sub">n⁺ - p - n⁺ Enhancement MOSFET (L = 1.0 μm)</span>
+                    </div>
+                    <div class="pane-actions">
+                        <button id="btn-toggle-bands" class="toggle-pill-btn active" title="Toggle Energy Band Diagram">⚡ Band Diagram</button>
+                        <button id="btn-toggle-carriers" class="toggle-pill-btn active" title="Toggle Carrier Drift Animation">Carrier Flow</button>
+                    </div>
+                </div>
+
+                <!-- Main Physical Semiconductor Canvas -->
+                <div class="canvas-wrapper">
+                    <canvas id="deviceCanvas"></canvas>
+                </div>
+
+                <!-- Synchronized Energy Band Diagram Canvas -->
+                <div id="band-diagram-section" class="band-diagram-wrapper">
+                    <div class="band-header">
+                        <span class="band-title">Surface Energy Band Diagram (Source &rarr; Channel &rarr; Drain)</span>
+                        <span id="band-telemetry" class="band-telemetry-text">E_C, E_F, E_Fi, E_V &bull; qV_DS Barrier Lowering</span>
+                    </div>
+                    <canvas id="bandCanvas"></canvas>
+                </div>
+            </section>
+
+            <!-- RIGHT PANE: Mathematical Theory HUD & Synchronized I-V Graphs -->
+            <section class="right-pane liquid-glass">
+
+                <!-- Dynamic Mathematical Theory HUD Card -->
+                <div class="theory-hud-card">
+                    <div class="hud-header">
+                        <div class="regime-indicator">
+                            <span class="regime-dot"></span>
+                            <span id="hud-regime-name" class="regime-name">Saturation / Pinch-Off</span>
+                        </div>
+                        <span id="hud-condition-tag" class="hud-condition">V_DS &ge; V_DS(sat) = V_GS - V_T</span>
+                    </div>
+
+                    <!-- Live Dynamic Mathematical Equations -->
+                    <div id="hud-math-box" class="math-display-box">
+                        <div class="formula-row">
+                            <span class="math-label">Current:</span>
+                            <span id="math-formula-current" class="math-expr">I_D = ½ μ_n C_ox (W/L) (V_GS - V_T)² (1 + λV_DS)</span>
+                        </div>
+                        <div class="formula-row">
+                            <span class="math-label">Pinch-Off:</span>
+                            <span id="math-formula-pinch" class="math-expr">V_DS(sat) = V_GS - V_T = 2.00 V - 0.70 V = 1.30 V</span>
+                        </div>
+                        <div class="formula-row">
+                            <span class="math-label">Modulation:</span>
+                            <span id="math-formula-clm" class="math-expr">&Delta;L = 0.082 &mu;m &bull; r_o &approx; 1/(λ I_D) = 45.2 k&Omega;</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Scalar Telemetry Grid -->
+                    <div class="telemetry-compact-grid">
+                        <div class="telemetry-cell">
+                            <span class="cell-label">Drain Current I_D</span>
+                            <span id="val-drain-current" class="cell-val highlight">1.42 mA</span>
+                        </div>
+                        <div class="telemetry-cell">
+                            <span class="cell-label">Pinch-Off V_DS(sat)</span>
+                            <span id="val-vds-sat" class="cell-val">1.30 V</span>
+                        </div>
+                        <div class="telemetry-cell">
+                            <span class="cell-label">Transconductance g_m</span>
+                            <span id="val-gm" class="cell-val mono">1.85 mS</span>
+                        </div>
+                        <div class="telemetry-cell">
+                            <span class="cell-label">Output Resist. r_o</span>
+                            <span id="val-ro" class="cell-val mono">45.2 k&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- I-V Graph Section with Tabs -->
+                <div class="graph-section">
+                    <div class="graph-tabs">
+                        <button id="tab-output-curve" class="graph-tab active">Output (I_D vs V_DS)</button>
+                        <button id="tab-transfer-curve" class="graph-tab">Transfer (I_D vs V_GS)</button>
+                        <div class="graph-legend">
+                            <span class="legend-item"><span class="legend-dot" style="background: #38bdf8;"></span> V_GS Family</span>
+                            <span class="legend-item"><span class="legend-dot" style="background: #fbbf24;"></span> Pinch-off Locus</span>
+                            <span class="legend-item"><span class="legend-dot" style="background: #ff4d4d;"></span> Q-Point</span>
+                        </div>
+                    </div>
+
+                    <div class="graph-canvas-container">
+                        <canvas id="graphCanvas"></canvas>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- BOTTOM CONTROLLER BAR -->
+        <footer class="controls-wrapper">
+            <div class="controls liquid-glass">
+
+                <!-- Type Selector (NMOS / PMOS) -->
+                <div class="ctrl-group">
+                    <span class="ctrl-title">Channel Type</span>
+                    <div class="segmented-control">
+                        <button id="btn-type-nmos" class="segment-btn active">NMOS (n⁺-p-n⁺)</button>
+                        <button id="btn-type-pmos" class="segment-btn">PMOS (p⁺-n-p⁺)</button>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Mode Selector (Enhancement / Depletion) -->
+                <div class="ctrl-group">
+                    <span class="ctrl-title">Device Mode</span>
+                    <div class="segmented-control">
+                        <button id="btn-mode-enh" class="segment-btn active">Enhancement (V_T > 0)</button>
+                        <button id="btn-mode-dep" class="segment-btn">Depletion (V_T < 0)</button>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Primary Voltage Sliders -->
+                <div class="ctrl-group slider-group">
+                    <div class="slider-header">
+                        <label for="slider-vgs">Gate Voltage V_GS</label>
+                        <span id="disp-vgs" class="slider-badge">2.00 V</span>
+                    </div>
+                    <input type="range" id="slider-vgs" min="-3.0" max="5.0" step="0.05" value="2.00">
+                </div>
+
+                <div class="ctrl-group slider-group">
+                    <div class="slider-header">
+                        <label for="slider-vds">Drain Voltage V_DS</label>
+                        <span id="disp-vds" class="slider-badge">2.50 V</span>
+                    </div>
+                    <input type="range" id="slider-vds" min="0.0" max="6.0" step="0.05" value="2.50">
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Quick Physics Presets -->
+                <div class="ctrl-group presets-group">
+                    <span class="ctrl-title">Presets</span>
+                    <div class="presets-row">
+                        <button id="preset-cutoff" class="btn btn-preset" title="Subthreshold / Cutoff">Cutoff</button>
+                        <button id="preset-triode" class="btn btn-preset" title="Linear / Ohmic Region">Triode</button>
+                        <button id="preset-pinchoff" class="btn btn-preset" title="Pinch-off Edge (V_DS = V_DS,sat)">Pinch-off</button>
+                        <button id="preset-saturation" class="btn btn-preset" title="Saturation Region">Saturation</button>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Advanced Options & Reset -->
+                <div class="ctrl-group">
+                    <button id="btn-advanced" class="btn">⚙ Parameters</button>
+                    <button id="btn-reset" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Advanced Parameters Modal / Drawer -->
+        <div id="advanced-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-card liquid-glass">
+                <div class="modal-header">
+                    <h3>Semiconductor & Device Parameters</h3>
+                    <button id="btn-close-modal" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="param-row">
+                        <label>Threshold Voltage V_T (V):</label>
+                        <input type="number" id="input-vt" step="0.05" value="0.70">
+                    </div>
+                    <div class="param-row">
+                        <label>Channel Modulation λ (V⁻¹):</label>
+                        <input type="number" id="input-lambda" step="0.01" min="0" max="0.2" value="0.04">
+                    </div>
+                    <div class="param-row">
+                        <label>Substrate Doping N_sub (cm⁻³):</label>
+                        <input type="text" id="input-nsub" value="2.0e16" disabled>
+                    </div>
+                    <div class="param-row">
+                        <label>Subthreshold Swing S (mV/dec):</label>
+                        <input type="number" id="input-subswing" step="5" min="60" max="150" value="75">
+                    </div>
+                    <div class="param-row toggle-row">
+                        <label>Velocity Saturation (v_sat = 10⁷ cm/s):</label>
+                        <input type="checkbox" id="chk-vsat">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions & Theory Splash Modal -->
+        <div id="splash-modal" class="splash-overlay" role="dialog" aria-modal="true">
+            <div class="splash-modal liquid-glass">
+                <header class="splash-header">
+                    <h1>MOSFET Physics & Visualisation</h1>
+                    <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+                </header>
+                <div class="splash-body">
+                    <h3>Lecture Overview & Instructions</h3>
+                    <ul>
+                        <li><b>Physical Cross-Section</b>: Visualises donor/acceptor wells, expanding depletion boundaries, gate oxide, and the mobile inversion channel.</li>
+                        <li><b>Pinch-Off & Channel Modulation</b>: Observe the channel pinching off when $V_{DS} \ge V_{DS(sat)} = V_{GS} - V_T$, and watch $\Delta L$ shorten the effective channel length.</li>
+                        <li><b>NMOS vs PMOS & Modes</b>: Switch between $n^+ \text{-} p \text{-} n^+$ and $p^+ \text{-} n \text{-} p^+$ across both <b>Enhancement</b> (normally-off) and <b>Depletion</b> (normally-on) modes.</li>
+                        <li><b>Energy Band Diagram</b>: Examine conduction ($E_C$) and valence ($E_V$) band bending along the channel and observe Drain-Induced Barrier Lowering (DIBL).</li>
+                        <li><b>Synchronized I-V Curves</b>: Family of output curves ($I_D \text{ vs } V_{DS}$) and transfer curves ($I_D \text{ vs } V_{GS}$) with live Q-point tracking.</li>
+                    </ul>
+                </div>
+                <footer class="splash-footer">
+                    <button id="btn-get-started" class="btn btn-primary w-full" style="justify-content: center;">START SIMULATION</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Signature Footer -->
+        <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
+
+    </div>
+
+    <script src="mosfet.js"></script>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+    </script>
+</body>
+
+</html>
