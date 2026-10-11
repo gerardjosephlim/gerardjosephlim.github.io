@@ -174,13 +174,13 @@ body.glass-simulation-body {
 }
 
 .pane-title {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #ffffff;
 }
 
 .pane-sub {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
 }
 
@@ -190,12 +190,12 @@ body.glass-simulation-body {
 }
 
 .toggle-pill-btn {
-  font-size: 0.72rem;
-  font-weight: 500;
-  padding: 4px 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 5px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -314,7 +314,7 @@ body.glass-simulation-body {
 }
 
 .regime-name {
-  font-size: 0.85rem;
+  font-size: 0.98rem;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.01em;
@@ -322,69 +322,97 @@ body.glass-simulation-body {
 
 .hud-condition {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 3px 10px;
   border-radius: 6px;
 }
 
 .math-display-box {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formula-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.math-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary-cyan);
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.math-expr {
+  font-size: 0.95rem;
+  color: #f8fafc;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.math-expr .katex {
+  font-size: 1.05em;
+  color: #f8fafc;
+}
+
+/* Fallback HTML Math Styling */
+.m-frac {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: -0.55em;
+  padding: 0 3px;
+  text-align: center;
+  font-size: 0.9em;
+  line-height: 1.1;
+}
+
+.m-num {
+  border-bottom: 1.5px solid currentColor;
+  padding-bottom: 1px;
+}
+
+.m-den {
+  padding-top: 1px;
+}
+
+.telemetry-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.telemetry-cell {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.formula-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.math-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  width: 70px;
-  flex-shrink: 0;
-}
-
-.math-expr {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #e2e8f0;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.telemetry-compact-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.telemetry-cell {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
 .cell-label {
-  font-size: 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 600;
   color: var(--text-muted);
 }
 
 .cell-val {
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #ffffff;
 }
@@ -395,7 +423,7 @@ body.glass-simulation-body {
 
 .cell-val.mono {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
 }
 
 /* Graph Section */
@@ -542,14 +570,22 @@ body.glass-simulation-body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.7rem;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
   color: var(--text-muted);
 }
 
 .slider-badge {
   font-family: var(--font-mono);
   font-weight: 600;
+  font-size: 0.75rem;
   color: var(--primary-cyan);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  padding: 1px 6px;
+  border-radius: 4px;
 }
 
 input[type="range"] {
