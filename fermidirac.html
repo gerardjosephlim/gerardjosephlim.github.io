@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive, quantitative simulation of semiconductor density of states, Fermi–Dirac statistics, and carrier occupation.">
+    <title>Semiconductor States Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fermidirac.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- App identity and material presets; presets never change model/axis modes. -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">ψ</div>
+                <div>
+                    <h1>Semiconductor States Lab</h1>
+                    <p>Density of states · Fermi–Dirac statistics · carrier occupation</p>
+                </div>
+            </div>
+            <nav class="presets" aria-label="Material presets">
+                <button class="preset active" data-material="Si">Si</button>
+                <button class="preset" data-material="Ge">Ge</button>
+                <button class="preset" data-material="GaAs">GaAs</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Solved values and the four synchronized energy panels. -->
+            <section class="workspace" aria-label="Simulation results">
+                <div class="summary-grid" aria-live="polite">
+                    <div class="metric featured"><span>Fermi level</span><strong id="result-ef">—</strong><small id="result-regime">—</small></div>
+                    <div class="metric electron"><span>Electrons, n</span><strong id="result-n">—</strong><small>cm⁻³</small></div>
+                    <div class="metric hole"><span>Holes, p</span><strong id="result-p">—</strong><small>cm⁻³</small></div>
+                    <div class="metric"><span>Intrinsic, nᵢ</span><strong id="result-ni">—</strong><small>cm⁻³</small></div>
+                    <div class="metric"><span>N<sub>c</sub> / N<sub>v</sub></span><strong id="result-ncnv">—</strong><small>cm⁻³</small></div>
+                    <div class="metric"><span>Ionized dopants</span><strong id="result-ionized">—</strong><small>N<sub>D</sub>⁺ / N<sub>A</sub>⁻</small></div>
+                </div>
+
+                <!-- Canvas is redrawn from solved data; tooltip and exports are overlays. -->
+                <div class="canvas-card" id="canvas-card">
+                    <div class="plot-toolbar">
+                        <div><span class="status-dot" id="status-dot"></span><span id="status-text">Solving equilibrium</span></div>
+                        <div class="plot-actions">
+                            <span class="plot-note" id="plot-note">Shared energy scale · hover to inspect</span>
+                            <button class="toolbar-button" id="export-csv" type="button">CSV</button>
+                            <button class="toolbar-button" id="export-png" type="button">PNG</button>
+                        </div>
+                    </div>
+                    <canvas id="simulationCanvas" aria-label="Four synchronized semiconductor energy plots"></canvas>
+                    <div class="plot-tooltip" id="plot-tooltip" role="status"></div>
+                </div>
+
+                <div class="diagnostics">
+                    <span>Charge residual <strong id="diag-residual">—</strong></span>
+                    <span>np/nᵢ² <strong id="diag-mass-action">—</strong></span>
+                    <span>Eᵢ <strong id="diag-ei">—</strong></span>
+                    <span>Solve time <strong id="diag-time">—</strong></span>
+                </div>
+            </section>
+
+            <!-- All user-editable physical and plot-display parameters. -->
+            <aside class="controls" aria-label="Simulation controls">
+                <div class="controls-heading">
+                    <div><span class="eyebrow">Equilibrium model</span><h2>Parameters</h2></div>
+                    <button id="reset-button" class="text-button" type="button">Reset</button>
+                </div>
+
+                <!-- Physical material state: intrinsic, doped, or diagnostic manual Ef. -->
+                <section class="control-section">
+                    <label class="field-label" for="mode">Material state</label>
+                    <select id="mode">
+                        <option value="intrinsic">Intrinsic</option>
+                        <option value="n">n-type</option>
+                        <option value="p">p-type</option>
+                        <option value="manual">Manual Fermi level</option>
+                    </select>
+                </section>
+
+                <!-- Bandgap physics and display scaling are intentionally independent. -->
+                <section class="control-section">
+                    <div class="range-field">
+                        <div class="range-heading"><label for="temp">Temperature</label><output id="disp-temp">300 K</output></div>
+                        <input type="range" id="temp" min="1" max="1000" step="1" value="300">
+                    </div>
+                    <div class="model-selects">
+                        <div>
+                            <label class="field-label" for="bandgap-model">Bandgap model</label>
+                            <select id="bandgap-model">
+                                <option value="fixed">Fixed Eg</option>
+                                <option value="varshni">Material Eg(T)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label" for="energy-scale-mode">Energy axis</label>
+                            <select id="energy-scale-mode">
+                                <option value="locked">Locked</option>
+                                <option value="thermal-fit">Fit thermal tails</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="field-help" id="energy-scale-help">Fixed Eg uses a locked vertical energy scale during temperature sweeps.</p>
+                    <div class="range-field">
+                        <div class="range-heading"><label for="bandgap">Bandgap, E<sub>g</sub></label><output id="disp-bandgap">1.12 eV</output></div>
+                        <input type="range" id="bandgap" min="0.1" max="4" step="0.001" value="1.12">
+                    </div>
+                </section>
+
+                <section class="control-section two-column">
+                    <div class="range-field">
+                        <div class="range-heading"><label for="e-mass">m<sub>e,DOS</sub>*</label><output id="disp-emass">1.08 m₀</output></div>
+                        <input type="range" id="e-mass" min="0.01" max="2" step="0.001" value="1.08">
+                    </div>
+                    <div class="range-field">
+                        <div class="range-heading"><label for="h-mass">m<sub>h,DOS</sub>*</label><output id="disp-hmass">0.56 m₀</output></div>
+                        <input type="range" id="h-mass" min="0.01" max="2" step="0.001" value="0.56">
+                    </div>
+                </section>
+
+                <!-- Donor/acceptor concentrations and optional freeze-out parameters. -->
+                <section class="control-section doping-section" id="doping-section">
+                    <div class="section-title"><span>Dopants</span><small>logarithmic concentration</small></div>
+                    <div class="dopant-control donor">
+                        <label class="check-row"><input type="checkbox" id="donors-enabled"><span>Donors, N<sub>D</sub></span><output id="disp-nd">off</output></label>
+                        <input type="range" id="donor-log" min="10" max="21" step="0.1" value="16" disabled>
+                    </div>
+                    <div class="dopant-control acceptor">
+                        <label class="check-row"><input type="checkbox" id="acceptors-enabled"><span>Acceptors, N<sub>A</sub></span><output id="disp-na">off</output></label>
+                        <input type="range" id="acceptor-log" min="10" max="21" step="0.1" value="16" disabled>
+                    </div>
+                    <label class="check-row"><input type="checkbox" id="incomplete-ionization"><span>Include incomplete ionization</span></label>
+                    <div class="ionization-controls" id="ionization-controls">
+                        <div class="range-field">
+                            <div class="range-heading"><label for="donor-depth">E<sub>c</sub>−E<sub>D</sub></label><output id="disp-donor-depth">45 meV</output></div>
+                            <input type="range" id="donor-depth" min="0.001" max="0.2" step="0.001" value="0.045">
+                        </div>
+                        <div class="range-field">
+                            <div class="range-heading"><label for="acceptor-depth">E<sub>A</sub>−E<sub>v</sub></label><output id="disp-acceptor-depth">45 meV</output></div>
+                            <input type="range" id="acceptor-depth" min="0.001" max="0.2" step="0.001" value="0.045">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="control-section" id="manual-ef-section">
+                    <div class="range-field">
+                        <div class="range-heading"><label for="fermi-level">Manual E<sub>F</sub></label><output id="disp-ef">0.55 eV</output></div>
+                        <input type="range" id="fermi-level" min="-0.5" max="1.7" step="0.001" value="0.55">
+                    </div>
+                    <p class="field-help">Manual mode reports net charge without enforcing neutrality.</p>
+                </section>
+
+                <!-- Plot-only options do not modify physical carrier calculations. -->
+                <section class="control-section display-options">
+                    <div class="section-title"><span>Display</span></div>
+                    <label class="check-row"><input type="checkbox" id="show-boltzmann" checked><span>Boltzmann approximation</span></label>
+                    <label class="check-row"><input type="checkbox" id="log-scale"><span>Log-enhanced curve widths</span></label>
+
+                    <!-- Occupation presets choose physical curves; custom mode exposes each curve separately. -->
+                    <div class="occupation-controls">
+                        <label class="field-label" for="occupation-view">Occupied-states view</label>
+                        <select id="occupation-view">
+                            <option value="mobile">Mobile carriers</option>
+                            <option value="electrons">Electron occupancy</option>
+                            <option value="empty">Empty states</option>
+                            <option value="all">All distributions</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <div class="occupation-custom" id="occupation-custom">
+                            <label class="check-row"><input type="checkbox" id="show-conduction-electrons"><span>Conduction electrons, gᶜf</span></label>
+                            <label class="check-row"><input type="checkbox" id="show-conduction-empty"><span>Empty conduction states, gᶜ(1−f)</span></label>
+                            <label class="check-row"><input type="checkbox" id="show-valence-electrons"><span>Valence electrons, gᵥf</span></label>
+                            <label class="check-row"><input type="checkbox" id="show-valence-holes"><span>Valence holes, gᵥ(1−f)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Width scaling is display-only and never changes physical concentrations. -->
+                    <div class="width-scale-controls">
+                        <div>
+                            <label class="field-label" for="occupation-width-mode">Horizontal curve scale</label>
+                            <select id="occupation-width-mode">
+                                <option value="auto">Auto-fit visible curves</option>
+                                <option value="locked">Locked</option>
+                            </select>
+                        </div>
+                        <button class="text-button" id="reset-width-scale" type="button">Reset scale</button>
+                    </div>
+                    <p class="field-help" id="occupation-scale-help">AUTO · one shared physical scale for visible curves.</p>
+                </section>
+
+                <div class="model-note"><strong>Model</strong><p>3D parabolic bands, DOS masses, thermal equilibrium, and exact Fermi–Dirac carrier integrals.</p></div>
+
+                <div style="text-align: center; margin-top: 14px; padding-bottom: 8px;">
+                    <a href="https://www.gerardjosephlim.com" target="_blank" style="color: rgba(255, 255, 255, 0.4); font-size: 12px; text-decoration: none; font-family: 'Inter', sans-serif; transition: color 0.2s ease;">www.gerardjosephlim.com</a>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="semiconductor-physics.js"></script>
+    <script src="simulation-state.js"></script>
+    <script src="plot-renderer.js"></script>
+    <script src="fermidirac.js"></script>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+    </script>
+</body>
+</html>
