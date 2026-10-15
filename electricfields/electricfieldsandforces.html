@@ -54,6 +54,19 @@
                         </select>
                     </div>
 
+                    <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.18); padding-left: 10px;">
+                        <button id="add-conductor-btn" class="btn" style="background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.45); color: #fef3c7; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; cursor: pointer;" title="Insert Conductive Material (Press C)">
+                            <span style="font-size: 1.1em;">🧲</span>
+                            <span>Add Conductor</span>
+                        </button>
+                        <select id="conductor-shape-select" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fde68a; border-radius: 8px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
+                            <option value="sphere">⚪ Sphere (R=85px)</option>
+                            <option value="rectangle">▭ Rectangle</option>
+                            <option value="square">🔲 Square</option>
+                            <option value="shell">🔘 Hollow Shell (Shielding)</option>
+                        </select>
+                    </div>
+
                     <div class="divider"></div>
 
                     <button id="play-pause" class="btn btn-success">
@@ -212,6 +225,7 @@
                         style="font-family: 'Inter', monospace; font-weight: 600; color: #38bdf8;">0.00 V</span>
                 </div>
             </div>
+            <div id="probe-shield-status" style="display: none; margin-top: 8px; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; text-align: center; font-weight: 600;"></div>
         </div>
     </div>
 
@@ -373,6 +387,102 @@
         </div>
     </div>
 
+    <!-- Floating Draggable Conductor Properties HUD Card -->
+    <div id="conductor-card" class="charge-panel liquid-glass conductor-hud" style="display: none; position: absolute; width: 320px; padding: 18px 20px; z-index: 150; cursor: default; user-select: none;">
+        <div class="panel-header" id="conductor-card-header" style="cursor: grab; display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 10px;">
+            <span class="panel-title" style="display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #fbbf24;">
+                <span>🧲</span> <span id="conductor-card-title">Conductive Material</span>
+            </span>
+            <button id="conductor-close-btn" class="close-btn" title="Close Panel">&times;</button>
+        </div>
+
+        <!-- Conductor Type & Status -->
+        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Material State</span>
+                <span id="conductor-status-badge" style="font-size: 0.76rem; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fde68a; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">Equilibrium (E = 0)</span>
+            </div>
+
+            <!-- Induced Surface Charge Counters -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+                <div style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #7dd3fc; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Electrons (−)</div>
+                    <div id="cond-electrons-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #38bdf8;">0</div>
+                </div>
+                <div style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #fda4af; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Positive Cores (+)</div>
+                    <div id="cond-positive-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #fb7185;">0</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.82rem;">
+                <span style="color: var(--text-muted);">Net Conductor Charge:</span>
+                <span id="cond-net-charge" style="font-family: monospace; font-weight: 700; color: #34d399;">0.00 μC (Neutral)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Internal Field (Bulk):</span>
+                <span style="font-family: monospace; font-weight: 600; color: #fbbf24;">E = 0.00 V/m</span>
+            </div>
+
+            <div id="cond-cavity-row" style="display: none; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Inner Cavity:</span>
+                <span id="cond-cavity-status" style="font-family: monospace; font-weight: 600; color: #38bdf8;">Shielded (Faraday Cage)</span>
+            </div>
+        </div>
+
+        <!-- Shape Selector in Card -->
+        <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Change Geometry</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <button id="cond-shape-sphere" class="btn-preset active" title="Spherical Conductor">⚪ Sphere</button>
+                <button id="cond-shape-rect" class="btn-preset" title="Rectangular Conductor">▭ Rectangle</button>
+                <button id="cond-shape-square" class="btn-preset" title="Square Conductor">🔲 Square</button>
+                <button id="cond-shape-shell" class="btn-preset" title="Hollow Shell">🔘 Shell</button>
+            </div>
+        </div>
+
+        <!-- Standard Dimensions Scale (Sphere / Rect / Square) -->
+        <div id="cond-standard-size-box" style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Dimensions Scale</label>
+                <span id="cond-size-val" style="font-family: monospace; font-size: 0.8rem; color: #fde68a;">100%</span>
+            </div>
+            <input type="range" id="cond-size-slider" min="0.6" max="1.5" step="0.05" value="1.0" style="width: 100%;">
+        </div>
+
+        <!-- Hollow Shell Dual Sliders: Inner & Outer Diameter -->
+        <div id="cond-shell-size-box" style="display: none; margin-bottom: 14px; background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 10px 8px 10px;">
+            <div style="margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="font-size: 0.74rem; color: #fde68a; text-transform: uppercase; font-weight: 600;">Outer Diameter (D<sub>out</sub>)</label>
+                    <span id="cond-outer-val" style="font-family: monospace; font-size: 0.8rem; color: #fde68a; font-weight: 700;">180 px</span>
+                </div>
+                <input type="range" id="cond-outer-slider" min="100" max="320" step="2" value="180" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="font-size: 0.74rem; color: #38bdf8; text-transform: uppercase; font-weight: 600;">Inner Diameter (D<sub>in</sub>)</label>
+                    <span id="cond-inner-val" style="font-family: monospace; font-size: 0.8rem; color: #38bdf8; font-weight: 700;">110 px</span>
+                </div>
+                <input type="range" id="cond-inner-slider" min="40" max="260" step="2" value="110" style="width: 100%;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 5px;">
+                <span>Wall Thickness:</span>
+                <span id="cond-wall-val" style="font-family: monospace; color: #34d399; font-weight: 600;">35 px</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 8px;">
+            <button id="cond-delete-btn" class="btn btn-danger" style="flex: 1; padding: 6px 8px; font-size: 0.8rem;">
+                🗑️ Delete Conductor
+            </button>
+        </div>
+    </div>
+
     <!-- Splash Screen Pop-up -->
     <div id="splash-overlay" class="splash-overlay">
         <div class="splash-modal liquid-glass">
@@ -385,12 +495,13 @@
                 <h3>Instructions</h3>
                 <ul>
                     <li><strong>Add Charge:</strong> Click the "+ Add Charged Particle" button.</li>
-                    <li><strong>Move Charge:</strong> Drag the particles around the canvas.</li>
-                    <li><strong>Adjust Properties:</strong> Select a charge to change its magnitude and state.</li>
-                    <li><strong>Simulate:</strong> Click "Play" to observe dynamic behavior.</li>
-                    <li><strong>Field Probe:</strong> Toggle the probe to measure local field (N/C) and potential (V).</li>
+                    <li><strong>Add Conductor:</strong> Click "🧲 Add Conductor" (or press [C]) to insert a Sphere, Rectangle, Square, or Hollow Shell.</li>
+                    <li><strong>Electrostatic Shielding:</strong> Observe how electric field lines bend perpendicular to conductor surfaces, free electrons (−) and positive cores (+) accumulate on opposite faces, and field inside the metal bulk is strictly zero (E = 0).</li>
+                    <li><strong>Hollow Shell (Cavity):</strong> Place charges inside the inner cavity to observe internal polarization and Faraday cage shielding.</li>
+                    <li><strong>Move Elements:</strong> Drag particles or conductors across the canvas (or into the trash bin to delete).</li>
+                    <li><strong>Field Probe:</strong> Toggle the probe to measure local field (N/C) and potential (V). Reads E = 0 inside conductors!</li>
                     <li><strong>Gaussian Surface:</strong> Enclose charges to visualize flux (Φ<sub>E</sub> = Q<sub>enc</sub>/ε<sub>0</sub>) and count field line piercings.</li>
-                    <li><strong>Shortcuts:</strong> [Space] Play/Pause, [Del] Delete charge, [Arrows] Nudge, [G] Draw loop, [S] Sphere, [P] Probe, [1-4] Units.</li>
+                    <li><strong>Shortcuts:</strong> [Space] Play/Pause, [Del] Delete, [Arrows] Nudge, [C] Conductor, [G] Draw loop, [S] Sphere, [P] Probe.</li>
                 </ul>
             </div>
 

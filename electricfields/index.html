@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Field Simulation</title>
+    <link rel="stylesheet" href="electricfieldsandforces.css?v=5">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="simulation-container">
+        <canvas id="fieldCanvas"></canvas>
+
+        <div class="ui-overlay">
+            <div class="header liquid-glass">
+                <h1>Electric Charges and Field</h1>
+                <p>Visualize vector fields from point charges</p>
+                <p><i>Dr. Gerard Joseph Lim</i></p>
+            </div>
+
+            <!-- Help Button -->
+            <button id="help-btn" class="help-btn liquid-glass" title="Show Instructions">?</button>
+
+
+
+            <!-- Trash Bin -->
+            <div id="trash-bin" class="trash-bin">
+                🗑️
+                <span class="trash-hint">Drop charge into trash to remove</span>
+            </div>
+
+            <div class="controls-wrapper">
+                <div class="controls liquid-glass" id="main-controls">
+                    <button id="add-charge" class="btn btn-primary">
+                        <span style="font-size: 1.2em;">+</span> Add Charged Particle
+                    </button>
+
+                    <div style="display: flex; align-items: center; gap: 6px; margin-left: 6px;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Preset:</span>
+                        <select id="charge-preset" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
+                            <option value="">Presets...</option>
+                            <option value="dipole">Dipole (+ / −)</option>
+                            <option value="quadrupole">Quadrupole</option>
+                            <option value="like-pair">Repelling Pair (+ / +)</option>
+                            <option value="line">Linear Array</option>
+                            <option value="triangle">Triangle (+ / − / +)</option>
+                            <option value="plates">Parallel Plates</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.18); padding-left: 10px;">
+                        <button id="add-conductor-btn" class="btn" style="background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.45); color: #fef3c7; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; cursor: pointer;" title="Insert Conductive Material (Press C)">
+                            <span style="font-size: 1.1em;">🧲</span>
+                            <span>Add Conductor</span>
+                        </button>
+                        <select id="conductor-shape-select" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fde68a; border-radius: 8px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
+                            <option value="sphere">⚪ Sphere (R=85px)</option>
+                            <option value="rectangle">▭ Rectangle</option>
+                            <option value="square">🔲 Square</option>
+                            <option value="shell">🔘 Hollow Shell (Shielding)</option>
+                        </select>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button id="play-pause" class="btn btn-success">
+                        <span id="play-icon">▶</span> Play
+                    </button>
+
+                    <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
+                        <label class="toggle-label" style="font-size: 0.75rem; white-space: nowrap;">Speed</label>
+                        <input type="range" id="sim-speed" min="0.01" max="0.5" step="0.01" value="0.05"
+                            style="width: 80px;">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="toggles-group">
+                        <div style="display: flex; flex-direction: row; gap: 4px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="viz-mode-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label" id="viz-label" style="min-width: 110px;">Vectors: Length</span>
+                            </div>
+
+                            <!-- Grid Unit Selection -->
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label style="font-size: 0.9rem; color: var(--text-muted);">Grid Unit:</label>
+                                <select id="grid-unit"
+                                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 4px; font-family: 'Inter', sans-serif;">
+                                    <option value="mm" selected>mm</option>
+                                    <option value="cm">cm</option>
+                                    <option value="m">m</option>
+                                </select>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="force-mode-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Show Forces</span>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="axes-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Axes</span>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="equipotential-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Equipotentials</span>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="probe-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Field Probe</span>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <label class="switch">
+                                    <input type="checkbox" id="field-lines-toggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Field Lines</span>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <button id="gaussian-tool-btn" class="btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: white; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; cursor: pointer;">
+                                    <span style="font-size: 1.1em;">🫧</span>
+                                    <span id="gaussian-btn-label">Gaussian Surface</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button id="reset-btn" class="btn btn-danger">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Left Sidebar for Stacked Panels -->
+    <div id="left-sidebar" class="left-sidebar">
+        <!-- Left Panel - Distance Table -->
+        <div id="distance-panel" class="left-card liquid-glass">
+            <div class="panel-header">
+                <span class="panel-title">Component Distances</span>
+            </div>
+            <div style="overflow-y: auto; max-height: 180px; margin-top: 10px; padding-right: 4px;">
+                <table id="distance-table"
+                    style="width:100%; color: white; font-size: 0.9em; text-align: left; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                            <th style="padding: 4px;">Charge</th>
+                            <th style="padding: 4px;">dx</th>
+                            <th style="padding: 4px;">dy</th>
+                            <th style="padding: 4px;">Dist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Left Panel - Field Probe Measurements -->
+        <div id="probe-panel" class="left-card liquid-glass">
+            <div class="panel-header">
+                <span class="panel-title">Field Probe Measurements</span>
+            </div>
+            <div class="control-group">
+                <label>Position (Grid Units)</label>
+                <div style="display: flex; gap: 12px; color: white; font-family: monospace;">
+                    <div>X: <span id="probe-pos-x">0.0</span></div>
+                    <div>Y: <span id="probe-pos-y">0.0</span></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Electric Field strength</label>
+                <div style="display: flex; flex-direction: column; gap: 6px; color: white; font-family: monospace; font-size: 0.95em;">
+                    <div>Ex: <span id="probe-field-x" style="color: #34d399;">0.00 N/C</span></div>
+                    <div>Ey: <span id="probe-field-y" style="color: #34d399;">0.00 N/C</span></div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 4px; font-weight: bold;">
+                        |E|: <span id="probe-field-mag" style="color: #10b981;">0.00 N/C</span>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Electric Potential</label>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">V =</span>
+                    <span id="probe-potential"
+                        style="font-family: 'Inter', monospace; font-weight: 600; color: #38bdf8;">0.00 V</span>
+                </div>
+            </div>
+            <div id="probe-shield-status" style="display: none; margin-top: 8px; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; text-align: center; font-weight: 600;"></div>
+        </div>
+    </div>
+
+    <!-- Right Panel - Selected Charge Properties -->
+    <div id="charge-panel" class="charge-panel liquid-glass">
+        <div class="panel-header">
+            <span class="panel-title">Charge Properties</span>
+            <button id="close-panel" class="close-btn">&times;</button>
+        </div>
+
+        <div class="control-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label>Charge Magnitude</label>
+                <select id="charge-unit"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-family: 'Inter', sans-serif;">
+                    <option value="nC">nC</option>
+                    <option value="uC" selected>μC</option>
+                    <option value="mC">mC</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="range" id="charge-slider" min="-10" max="10" step="0.5" value="0" style="flex: 1;">
+                <input type="number" id="charge-number" min="-10" max="10" step="0.5" value="0">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Position (Grid Units)</label>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">X</span>
+                    <input type="number" id="pos-x" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">Y</span>
+                    <input type="number" id="pos-y" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Initial Velocity (grid/s)</label>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">Vx</span>
+                    <input type="number" id="vel-x" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;">Vy</span>
+                    <input type="number" id="vel-y" step="0.1" style="width: 100%; min-width: 0;">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Electric Potential Energy</label>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">U =</span>
+                <span id="energy-val" style="font-family: 'Inter', monospace; font-weight: 600; color: #fbbf24;">0.00
+                    J</span>
+            </div>
+        </div>
+
+        <div id="force-display-group" class="control-group" style="display: none;">
+            <label>Net Force Components</label>
+            <div
+                style="display: flex; justify-content: space-between; gap: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-muted);">
+                <div>Fx: <span id="force-x" style="color: var(--text-main);">0.0</span></div>
+                <div>Fy: <span id="force-y" style="color: var(--text-main);">0.0</span></div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label>State</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="state-label" class="toggle-label" style="font-size: 0.75rem;">Static</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fixed-dynamic-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Draggable Gaussian Flux HUD Card -->
+    <div id="gaussian-card" class="charge-panel liquid-glass gaussian-hud" style="display: none; position: absolute; width: 330px; padding: 18px 20px; z-index: 150; cursor: default; user-select: none;">
+        <div class="panel-header" id="gaussian-card-header" style="cursor: grab; display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 10px;">
+            <span class="panel-title" style="display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #7dd3fc;">
+                <span>🫧</span> Gaussian Surface & Flux
+            </span>
+            <button id="gaussian-close-btn" class="close-btn" title="Close / Hide Surface">&times;</button>
+        </div>
+
+        <!-- Enclosed Charge & Flux Summary -->
+        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Enclosed Charge (Q<sub>enc</sub>)</span>
+                <span id="gauss-qenc" style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: #fbbf24;">0.00 μC</span>
+            </div>
+            
+            <!-- Flux Line Counters -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #fca5a5; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Inflow (Red)</div>
+                    <div id="gauss-nin" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #ff6b6b;">0</div>
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #93c5fd; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Outflow (Blue)</div>
+                    <div id="gauss-nout" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #60a5fa;">0</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.82rem;">
+                <span style="color: var(--text-muted);">Net Line Flux (ΔN):</span>
+                <span id="gauss-net-lines" style="font-family: monospace; font-weight: 700; color: #ffffff;">0 (Balanced)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Gauss Expected (λ·Q<sub>enc</sub>):</span>
+                <span id="gauss-expected" style="font-family: monospace; font-weight: 600; color: #34d399;">0 ✓</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Physical Flux (Φ<sub>E</sub>):</span>
+                <span id="gauss-calc-flux" style="font-family: monospace; font-weight: 600; color: #38bdf8;">0.00 N·m²/C</span>
+            </div>
+        </div>
+
+        <!-- Presets Selector -->
+        <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Presets & Draw</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button id="preset-freehand" class="btn-preset active" title="Freehand Sketch Loop">✏️ Freehand</button>
+                <button id="preset-sphere" class="btn-preset" title="Spherical Gaussian Surface">⚪ Sphere</button>
+            </div>
+        </div>
+
+        <!-- Color Mode Selector -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(255,255,255,0.04); padding: 8px 10px; border-radius: 8px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Line Visuals:</span>
+            <select id="gauss-color-mode" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-family: 'Inter', sans-serif;">
+                <option value="pierce" selected>Piercing Arrows</option>
+                <option value="full">Full Line Glow</option>
+            </select>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 8px;">
+            <button id="gauss-redraw-btn" class="btn" style="flex: 1; padding: 6px 8px; font-size: 0.8rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                ✏️ Draw Loop
+            </button>
+            <button id="gauss-clear-btn" class="btn btn-danger" style="flex: 1; padding: 6px 8px; font-size: 0.8rem;">
+                🗑️ Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Draggable Conductor Properties HUD Card -->
+    <div id="conductor-card" class="charge-panel liquid-glass conductor-hud" style="display: none; position: absolute; width: 320px; padding: 18px 20px; z-index: 150; cursor: default; user-select: none;">
+        <div class="panel-header" id="conductor-card-header" style="cursor: grab; display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 10px;">
+            <span class="panel-title" style="display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #fbbf24;">
+                <span>🧲</span> <span id="conductor-card-title">Conductive Material</span>
+            </span>
+            <button id="conductor-close-btn" class="close-btn" title="Close Panel">&times;</button>
+        </div>
+
+        <!-- Conductor Type & Status -->
+        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Material State</span>
+                <span id="conductor-status-badge" style="font-size: 0.76rem; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fde68a; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">Equilibrium (E = 0)</span>
+            </div>
+
+            <!-- Induced Surface Charge Counters -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
+                <div style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #7dd3fc; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Electrons (−)</div>
+                    <div id="cond-electrons-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #38bdf8;">0</div>
+                </div>
+                <div style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                    <div style="font-size: 0.72rem; color: #fda4af; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Positive Cores (+)</div>
+                    <div id="cond-positive-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #fb7185;">0</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.82rem;">
+                <span style="color: var(--text-muted);">Net Conductor Charge:</span>
+                <span id="cond-net-charge" style="font-family: monospace; font-weight: 700; color: #34d399;">0.00 μC (Neutral)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Internal Field (Bulk):</span>
+                <span style="font-family: monospace; font-weight: 600; color: #fbbf24;">E = 0.00 V/m</span>
+            </div>
+
+            <div id="cond-cavity-row" style="display: none; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
+                <span style="color: var(--text-muted);">Inner Cavity:</span>
+                <span id="cond-cavity-status" style="font-family: monospace; font-weight: 600; color: #38bdf8;">Shielded (Faraday Cage)</span>
+            </div>
+        </div>
+
+        <!-- Shape Selector in Card -->
+        <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Change Geometry</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <button id="cond-shape-sphere" class="btn-preset active" title="Spherical Conductor">⚪ Sphere</button>
+                <button id="cond-shape-rect" class="btn-preset" title="Rectangular Conductor">▭ Rectangle</button>
+                <button id="cond-shape-square" class="btn-preset" title="Square Conductor">🔲 Square</button>
+                <button id="cond-shape-shell" class="btn-preset" title="Hollow Shell">🔘 Shell</button>
+            </div>
+        </div>
+
+        <!-- Standard Dimensions Scale (Sphere / Rect / Square) -->
+        <div id="cond-standard-size-box" style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Dimensions Scale</label>
+                <span id="cond-size-val" style="font-family: monospace; font-size: 0.8rem; color: #fde68a;">100%</span>
+            </div>
+            <input type="range" id="cond-size-slider" min="0.6" max="1.5" step="0.05" value="1.0" style="width: 100%;">
+        </div>
+
+        <!-- Hollow Shell Dual Sliders: Inner & Outer Diameter -->
+        <div id="cond-shell-size-box" style="display: none; margin-bottom: 14px; background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 10px 8px 10px;">
+            <div style="margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="font-size: 0.74rem; color: #fde68a; text-transform: uppercase; font-weight: 600;">Outer Diameter (D<sub>out</sub>)</label>
+                    <span id="cond-outer-val" style="font-family: monospace; font-size: 0.8rem; color: #fde68a; font-weight: 700;">180 px</span>
+                </div>
+                <input type="range" id="cond-outer-slider" min="100" max="320" step="2" value="180" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="font-size: 0.74rem; color: #38bdf8; text-transform: uppercase; font-weight: 600;">Inner Diameter (D<sub>in</sub>)</label>
+                    <span id="cond-inner-val" style="font-family: monospace; font-size: 0.8rem; color: #38bdf8; font-weight: 700;">110 px</span>
+                </div>
+                <input type="range" id="cond-inner-slider" min="40" max="260" step="2" value="110" style="width: 100%;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 5px;">
+                <span>Wall Thickness:</span>
+                <span id="cond-wall-val" style="font-family: monospace; color: #34d399; font-weight: 600;">35 px</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 8px;">
+            <button id="cond-delete-btn" class="btn btn-danger" style="flex: 1; padding: 6px 8px; font-size: 0.8rem;">
+                🗑️ Delete Conductor
+            </button>
+        </div>
+    </div>
+
+    <!-- Splash Screen Pop-up -->
+    <div id="splash-overlay" class="splash-overlay">
+        <div class="splash-modal liquid-glass">
+            <div class="splash-header">
+                <h1>Electric Fields and Forces</h1>
+                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+            </div>
+
+            <div class="splash-body">
+                <h3>Instructions</h3>
+                <ul>
+                    <li><strong>Add Charge:</strong> Click the "+ Add Charged Particle" button.</li>
+                    <li><strong>Add Conductor:</strong> Click "🧲 Add Conductor" (or press [C]) to insert a Sphere, Rectangle, Square, or Hollow Shell.</li>
+                    <li><strong>Electrostatic Shielding:</strong> Observe how electric field lines bend perpendicular to conductor surfaces, free electrons (−) and positive cores (+) accumulate on opposite faces, and field inside the metal bulk is strictly zero (E = 0).</li>
+                    <li><strong>Hollow Shell (Cavity):</strong> Place charges inside the inner cavity to observe internal polarization and Faraday cage shielding.</li>
+                    <li><strong>Move Elements:</strong> Drag particles or conductors across the canvas (or into the trash bin to delete).</li>
+                    <li><strong>Field Probe:</strong> Toggle the probe to measure local field (N/C) and potential (V). Reads E = 0 inside conductors!</li>
+                    <li><strong>Gaussian Surface:</strong> Enclose charges to visualize flux (Φ<sub>E</sub> = Q<sub>enc</sub>/ε<sub>0</sub>) and count field line piercings.</li>
+                    <li><strong>Shortcuts:</strong> [Space] Play/Pause, [Del] Delete, [Arrows] Nudge, [C] Conductor, [G] Draw loop, [S] Sphere, [P] Probe.</li>
+                </ul>
+            </div>
+
+            <div class="splash-footer">
+                <button id="splash-ok-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    OK, Let's Go!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="toast-notification"></div>
+
+    <script src="electricfieldsandforces.js?v=7"></script>
+    <!-- Footer Link -->
+    <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">
+        www.gerardjosephlim.com
+    </a>
+</body>
+
+</html>

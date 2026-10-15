@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron Beam Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="electronbeam.css">
+</head>
+
+<body>
+
+    <main id="app-container">
+        <canvas id="simulationCanvas"></canvas>
+
+        <div class="ui-overlay">
+            <header class="header liquid-glass">
+                <h1>Electron Beam Simulator</h1>
+                <p>Simulate electron beam in magnetic and electric fields</p>
+                <p><i>Dr. Gerard Joseph Lim</i></p>
+            </header>
+
+            <!-- Dedicated Beam Telemetry Glass Card -->
+            <div id="telemetry-panel" class="telemetry-panel liquid-glass">
+                <div class="telemetry-header">
+                    <span class="telemetry-title">Beam Telemetry</span>
+                    <span id="telemetry-status" class="telemetry-badge badge-active">Transmitting</span>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <span class="item-label">Deflection ΔY</span>
+                        <span id="telemetry-deflection" class="item-val highlight">0.0 mm</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Exit Angle θ</span>
+                        <span id="telemetry-angle" class="item-val">0.0°</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Velocity v</span>
+                        <span id="telemetry-speed" class="item-val mono">0.0% c</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="item-label">Field Status</span>
+                        <span id="telemetry-mode" class="item-val sub">Pure Drift</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="help-btn" class="help-btn liquid-glass" aria-label="Help">?</button>
+
+        <!-- Bottom Controller Bar (Aligned with Electric Fields and Forces) -->
+        <div class="controls-wrapper">
+            <div class="controls liquid-glass" id="main-controls">
+                <button id="add-magnet-btn" class="btn btn-primary">+ B-Field</button>
+                <button id="add-electric-btn" class="btn btn-primary">+ E-Plate</button>
+                <button id="select-anode-btn" class="btn">⚡ Anode Gate</button>
+
+                <div class="divider"></div>
+
+                <!-- Particle Type Toggle -->
+                <div class="toggle-group">
+                    <button id="btn-type-electron" class="active">e⁻</button>
+                    <button id="btn-type-positron">e⁺</button>
+                </div>
+
+                <div class="ctrl-slider-group">
+                    <label class="toggle-label">Energy</label>
+                    <input type="range" id="beamEnergy" min="10" max="500" value="100" style="width: 75px;">
+                    <span id="energy-val" class="value-display">100</span>
+                </div>
+
+                <div class="ctrl-slider-group">
+                    <label class="toggle-label">Flux</label>
+                    <input type="range" id="emissionRate" min="0" max="50" value="25" style="width: 65px;">
+                    <span id="emission-val" class="value-display">25</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Dot Grid Toggle Switch -->
+                <div class="grid-toggle-wrapper">
+                    <label class="switch">
+                        <input type="checkbox" id="grid-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Grid</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <button id="clear-particles-btn" class="btn">Reset Fields</button>
+            </div>
+        </div>
+
+        <!-- Floating Contextual Property Panel (Only appears when Hardware / Region is selected) -->
+        <aside id="property-panel" class="property-panel liquid-glass" style="display: none;">
+            <!-- Anode Gate Customizer -->
+            <div id="accelerator-group" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Accelerator Gate</span>
+                    <button id="close-accelerator-btn" class="close-btn" title="Close">✕</button>
+                </div>
+                <label>
+                    Plate Voltage (kV)
+                    <span id="voltage-val" class="value-display">2.0</span>
+                </label>
+                <input type="range" id="plateVoltage" min="-10.0" max="10.0" step="0.1" value="2.0">
+            </div>
+
+            <!-- Magnet Customizer -->
+            <div id="magnet-customizer" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Magnetic Region</span>
+                    <button id="close-magnet-btn" class="close-btn" title="Close">✕</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Dimensions:</span>
+                    <span id="magnet-dim-val" class="value-display" style="font-size: 0.8rem;">160 × 160 mm</span>
+                </div>
+                <label class="mt-4">
+                    B-Field Strength (mT)
+                    <span id="b-field-val" class="value-display">0</span>
+                </label>
+                <input type="range" id="bFieldStrength" min="-1000" max="1000" value="0">
+                <button id="reset-magnet-size-btn" class="btn w-full mt-8">Reset Size</button>
+                <button id="delete-magnet-btn" class="btn btn-danger w-full mt-8">Remove Region</button>
+            </div>
+
+            <!-- Electric Customizer -->
+            <div id="electric-customizer" class="customizer-panel" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">Electric Plates</span>
+                    <button id="close-electric-btn" class="close-btn" title="Close">✕</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Dimensions:</span>
+                    <span id="electric-dim-val" class="value-display" style="font-size: 0.8rem;">140 × 110 mm</span>
+                </div>
+                <label class="mt-4">
+                    Voltage (kV)
+                    <span id="e-voltage-val" class="value-display">0</span>
+                </label>
+                <input type="range" id="eFieldVoltage" min="-25" max="25" step="0.5" value="0">
+
+                <label class="mt-8">
+                    Gap Size
+                    <span id="e-gap-val" class="value-display">100</span>
+                </label>
+                <input type="range" id="eFieldGap" min="50" max="300" step="10" value="100">
+
+                <button id="delete-electric-btn" class="btn btn-danger w-full mt-8">Remove Plate</button>
+            </div>
+        </aside>
+
+        <div id="splash-overlay" class="splash-overlay" role="dialog" aria-modal="true">
+            <div class="splash-modal liquid-glass">
+                <header class="splash-header">
+                    <h1>Electron Beam Simulator</h1>
+                    <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+                </header>
+                <div class="splash-body">
+                    <h3>Instructions</h3>
+                    <ul>
+                        <li>Add magnetic and electric field regions to the canvas.</li>
+                        <li>Drag regions to move them; use the bottom-right handle to resize magnets.</li>
+                        <li>Adjust beam energy, emission rate, and plate voltage in the controls.</li>
+                        <li>Observe particle deflection based on Lorentz force (F = q(E + v × B)).</li>
+                    </ul>
+                </div>
+                <footer class="splash-footer">
+                    <button id="get-started-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">START SIMULATION</button>
+                </footer>
+            </div>
+        </div>
+
+        <script src="electronbeam.js"></script>
+        <script>
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.onkeydown = function (e) {
+                // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+                if (e.keyCode == 123) return false;
+                if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+            }
+        </script>
+    </main>
+
+    <!-- Signature Footer -->
+    <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
+</body>
+
+</html>
