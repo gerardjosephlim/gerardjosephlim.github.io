@@ -43,7 +43,7 @@
 
                     <div style="display: flex; align-items: center; gap: 6px; margin-left: 6px;">
                         <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Preset:</span>
-                        <select id="charge-preset" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
+                        <select id="charge-preset" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 5px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
                             <option value="">Presets...</option>
                             <option value="dipole">Dipole (+ / −)</option>
                             <option value="quadrupole">Quadrupole</option>
@@ -55,11 +55,11 @@
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.18); padding-left: 10px;">
-                        <button id="add-conductor-btn" class="btn" style="background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.45); color: #fef3c7; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; cursor: pointer;" title="Insert Conductive Material (Press C)">
+                        <button id="add-conductor-btn" class="btn" style="background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.45); color: #fef3c7; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 5px; cursor: pointer;" title="Insert Conductive Material (Press C)">
                             <span style="font-size: 1.1em;">🧲</span>
                             <span>Add Conductor</span>
                         </button>
-                        <select id="conductor-shape-select" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fde68a; border-radius: 8px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
+                        <select id="conductor-shape-select" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fde68a; border-radius: 5px; padding: 5px 8px; font-size: 0.78rem; font-family: 'Inter', sans-serif; outline: none; cursor: pointer;">
                             <option value="sphere">⚪ Sphere (R=85px)</option>
                             <option value="rectangle">▭ Rectangle</option>
                             <option value="square">🔲 Square</option>
@@ -96,7 +96,7 @@
                                 style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
                                 <label style="font-size: 0.9rem; color: var(--text-muted);">Grid Unit:</label>
                                 <select id="grid-unit"
-                                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 4px; font-family: 'Inter', sans-serif;">
+                                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 5px; font-family: 'Inter', sans-serif;">
                                     <option value="mm" selected>mm</option>
                                     <option value="cm">cm</option>
                                     <option value="m">m</option>
@@ -150,9 +150,17 @@
 
                             <div
                                 style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
-                                <button id="gaussian-tool-btn" class="btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: white; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; cursor: pointer;">
+                                <button id="gaussian-tool-btn" class="btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: white; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 5px; cursor: pointer;">
                                     <span style="font-size: 1.1em;">🫧</span>
                                     <span id="gaussian-btn-label">Gaussian Surface</span>
+                                </button>
+                            </div>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 8px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 16px;">
+                                <button id="view3d-toggle-btn" class="btn" style="background: rgba(168, 85, 247, 0.22); border: 1px solid rgba(168, 85, 247, 0.45); color: #f3e8ff; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 5px; cursor: pointer;" title="Toggle 3D Potential Split View (Press V)">
+                                    <span style="font-size: 1.1em;">🌐</span>
+                                    <span id="view3d-btn-label">3D View</span>
                                 </button>
                             </div>
                         </div>
@@ -167,6 +175,97 @@
             </div>
         </div>
 
+        <!-- 2D Pan & Zoom Floating Widget -->
+        <div id="zoom-controls" class="zoom-controls liquid-glass">
+            <button id="zoom-in-btn" class="zoom-btn" title="Zoom In (+)">+</button>
+            <span id="zoom-level-text" class="zoom-level-text">100%</span>
+            <button id="zoom-out-btn" class="zoom-btn" title="Zoom Out (−)">−</button>
+            <button id="zoom-reset-btn" class="zoom-btn reset-zoom" title="Reset 2D View & Center">↺</button>
+        </div>
+
+    </div>
+
+    <!-- 3D Potential Field Floating Popup Card -->
+    <div id="view3d-container" class="view3d-container liquid-glass" style="display: none;">
+        <div class="view3d-card-header">
+            <div class="view3d-card-title">
+                <span style="font-size: 1.15rem;">🌐</span>
+                <span style="font-weight: 600; font-size: 0.92rem; color: #fff;">3D Potential Landscape</span>
+            </div>
+            <div class="view3d-card-actions">
+                <button id="view3d-hud-toggle-btn" class="view3d-card-btn" title="Toggle Controls Overlay">⚙️</button>
+                <button id="view3d-size-btn" class="view3d-card-btn" title="Expand / Restore Size">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                    </svg>
+                </button>
+                <button id="view3d-close-btn" class="view3d-card-btn view3d-close-btn" title="Close 3D View">✕</button>
+            </div>
+        </div>
+
+        <div id="canvas3d-wrapper" class="canvas3d-wrapper">
+            <canvas id="fieldCanvas3D"></canvas>
+
+            <!-- 3D Floating HUD (Solid Panel) -->
+            <div id="view3d-hud" class="view3d-hud" style="display: none;">
+                <div class="view3d-hud-header" style="margin-bottom: 8px; padding-bottom: 6px;">
+                    <span style="font-weight: 600; font-size: 0.85rem; color: #fff;">Display Settings</span>
+                    <button id="view3d-hud-close-btn" class="close-btn" style="font-size: 1.1rem; padding: 0 4px;" title="Hide Controls Overlay">&times;</button>
+                </div>
+
+                <div class="view3d-hud-body">
+                    <!-- Equipotential Configuration -->
+                    <div class="view3d-control-group">
+                        <label class="view3d-group-title">Equipotential Representation</label>
+                        <select id="pot3d-style-select" class="view3d-select">
+                            <option value="both" selected>Both: Bands + Contour Lines</option>
+                            <option value="lines">Contour Lines Only (Isolines)</option>
+                            <option value="bands">Color Bands Only (Hypsometric)</option>
+                        </select>
+                    </div>
+
+                    <!-- Equipotential Density Slider -->
+                    <div class="view3d-control-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label style="font-size: 0.78rem; color: var(--text-muted);">Equipotential Density</label>
+                            <span id="pot3d-density-val" style="font-size: 0.78rem; font-family: monospace; color: #38bdf8;">14 levels</span>
+                        </div>
+                        <input type="range" id="pot3d-density-slider" min="4" max="30" step="2" value="14" style="width: 100%;">
+                    </div>
+
+                    <!-- Height / Extrusion Slider -->
+                    <div class="view3d-control-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label id="pot3d-scale-label" style="font-size: 0.78rem; color: var(--text-muted);">Height Scale (z)</label>
+                            <span id="pot3d-scale-val" style="font-size: 0.78rem; font-family: monospace; color: #c084fc;">1.0×</span>
+                        </div>
+                        <input type="range" id="pot3d-scale-slider" min="0.2" max="3.0" step="0.1" value="1.0" style="width: 100%;">
+                    </div>
+
+                    <!-- 3D Field Probe Telemetry -->
+                    <div class="view3d-control-group" style="padding: 8px 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 5px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label style="font-size: 0.75rem; color: #a7f3d0; font-weight: 600;">🎯 3D Field Probe</label>
+                            <span id="probe-3d-status" style="font-size: 0.7rem; font-family: monospace; color: #6ee7b7;">Synchronized</span>
+                        </div>
+                        <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.35;">
+                            Drag the emerald probe marker (or Shift+drag on terrain) to position the probe. Click and drag anywhere else to rotate the 3D model!
+                        </p>
+                    </div>
+
+                    <!-- Camera Reset Control -->
+                    <div class="view3d-bottom-row" style="margin-top: 6px;">
+                        <button id="pot3d-reset-cam-btn" class="btn" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 5px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            ↺ Reset Camera View
+                        </button>
+                    </div>
+                </div>
+
+                <div class="view3d-hud-footer">
+                    <span>Left Drag: Orbit • Right Drag: Pan • Scroll: Zoom</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Left Sidebar for Stacked Panels -->
@@ -219,13 +318,13 @@
             <div class="control-group">
                 <label>Electric Potential</label>
                 <div
-                    style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                    style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.08);">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">V =</span>
                     <span id="probe-potential"
                         style="font-family: 'Inter', monospace; font-weight: 600; color: #38bdf8;">0.00 V</span>
                 </div>
             </div>
-            <div id="probe-shield-status" style="display: none; margin-top: 8px; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; text-align: center; font-weight: 600;"></div>
+            <div id="probe-shield-status" style="display: none; margin-top: 8px; padding: 6px 10px; border-radius: 5px; font-size: 0.78rem; text-align: center; font-weight: 600;"></div>
         </div>
     </div>
 
@@ -240,7 +339,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <label>Charge Magnitude</label>
                 <select id="charge-unit"
-                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-family: 'Inter', sans-serif;">
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 2px 6px; border-radius: 5px; font-size: 0.8rem; font-family: 'Inter', sans-serif;">
                     <option value="nC">nC</option>
                     <option value="uC" selected>μC</option>
                     <option value="mC">mC</option>
@@ -284,7 +383,7 @@
         <div class="control-group">
             <label>Electric Potential Energy</label>
             <div
-                style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.05);">
                 <span style="font-size: 0.8rem; color: var(--text-muted);">U =</span>
                 <span id="energy-val" style="font-family: 'Inter', monospace; font-weight: 600; color: #fbbf24;">0.00
                     J</span>
@@ -324,7 +423,7 @@
         </div>
 
         <!-- Enclosed Charge & Flux Summary -->
-        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 12px; margin-bottom: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Enclosed Charge (Q<sub>enc</sub>)</span>
                 <span id="gauss-qenc" style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: #fbbf24;">0.00 μC</span>
@@ -332,11 +431,11 @@
             
             <!-- Flux Line Counters -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 5px; padding: 6px 10px; text-align: center;">
                     <div style="font-size: 0.72rem; color: #fca5a5; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Inflow (Red)</div>
                     <div id="gauss-nin" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #ff6b6b;">0</div>
                 </div>
-                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 5px; padding: 6px 10px; text-align: center;">
                     <div style="font-size: 0.72rem; color: #93c5fd; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Outflow (Blue)</div>
                     <div id="gauss-nout" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #60a5fa;">0</div>
                 </div>
@@ -368,9 +467,9 @@
         </div>
 
         <!-- Color Mode Selector -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(255,255,255,0.04); padding: 8px 10px; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(255,255,255,0.04); padding: 8px 10px; border-radius: 5px;">
             <span style="font-size: 0.78rem; color: var(--text-muted);">Line Visuals:</span>
-            <select id="gauss-color-mode" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-family: 'Inter', sans-serif;">
+            <select id="gauss-color-mode" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 5px; font-size: 0.78rem; font-family: 'Inter', sans-serif;">
                 <option value="pierce" selected>Piercing Arrows</option>
                 <option value="full">Full Line Glow</option>
             </select>
@@ -397,19 +496,19 @@
         </div>
 
         <!-- Conductor Type & Status -->
-        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 12px; margin-bottom: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Material State</span>
-                <span id="conductor-status-badge" style="font-size: 0.76rem; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fde68a; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">Equilibrium (E = 0)</span>
+                <span id="conductor-status-badge" style="font-size: 0.76rem; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fde68a; padding: 2px 8px; border-radius: 5px; font-weight: 600;">Equilibrium (E = 0)</span>
             </div>
 
             <!-- Induced Surface Charge Counters -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                <div style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                <div style="background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35); border-radius: 5px; padding: 6px 10px; text-align: center;">
                     <div style="font-size: 0.72rem; color: #7dd3fc; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Electrons (−)</div>
                     <div id="cond-electrons-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #38bdf8;">0</div>
                 </div>
-                <div style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 6px 10px; text-align: center;">
+                <div style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 5px; padding: 6px 10px; text-align: center;">
                     <div style="font-size: 0.72rem; color: #fda4af; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Positive Cores (+)</div>
                     <div id="cond-positive-count" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #fb7185;">0</div>
                 </div>
@@ -452,7 +551,7 @@
         </div>
 
         <!-- Hollow Shell Dual Sliders: Inner & Outer Diameter -->
-        <div id="cond-shell-size-box" style="display: none; margin-bottom: 14px; background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 10px 8px 10px;">
+        <div id="cond-shell-size-box" style="display: none; margin-bottom: 14px; background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 10px 10px 8px 10px;">
             <div style="margin-bottom: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <label style="font-size: 0.74rem; color: #fde68a; text-transform: uppercase; font-weight: 600;">Outer Diameter (D<sub>out</sub>)</label>
@@ -516,7 +615,11 @@
     <!-- Toast Notification Container -->
     <div id="toast" class="toast-notification"></div>
 
-    <script src="electricfieldsandforces.js?v=9"></script>
+    <!-- Three.js & OrbitControls for 3D Potential Field Viewport -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script src="electricfieldsandforces.js?v=10"></script>
     <!-- Footer Link -->
     <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">
         www.gerardjosephlim.com

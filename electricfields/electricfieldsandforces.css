@@ -26,21 +26,12 @@
   --warning: #fbbf24;
   --error: #ef4444;
   
-  /* Glass Tokens */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-border-light: rgba(255, 255, 255, 0.3);
-  --glass-shadow:
-    inset 0 0 20px rgba(255, 255, 255, 0.05),
-    inset 0 0 5px rgba(255, 255, 255, 0.1),
-    0 5px 15px rgba(0, 0, 0, 0.5);
-  
-  --aberration-red: rgba(255, 0, 0, 0.2);
-  --aberration-cyan: rgba(0, 255, 255, 0.2);
-  --chromatic-shadow:
-    -2px 0 2px var(--aberration-red),
-    2px 0 2px var(--aberration-cyan),
-    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  /* Solid Card / Panel Tokens */
+  --card-bg: #0d1322;
+  --card-border: #1e293b;
+  --card-border-light: #334155;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --card-radius: 5px;
   
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -61,35 +52,20 @@
   width: 100vw;
 }
 
-/* Liquid Glass Panel Container */
+/* Solid Panel Container (No Glass / No Transparency, 5px Corner Radius) */
 .liquid-glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-top: 1px solid var(--glass-border-light);
-  border-left: 1px solid var(--glass-border-light);
-  box-shadow: var(--chromatic-shadow);
-  border-radius: 24px;
+  background: var(--card-bg, #0d1322);
+  border: 1px solid var(--card-border, #1e293b);
+  box-shadow: var(--card-shadow, 0 4px 16px rgba(0, 0, 0, 0.6));
+  border-radius: 5px;
   position: relative;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
 }
 
-/* Subtle reflection line */
+/* Reflection line removed for clean solid appearance */
 .liquid-glass::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right,
-      transparent,
-      rgba(255, 255, 255, 0.05),
-      transparent);
-  transform: skewX(-25deg);
-  pointer-events: none;
+  display: none;
 }
 
 /* Typography elements */
@@ -106,15 +82,15 @@
 
 /* Standard Buttons */
 .btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #172033;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--text-main);
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 8px 16px;
+  border-radius: 5px;
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -204,10 +180,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  transition: .4s;
-  border-radius: 34px;
-  border: 1px solid var(--glass-border);
+  background-color: #0a0f1d;
+  transition: .3s;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -218,21 +194,21 @@
   width: 16px;
   left: 3px;
   bottom: 3px;
-  background: radial-gradient(circle at 30% 30%, #fff, #ccc);
-  transition: .4s;
-  border-radius: 50%;
+  background: #e2e8f0;
+  transition: .3s;
+  border-radius: 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 input:checked + .slider {
-  background-color: rgba(56, 189, 248, 0.15);
-  border-color: rgba(56, 189, 248, 0.4);
+  background-color: rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.5);
 }
 
 input:checked + .slider:before {
   transform: translateX(20px);
-  background: radial-gradient(circle at 30% 30%, #fff, var(--primary));
-  box-shadow: 0 0 10px var(--primary);
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
 }
 
 /* Standard Range inputs */
@@ -284,11 +260,11 @@ input[type="range"]::-moz-range-thumb:hover {
 input[type="text"],
 input[type="number"],
 select {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0a0f1d;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--text-main);
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: 5px;
   font-family: var(--font-mono);
   font-size: 0.9rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -310,9 +286,7 @@ select:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.8);
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -329,11 +303,15 @@ select:focus {
 .splash-modal {
   width: 90%;
   max-width: 500px;
-  padding: 40px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .splash-header {
@@ -408,29 +386,28 @@ select:focus {
   position: absolute;
   top: 24px;
   right: 24px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #fff;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   z-index: 900;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: var(--chromatic-shadow);
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .help-btn:hover {
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  transform: scale(1.05);
+  background: #172033;
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
 }
 
 /* Close button for Property panels */
@@ -464,10 +441,10 @@ a.signature-footer {
   letter-spacing: 0.1em;
   z-index: 100;
   transition: all 0.3s ease;
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  border-radius: 5px;
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   text-align: center;
   pointer-events: auto;
 }
@@ -671,14 +648,10 @@ canvas {
   right: auto;
   width: 72px;
   height: 72px;
-  background: rgba(239, 68, 68, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  box-shadow:
-    inset 0 0 20px rgba(239, 68, 68, 0.15),
-    0 4px 15px rgba(0, 0, 0, 0.5);
-  border-radius: 24px;
+  background: #190b0e;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -701,10 +674,10 @@ canvas {
   right: auto;
   top: 50%;
   transform: translateY(-50%) translateX(12px);
-  background: rgba(0, 0, 0, 0.85);
+  background: #0d1322;
   color: #fff;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 5px;
   font-size: 0.8rem;
   white-space: nowrap;
   opacity: 0;
@@ -720,17 +693,15 @@ canvas {
 }
 
 .trash-bin.drag-over {
-  background: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.55);
   border-color: #ffaaaa;
   transform: scale(1.15) rotate(-5deg);
-  box-shadow:
-    0 0 30px rgba(239, 68, 68, 0.7),
-    inset 0 0 20px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.7);
   color: #fff;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-/* Left Sidebar & Stacked Glass Cards */
+/* Left Sidebar & Stacked Cards */
 #left-sidebar,
 .left-sidebar {
   position: absolute;
@@ -750,7 +721,10 @@ canvas {
   position: relative;
   width: 100%;
   padding: 18px 20px;
-  border-radius: 24px;
+  border-radius: 5px;
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   display: none;
   animation: slideInLeft 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-sizing: border-box;
@@ -789,6 +763,10 @@ canvas {
   padding: 24px;
   cursor: grab;
   z-index: 100;
+  border-radius: 5px;
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
 }
 
 .charge-panel:active {
@@ -860,38 +838,30 @@ canvas {
 
 /* Gaussian HUD & Preset Controls */
 .gaussian-hud {
-  box-shadow: 
-    -2px 0 2px rgba(56, 189, 248, 0.3),
-    2px 0 2px rgba(96, 165, 250, 0.2),
-    inset 0 0 20px rgba(56, 189, 248, 0.1),
-    0 10px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: #0d1322;
+  border-radius: 5px;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
 }
 
 /* Conductor HUD */
 .conductor-hud {
-  box-shadow: 
-    -2px 0 2px rgba(245, 158, 11, 0.3),
-    2px 0 2px rgba(251, 191, 36, 0.2),
-    inset 0 0 20px rgba(245, 158, 11, 0.1),
-    0 10px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  background: #0d1322;
+  border-radius: 5px;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
 }
 
 .btn-preset {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #172033;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--text-muted);
   font-family: var(--font-family);
   font-size: 0.76rem;
   padding: 6px 4px;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -922,18 +892,16 @@ canvas {
   bottom: 84px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: rgba(15, 23, 42, 0.88);
+  background: #0f172a;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   padding: 10px 20px;
-  border-radius: 9999px;
+  border-radius: 5px;
   font-family: var(--font-family);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.2px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.25);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -965,3 +933,271 @@ canvas {
 .surface-hover-canvas {
   cursor: move !important;
 }
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* 3D POTENTIAL & EQUIPOTENTIAL FLOATING POPUP CARD                           */
+/* -------------------------------------------------------------------------- */
+.view3d-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 660px;
+  height: 500px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  z-index: 95;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.view3d-container.expanded {
+  width: min(980px, calc(100vw - 40px));
+  height: min(740px, calc(100vh - 40px));
+}
+
+.view3d-card-header {
+  height: 44px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.view3d-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view3d-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view3d-card-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.view3d-card-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.view3d-close-btn:hover {
+  background: rgba(239, 68, 68, 0.35) !important;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  color: #fee2e2 !important;
+}
+
+.canvas3d-wrapper {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+#fieldCanvas3D {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+}
+
+/* 3D Floating HUD Overlay (Solid, 5px radius) */
+.view3d-hud {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 280px;
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  padding: 12px 14px;
+  z-index: 100;
+  pointer-events: auto;
+  user-select: none;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  display: none;
+}
+
+.view3d-hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.view3d-hud-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.view3d-control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.view3d-group-title {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.view3d-pill-group {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.view3d-pill-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-family: var(--font-family);
+  font-weight: 500;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.view3d-pill-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.view3d-pill-btn.active {
+  background: rgba(168, 85, 247, 0.3);
+  color: #f3e8ff;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+  font-weight: 600;
+}
+
+.view3d-select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-family: var(--font-family);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.view3d-select:focus {
+  border-color: #a855f7;
+}
+
+.view3d-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.view3d-hud-footer {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+
+
+/* 2D Pan & Zoom Floating Controls (Solid, 5px radius) */
+.zoom-controls {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: #0d1322;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  z-index: 85;
+  user-select: none;
+}
+
+.zoom-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.05);
+}
+
+.zoom-btn.reset-zoom {
+  font-size: 1.1rem;
+}
+
+.zoom-level-text {
+  font-size: 0.78rem;
+  font-family: monospace;
+  color: var(--text-muted);
+  min-width: 44px;
+  text-align: center;
+}
+
