@@ -1698,3 +1698,391 @@ canvas {
   background: rgba(70, 60, 50, 0.45) !important;
 }
 
+/* ========================================================================== */
+/* LABASSIST QA ASSISTANT MODAL & MATHML (Cambria Math)                       */
+/* ========================================================================== */
+
+.assistant-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: var(--card-radius);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assistant-toggle-btn:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.assistant-toggle-btn.active {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+  color: #ffffff;
+}
+
+.lab-assistant-card {
+  position: fixed;
+  top: 60px;
+  left: max(20px, calc(50vw - 310px));
+  width: 620px;
+  max-width: calc(100vw - 40px);
+  height: 560px;
+  max-height: calc(100vh - 80px);
+  min-width: 320px;
+  min-height: 280px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+  padding: 14px 16px;
+  gap: 10px;
+  box-sizing: border-box;
+  resize: both;
+  overflow: hidden;
+}
+
+[data-theme="light"] .lab-assistant-card {
+  box-shadow: 0 8px 24px rgba(70, 60, 50, 0.18);
+}
+
+.lab-assistant-card.hidden {
+  display: none !important;
+}
+
+/* Corner Resizer Handle (Bottom-Right) */
+.lab-assistant-card::-webkit-resizer {
+  background: transparent;
+}
+
+.lab-assistant-card::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  background: linear-gradient(135deg,
+      transparent 0%, transparent 40%,
+      var(--text-subtle) 40%, var(--text-subtle) 50%,
+      transparent 50%, transparent 70%,
+      var(--text-subtle) 70%, var(--text-subtle) 80%,
+      transparent 80%, transparent 100%);
+  opacity: 0.65;
+}
+
+.assistant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--card-border);
+  cursor: grab;
+  user-select: none;
+}
+
+.assistant-header.is-dragging {
+  cursor: grabbing;
+}
+
+.assistant-header a,
+.assistant-header button {
+  cursor: pointer;
+  user-select: auto;
+}
+
+.assistant-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.assistant-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.assistant-logo-icon:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--primary);
+}
+
+.assistant-title-block h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.assistant-chips-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+
+.assistant-chip {
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.assistant-chip:hover {
+  color: var(--text-main);
+  background: var(--btn-hover-bg);
+  border-color: var(--primary);
+}
+
+.assistant-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 4px 8px 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.assistant-welcome {
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: 12px 14px;
+  color: var(--text-muted);
+}
+
+.assistant-welcome p {
+  margin: 0 0 6px 0;
+}
+.assistant-welcome p:last-child {
+  margin: 0;
+}
+
+.assistant-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.assistant-message.user {
+  align-items: flex-end;
+}
+
+.user-bubble {
+  background: var(--primary-dark);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 5px;
+  max-width: 85%;
+  font-weight: 500;
+  font-size: 0.80rem;
+}
+
+[data-theme="light"] .user-bubble {
+  background: var(--primary);
+}
+
+.assistant-message.assistant {
+  align-items: flex-start;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+
+/* Assistant Thinking Indicator with 4 Scrolling / Pulsing Dots */
+.assistant-message.assistant-thinking {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.thinking-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 14px;
+}
+
+.thinking-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.3;
+  animation: dot-wave 1.4s ease-in-out infinite;
+}
+
+.thinking-dots span:nth-child(1) { animation-delay: 0.0s; }
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+.thinking-dots span:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes dot-wave {
+  0%, 100% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.3;
+  }
+  30% {
+    transform: translateY(-5px) scale(1.15);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(0) scale(0.95);
+    opacity: 0.45;
+  }
+}
+
+.assistant-reply-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 4px;
+  width: 100%;
+}
+
+.assistant-reply-body {
+  color: var(--text-main);
+}
+
+.assistant-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--card-border);
+  padding-top: 10px;
+}
+
+.prompt-symbol {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+.assistant-input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--card-radius);
+  color: var(--text-main);
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  font-family: var(--font-family);
+  outline: none;
+}
+
+.assistant-input:focus {
+  border-color: var(--primary);
+}
+
+.assistant-send-btn {
+  background: var(--primary);
+  color: #ffffff;
+  border: 1px solid var(--primary-dark);
+  border-radius: var(--card-radius);
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assistant-send-btn:hover {
+  background: var(--primary-dark);
+}
+
+.hover-card-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+  border-radius: var(--card-radius);
+  transition: all 0.15s ease;
+}
+
+.hover-card-close-btn:hover {
+  color: var(--text-main);
+  background: var(--btn-hover-bg);
+}
+
+/* Authentic OMML / Cambria MathML Typography */
+math, .math-omml {
+  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
+  font-size: 1.08em;
+  letter-spacing: 0.01em;
+  font-style: normal;
+  color: var(--text-main);
+}
+
+math[display="inline"] {
+  display: inline;
+  vertical-align: -0.15em;
+}
+
+math mi {
+  font-style: italic;
+  font-family: inherit;
+}
+
+math mo, math mn {
+  font-style: normal;
+  font-family: inherit;
+}
+
+math mfrac {
+  padding: 0 2px;
+}
+
+.math-eq-row {
+  display: block;
+  margin: 6px 0;
+  padding: 4px 6px;
+  background: var(--input-bg);
+  border-radius: 4px;
+  text-align: center;
+}
+
+
