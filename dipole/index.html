@@ -58,6 +58,13 @@
                         </svg>
                     </button>
 
+                    <!-- LabAssist Trigger Button (34x34px, 5px radius standard) -->
+                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
+                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
                     <!-- Help / Instructions Modal Trigger -->
                     <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">?</button>
                 </div>
@@ -278,6 +285,49 @@
         </footer>
     </div>
 
+    <!-- Floating LabAssist Card (Resizable, 5px Standard) -->
+    <div id="lab-assistant-card" class="lab-assistant-card hidden" role="dialog" aria-label="LabAssist">
+        <div class="assistant-header">
+            <div class="assistant-title-block">
+                <div class="assistant-title-row">
+                    <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="assistant-logo-icon" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                        <svg class="brand-logo-svg" viewBox="0 0 376 376" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                            <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                        </svg>
+                    </a>
+                    <h3>LabAssist</h3>
+                </div>
+            </div>
+            <button id="close-assistant-btn" class="hover-card-close-btn" title="Close LabAssist" aria-label="Close LabAssist">✕</button>
+        </div>
+
+        <!-- Clickable Starter Question Chips -->
+        <div class="assistant-chips-bar" aria-label="Suggested questions">
+            <button type="button" class="assistant-chip" data-query="Why is the internal electric field smaller?">Why is E<sub>net</sub> smaller?</button>
+            <button type="button" class="assistant-chip" data-query="What is bound surface charge density σ_b?">What is bound charge σ<sub>b</sub>?</button>
+            <button type="button" class="assistant-chip" data-query="How does temperature affect dipole alignment?">Temperature & dipoles</button>
+            <button type="button" class="assistant-chip" data-query="Why does a dielectric increase capacitance?">Why increase capacitance?</button>
+            <button type="button" class="assistant-chip" data-query="Compare water and glass dielectrics">Compare materials</button>
+            <button type="button" class="assistant-chip" data-query="What is the live telemetry status?">Live telemetry status</button>
+        </div>
+
+        <!-- Scrollable Q&A Dialogue Log -->
+        <div class="assistant-log" id="assistant-log" aria-live="polite">
+            <div class="assistant-welcome">
+                <p><strong>Welcome to LabAssist.</strong></p>
+                <p>Ask questions about dielectric polarization, bound surface charges, internal field screening, and capacitance, or click any suggested question chip above.</p>
+            </div>
+        </div>
+
+        <!-- Input Form -->
+        <form class="assistant-form" id="assistant-form">
+            <span class="prompt-symbol" aria-hidden="true">?</span>
+            <input type="text" id="assistant-input" class="assistant-input" placeholder="Ask a physics question..." autocomplete="off" spellcheck="false">
+            <button type="submit" id="assistant-send-btn" class="assistant-send-btn">Ask</button>
+        </form>
+    </div>
+
     <!-- Instruction & Physics Modal -->
     <div id="splashOverlay" class="splash-overlay hidden">
         <div class="splash-modal">
@@ -300,8 +350,9 @@
         </div>
     </div>
 
-    <script src="dipole-physics.js"></script>
-    <script src="dipole.js"></script>
+    <script src="dipole-physics.js?v=2"></script>
+    <script src="assistant-parser.js?v=2"></script>
+    <script src="dipole.js?v=2"></script>
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function (e) {
