@@ -72,7 +72,11 @@
                     </button>
 
                     <!-- Help / Instructions Modal Trigger -->
-                    <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">?</button>
+                    <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions"><svg class="help-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+</svg></button>
                 </div>
             </div>
         </header>
@@ -87,22 +91,22 @@
                     <h2>Beam Telemetry</h2>
                     <span class="panel-subtitle">Impact & Field Kinetics</span>
                 </div>
-                <span id="telemetry-status" class="telemetry-badge badge-active">Transmitting</span>
+                <span id="telemetry-status" class="telemetry-badge badge-active" data-tooltip-id="status">Transmitting</span>
             </div>
             <div class="telemetry-grid">
-                <div class="telemetry-item">
+                <div class="telemetry-item" data-tooltip-id="deflection">
                     <span class="item-label">Deflection ΔY</span>
                     <span id="telemetry-deflection" class="item-val highlight">0.0 mm</span>
                 </div>
-                <div class="telemetry-item">
+                <div class="telemetry-item" data-tooltip-id="angle">
                     <span class="item-label">Exit Angle θ</span>
                     <span id="telemetry-angle" class="item-val">0.0°</span>
                 </div>
-                <div class="telemetry-item">
+                <div class="telemetry-item" data-tooltip-id="speed">
                     <span class="item-label">Velocity v</span>
                     <span id="telemetry-speed" class="item-val mono">0.0% c</span>
                 </div>
-                <div class="telemetry-item">
+                <div class="telemetry-item" data-tooltip-id="mode">
                     <span class="item-label">Field Status</span>
                     <span id="telemetry-mode" class="item-val sub">Pure Drift</span>
                 </div>
@@ -238,8 +242,8 @@
             <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="footer-portfolio-link">www.gerardjosephlim.com</a>
         </footer>
 
-        <!-- Flat Instructions Modal (Zero Sluggish Animation, 5px Radius) -->
-        <div id="splash-overlay" class="splash-overlay hidden" role="dialog" aria-modal="true">
+        <!-- Flat Instructions Modal (Zero Sluggish Animation, Launches First on Load, 5px Radius) -->
+        <div id="splash-overlay" class="splash-overlay" role="dialog" aria-modal="true">
             <div class="splash-modal chassis-card">
                 <header class="splash-header">
                     <h1>Electron Beam Simulator</h1>
@@ -307,6 +311,8 @@
                 <button type="submit" id="assistant-send-btn" class="assistant-send-btn">Ask</button>
             </form>
         </div>
+        <!-- Floating Delayed Hover Tooltip for Beam Telemetry Metrics -->
+        <div id="metric-tooltip" class="metric-tooltip chassis-card hidden" role="tooltip" aria-hidden="true"></div>
     </div>
 
     <!-- Scripts -->

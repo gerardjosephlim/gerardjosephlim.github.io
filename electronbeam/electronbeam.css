@@ -162,8 +162,16 @@ html, body {
     transform: scale(1.04);
 }
 
-.brand-logo-svg path {
-    fill: currentColor;
+.brand-path-top {
+    fill: #ffffff;
+}
+
+[data-theme="light"] .brand-path-top {
+    fill: #1E3A8A;
+}
+
+.brand-path-bottom {
+    fill: #14B8A6;
 }
 
 .header-title-block h1 {
@@ -755,6 +763,9 @@ input:checked + .slider:before {
     border: 1px solid var(--card-border);
     border-radius: var(--card-radius);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    padding: 14px 16px;
+    gap: 10px;
+    box-sizing: border-box;
     z-index: 300;
     display: flex;
     flex-direction: column;
@@ -762,8 +773,12 @@ input:checked + .slider:before {
     overflow: hidden;
 }
 
+[data-theme="light"] .lab-assistant-card {
+    box-shadow: 0 8px 24px rgba(70, 60, 50, 0.18);
+}
+
 .lab-assistant-card.hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Diagonal tactile corner resizer handle */
@@ -833,32 +848,32 @@ input:checked + .slider:before {
 /* Starter Question Chips Ribbon */
 .assistant-chips-bar {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
-    padding: 8px 12px;
-    overflow-x: auto;
-    background: var(--input-bg);
-    border-bottom: 1px solid var(--card-border);
-    white-space: nowrap;
-    scrollbar-width: thin;
+    flex-shrink: 0;
+    padding: 4px 0;
 }
 
 .assistant-chip {
     background: var(--btn-bg);
     border: 1px solid var(--btn-border);
-    color: var(--text-main);
+    border-radius: 4px;
+    color: var(--text-muted);
     font-size: 0.74rem;
-    font-weight: 500;
-    padding: 4px 8px;
-    border-radius: var(--card-radius);
+    font-weight: 600;
+    padding: 4px 9px;
     cursor: pointer;
     transition: all 0.15s ease;
-    flex-shrink: 0;
+    white-space: nowrap;
+    line-height: 1.3;
+    display: inline-flex;
+    align-items: center;
 }
 
 .assistant-chip:hover {
+    color: var(--text-main);
     background: var(--btn-hover-bg);
     border-color: var(--primary);
-    color: var(--primary);
 }
 
 /* Scrollable Dialogue Log */
@@ -1041,6 +1056,94 @@ input:checked + .slider:before {
     background: var(--primary);
     border-color: var(--primary);
     color: #ffffff;
+}
+
+/* ========================================================================== */
+/* FLOATING DELAYED HOVER TOOLTIP FOR BEAM TELEMETRY                          */
+/* ========================================================================== */
+
+.metric-tooltip {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    max-width: 340px;
+    padding: 11px 15px;
+    background: var(--card-bg);
+    border: 1px solid var(--primary);
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: var(--text-main);
+    font: 500 0.78rem/1.55 var(--font-family);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+[data-theme="light"] .metric-tooltip {
+    box-shadow: 0 4px 20px rgba(70, 60, 50, 0.2);
+}
+
+.metric-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(3px);
+}
+
+.metric-tooltip-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metric-tooltip-body {
+    color: var(--text-muted);
+    font-size: 0.77rem;
+    line-height: 1.55;
+}
+
+.metric-tooltip-body strong {
+    color: var(--text-main);
+}
+
+.metric-tooltip-body code {
+    font-family: var(--font-mono);
+    color: var(--primary);
+    background: var(--input-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+}
+
+/* Authentic MathML Typography */
+math {
+    font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
+    font-size: 1.05em;
+    letter-spacing: 0.01em;
+    font-style: normal;
+    color: var(--text-main);
+}
+
+math[display="block"] {
+    display: block;
+    margin: 6px 0;
+    padding: 4px 8px;
+    text-align: center;
+    background: var(--input-bg);
+    border-radius: var(--card-radius);
+}
+
+math[display="inline"] {
+    display: inline;
+    vertical-align: -0.15em;
+}
+
+.math-eq-row {
+    margin: 4px 0;
 }
 
 /* Responsive adjustments */
