@@ -12,7 +12,7 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
-    <link rel="stylesheet" href="electricfieldsandforces.css?v=7">
+    <link rel="stylesheet" href="electricfieldsandforces.css?v=13">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -461,37 +461,37 @@
         </div>
 
         <!-- Enclosed Charge & Flux Summary -->
-        <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 12px; margin-bottom: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">Enclosed Charge (Q<sub>enc</sub>)</span>
-                <span id="gauss-qenc" style="font-family: monospace; font-size: 1.05rem; font-weight: 700; color: #fbbf24;">0.00 μC</span>
+        <div class="gaussian-summary-box">
+            <div class="gaussian-summary-row">
+                <span class="gaussian-summary-label">Enclosed Charge (Q<sub>enc</sub>)</span>
+                <span id="gauss-qenc" class="gauss-val-qenc">0.00 μC</span>
             </div>
             
             <!-- Flux Line Counters -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 5px; padding: 6px 10px; text-align: center;">
-                    <div style="font-size: 0.72rem; color: #fca5a5; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Inflow (Red)</div>
-                    <div id="gauss-nin" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #ff6b6b;">0</div>
+            <div class="gaussian-counters-grid">
+                <div class="gauss-counter-box gauss-counter-inflow">
+                    <div class="gauss-counter-label">Inflow (Red)</div>
+                    <div id="gauss-nin" class="gauss-counter-num">0</div>
                 </div>
-                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 5px; padding: 6px 10px; text-align: center;">
-                    <div style="font-size: 0.72rem; color: #93c5fd; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Outflow (Blue)</div>
-                    <div id="gauss-nout" style="font-size: 1.15rem; font-family: monospace; font-weight: 700; color: #60a5fa;">0</div>
+                <div class="gauss-counter-box gauss-counter-outflow">
+                    <div class="gauss-counter-label">Outflow (Blue)</div>
+                    <div id="gauss-nout" class="gauss-counter-num">0</div>
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.82rem;">
-                <span style="color: var(--text-muted);">Net Line Flux (ΔN):</span>
-                <span id="gauss-net-lines" style="font-family: monospace; font-weight: 700; color: var(--text-main);">0 (Balanced)</span>
+            <div class="gaussian-stat-row">
+                <span class="gaussian-stat-label">Net Line Flux (ΔN):</span>
+                <span id="gauss-net-lines" class="gaussian-stat-val">0 (Balanced)</span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
-                <span style="color: var(--text-muted);">Gauss Expected (λ·Q<sub>enc</sub>):</span>
-                <span id="gauss-expected" style="font-family: monospace; font-weight: 600; color: #34d399;">0 ✓</span>
+            <div class="gaussian-stat-row">
+                <span class="gaussian-stat-label">Gauss Expected (λ·Q<sub>enc</sub>):</span>
+                <span id="gauss-expected" class="gaussian-stat-val gauss-val-expected">0 ✓</span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.8rem;">
-                <span style="color: var(--text-muted);">Physical Flux (Φ<sub>E</sub>):</span>
-                <span id="gauss-calc-flux" style="font-family: monospace; font-weight: 600; color: #38bdf8;">0.00 N·m²/C</span>
+            <div class="gaussian-stat-row">
+                <span class="gaussian-stat-label">Physical Flux (Φ<sub>E</sub>):</span>
+                <span id="gauss-calc-flux" class="gaussian-stat-val gauss-val-flux">0.00 N·m²/C</span>
             </div>
         </div>
 
@@ -701,8 +701,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-    <script src="assistant-parser.js?v=12"></script>
-    <script src="electricfieldsandforces.js?v=12"></script>
+    <script src="assistant-parser.js?v=13"></script>
+    <script src="electricfieldsandforces.js?v=13"></script>
 </body>
 
 </html>
