@@ -426,7 +426,8 @@ select:focus {
 
 /* Header Actions & Theme Toggle Button (Square 34x34, 5px radius) */
 .theme-btn,
-.help-btn {
+.help-btn,
+.assistant-btn {
   pointer-events: auto;
   position: static;
   width: 34px;
@@ -447,10 +448,23 @@ select:focus {
 }
 
 .theme-btn:hover,
-.help-btn:hover {
+.help-btn:hover,
+.assistant-btn:hover {
   transform: scale(1.05);
   background: var(--btn-hover-bg, rgba(255, 255, 255, 0.15));
   border-color: var(--card-border-light, rgba(255, 255, 255, 0.25));
+}
+
+.assistant-btn.active {
+  background: #1e40af;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+[data-theme="light"] .assistant-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #1d4ed8;
 }
 
 .help-btn {
@@ -607,6 +621,62 @@ canvas {
   z-index: 200;
   user-select: none;
   box-sizing: border-box;
+}
+
+.header-brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--card-radius, 5px);
+  background: var(--btn-bg, #172033);
+  border: 1px solid var(--btn-border, rgba(255, 255, 255, 0.14));
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.brand-mark:hover {
+  background: var(--btn-hover-bg, rgba(255, 255, 255, 0.15));
+  border-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+.brand-logo-svg {
+  display: block;
+}
+
+.brand-path-top {
+  fill: #ffffff;
+}
+
+[data-theme="light"] .brand-path-top {
+  fill: #1E3A8A;
+}
+
+.brand-path-bottom {
+  fill: #14B8A6;
+}
+
+.assistant-logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: transform 0.2s ease;
+}
+
+.assistant-logo-icon:hover {
+  transform: scale(1.08);
 }
 
 .header-title-block {
@@ -1452,7 +1522,9 @@ canvas {
 
 [data-theme="light"] .zoom-controls,
 [data-theme="light"] .theme-btn,
-[data-theme="light"] .help-btn {
+[data-theme="light"] .help-btn,
+[data-theme="light"] .assistant-btn,
+[data-theme="light"] .brand-mark {
   background: var(--card-bg) !important;
   border-color: var(--card-border) !important;
   color: var(--text-main) !important;
@@ -1701,33 +1773,6 @@ canvas {
 /* ========================================================================== */
 /* LABASSIST QA ASSISTANT MODAL & MATHML (Cambria Math)                       */
 /* ========================================================================== */
-
-.assistant-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  color: var(--text-main);
-  padding: 6px 12px;
-  border-radius: var(--card-radius);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.assistant-toggle-btn:hover {
-  background: var(--btn-hover-bg);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.assistant-toggle-btn.active {
-  background: var(--primary);
-  border-color: var(--primary-dark);
-  color: #ffffff;
-}
 
 .lab-assistant-card {
   position: fixed;
