@@ -487,14 +487,6 @@ button:focus-visible, select:focus-visible, input:focus-visible {
     font-weight: 500;
 }
 
-.metric.featured {
-    border-color: var(--primary);
-}
-
-.metric.featured strong {
-    color: var(--primary);
-}
-
 .metric.electron strong {
     color: var(--blue);
 }
@@ -505,10 +497,6 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 
 [data-theme="light"] .metric strong {
     color: #000000;
-}
-
-[data-theme="light"] .metric.featured strong {
-    color: var(--primary-dark);
 }
 
 [data-theme="light"] .metric.electron strong {
@@ -799,7 +787,7 @@ canvas {
 .metric[data-tooltip-id],
 .diag-item[data-tooltip-id],
 .status-indicator[data-tooltip-id] {
-    cursor: help;
+    cursor: default;
     transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -808,7 +796,7 @@ canvas {
 }
 
 .diag-item {
-    cursor: help;
+    cursor: default;
     padding: 3px 6px;
     border-radius: var(--card-radius);
     transition: background-color 0.15s ease, color 0.15s ease;
@@ -825,6 +813,7 @@ canvas {
     gap: 6px;
     padding: 2px 6px;
     border-radius: var(--card-radius);
+    cursor: default;
     transition: background-color 0.15s ease;
 }
 
@@ -837,14 +826,14 @@ canvas {
     position: fixed;
     z-index: 9999;
     pointer-events: none;
-    max-width: 320px;
-    padding: 10px 14px;
+    max-width: 340px;
+    padding: 11px 15px;
     background: var(--card-bg);
     border: 1px solid var(--primary);
     border-radius: var(--card-radius);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     color: var(--text-main);
-    font: 500 0.78rem/1.5 var(--font-sans);
+    font: 500 0.78rem/1.55 var(--font-sans);
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.15s ease, transform 0.15s ease;
@@ -861,7 +850,7 @@ canvas {
     font-size: 0.82rem;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-family: var(--font-sans);
     display: flex;
     align-items: center;
@@ -870,8 +859,8 @@ canvas {
 
 .metric-tooltip-body {
     color: var(--text-muted);
-    font-size: 0.76rem;
-    line-height: 1.5;
+    font-size: 0.77rem;
+    line-height: 1.55;
 }
 
 .metric-tooltip-body strong {
@@ -885,6 +874,52 @@ canvas {
     padding: 1px 4px;
     border-radius: 3px;
     font-size: 0.72rem;
+}
+
+/* Authentic OMML / Cambria MathML Typography */
+math, .math-omml {
+    font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
+    font-size: 1.08em;
+    letter-spacing: 0.01em;
+    font-style: normal;
+    color: var(--text-main);
+}
+
+math[display="block"], .math-omml-block {
+    display: block;
+    margin: 8px 0;
+    padding: 4px 8px;
+    text-align: center;
+    background: var(--input-bg);
+    border-radius: var(--card-radius);
+}
+
+math[display="inline"], .math-omml-inline {
+    display: inline;
+    vertical-align: -0.15em;
+}
+
+math mi, .math-omml var {
+    font-style: italic;
+    font-family: inherit;
+}
+
+math mo, math mn, .math-omml span.op, .math-omml span.num {
+    font-style: normal;
+    font-family: inherit;
+}
+
+math mfrac, .math-omml .frac {
+    padding: 0 2px;
+}
+
+.math-eq-row {
+    display: block;
+    margin: 6px 0;
+    padding: 4px 6px;
+    background: var(--input-bg);
+    border-radius: 4px;
+    text-align: center;
 }
 
 /* Parameter Controls Panel */
