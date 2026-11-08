@@ -333,7 +333,7 @@ body.glass-simulation-body {
 /* Energy Band Diagram Canvas */
 .band-diagram-wrapper {
   flex: 1;
-  min-height: 140px;
+  min-height: 175px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
@@ -434,9 +434,10 @@ body.glass-simulation-body {
 
 .formula-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   font-size: 0.74rem;
+  min-width: 0;
 }
 
 .math-label {
@@ -450,6 +451,12 @@ body.glass-simulation-body {
   font-family: var(--font-math-roman);
   color: var(--text-primary);
   letter-spacing: 0.01em;
+  min-width: 0;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: thin;
 }
 
 .telemetry-compact-grid {
@@ -578,13 +585,17 @@ body.glass-simulation-body {
   z-index: 10;
   margin-top: 6px;
   margin-bottom: 6px;
+  box-sizing: border-box;
+  padding: 0 8px;
 }
 
 .controls {
   pointer-events: auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px 12px;
   padding: 6px 14px;
   border-radius: var(--card-radius);
   background: var(--card-bg);
@@ -723,6 +734,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
   width: 1px;
   height: 28px;
   background: var(--card-border);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1240px) {
+  .divider {
+    display: none;
+  }
+  .controls {
+    gap: 8px 10px;
+  }
 }
 
 .btn {
