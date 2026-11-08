@@ -795,6 +795,98 @@ canvas {
     font-weight: 700;
 }
 
+/* Diagnostic & Metric Tooltip Interactive Targets */
+.metric[data-tooltip-id],
+.diag-item[data-tooltip-id],
+.status-indicator[data-tooltip-id] {
+    cursor: help;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.metric[data-tooltip-id]:hover {
+    border-color: var(--primary);
+}
+
+.diag-item {
+    cursor: help;
+    padding: 3px 6px;
+    border-radius: var(--card-radius);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.diag-item:hover {
+    background: var(--input-bg);
+    color: var(--text-main);
+}
+
+.status-indicator[data-tooltip-id] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 6px;
+    border-radius: var(--card-radius);
+    transition: background-color 0.15s ease;
+}
+
+.status-indicator[data-tooltip-id]:hover {
+    background: var(--input-bg);
+}
+
+/* Delayed Floating Metric Tooltip Popup (0.5s Hover Delay) */
+.metric-tooltip {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    max-width: 320px;
+    padding: 10px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--primary);
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: var(--text-main);
+    font: 500 0.78rem/1.5 var(--font-sans);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.metric-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(3px);
+}
+
+.metric-tooltip-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+    font-family: var(--font-sans);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metric-tooltip-body {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.5;
+}
+
+.metric-tooltip-body strong {
+    color: var(--text-main);
+}
+
+.metric-tooltip-body code {
+    font-family: var(--font-mono);
+    color: var(--primary);
+    background: var(--input-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+}
+
 /* Parameter Controls Panel */
 .controls {
     height: 100%;

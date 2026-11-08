@@ -93,18 +93,18 @@
             <!-- Solved values and the four synchronized energy panels. -->
             <section class="workspace" aria-label="Simulation results">
                 <div class="summary-grid" aria-live="polite">
-                    <div class="metric featured"><span>Fermi level</span><strong id="result-ef">—</strong><small id="result-regime">—</small></div>
-                    <div class="metric electron"><span>Electrons, n</span><strong id="result-n">—</strong><small>cm⁻³</small></div>
-                    <div class="metric hole"><span>Holes, p</span><strong id="result-p">—</strong><small>cm⁻³</small></div>
-                    <div class="metric"><span>Intrinsic, nᵢ</span><strong id="result-ni">—</strong><small>cm⁻³</small></div>
-                    <div class="metric"><span>N<sub>c</sub> / N<sub>v</sub></span><strong id="result-ncnv">—</strong><small>cm⁻³</small></div>
-                    <div class="metric"><span>Ionized dopants</span><strong id="result-ionized">—</strong><small>N<sub>D</sub>⁺ / N<sub>A</sub>⁻</small></div>
+                    <div class="metric featured" data-tooltip-id="fermi-level"><span>Fermi level</span><strong id="result-ef">—</strong><small id="result-regime">—</small></div>
+                    <div class="metric electron" data-tooltip-id="electrons"><span>Electrons, n</span><strong id="result-n">—</strong><small>cm⁻³</small></div>
+                    <div class="metric hole" data-tooltip-id="holes"><span>Holes, p</span><strong id="result-p">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="intrinsic"><span>Intrinsic, nᵢ</span><strong id="result-ni">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="ncnv"><span>N<sub>c</sub> / N<sub>v</sub></span><strong id="result-ncnv">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="ionized"><span>Ionized dopants</span><strong id="result-ionized">—</strong><small>N<sub>D</sub>⁺ / N<sub>A</sub>⁻</small></div>
                 </div>
 
                 <!-- Canvas is redrawn from solved data; tooltip and exports are overlays. -->
                 <div class="canvas-card liquid-glass" id="canvas-card">
                     <div class="plot-toolbar">
-                        <div><span class="status-dot" id="status-dot"></span><span id="status-text">Equilibrium</span></div>
+                        <div class="status-indicator" data-tooltip-id="status"><span class="status-dot" id="status-dot"></span><span id="status-text">Equilibrium</span></div>
                         <div class="plot-actions">
                             <span class="plot-note" id="plot-note">Shared energy scale · hover to inspect</span>
                             <button class="toolbar-button" id="toggle-hover-fd-btn" type="button" title="Toggle floating Fermi–Dirac probability plot (f vs E)">⤢ f(E) Plot</button>
@@ -141,10 +141,10 @@
                 </div>
 
                 <div class="diagnostics liquid-glass">
-                    <span>Charge residual <strong id="diag-residual">—</strong></span>
-                    <span>np/nᵢ² <strong id="diag-mass-action">—</strong></span>
-                    <span>Eᵢ <strong id="diag-ei">—</strong></span>
-                    <span>Solve time <strong id="diag-time">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="residual">Charge residual <strong id="diag-residual">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="mass-action">np/nᵢ² <strong id="diag-mass-action">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="ei">Eᵢ <strong id="diag-ei">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="time">Solve time <strong id="diag-time">—</strong></span>
                 </div>
             </section>
 
@@ -340,6 +340,7 @@
         <div class="assistant-chips-bar" aria-label="Suggested questions">
             <button type="button" class="assistant-chip" data-query="Is my sample degenerate?">Is it degenerate?</button>
             <button type="button" class="assistant-chip" data-query="What is the Fermi level?">What is E<sub>F</sub>?</button>
+            <button type="button" class="assistant-chip" data-query="Why is the Fermi level not in the middle when the band gap is small?">Why E<sub>F</sub> not midgap?</button>
             <button type="button" class="assistant-chip" data-query="Why is the 3kT line marked?">Why 3kT line?</button>
             <button type="button" class="assistant-chip" data-query="Explain the charge residual bar">Explain charge residual</button>
             <button type="button" class="assistant-chip" data-query="What is carrier freeze-out?">What is freeze-out?</button>
@@ -361,6 +362,9 @@
             <button type="submit" id="assistant-send-btn" class="assistant-send-btn">Ask</button>
         </form>
     </div>
+
+    <!-- Floating Delayed Metric Tooltip (0.5s Hover Delay, 5px Radius Standard) -->
+    <div id="metric-tooltip" class="metric-tooltip hidden" role="tooltip" aria-hidden="true"></div>
 
     <script src="semiconductor-physics.js"></script>
     <script src="simulation-state.js"></script>
