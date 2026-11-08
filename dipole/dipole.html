@@ -1,53 +1,315 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dipole Dynamics | Liquid Glass</title>
-    <meta name="description" content="A premium physics simulation of dipole dynamics in an electric field.">
+    <title>Dielectric Polarization Lab | Scientific Workstation</title>
+    <meta name="description" content="Quantitative physics simulation of dielectric polarization, bound surface charge, and internal electric field screening in a parallel-plate capacitor.">
     <link rel="stylesheet" href="dipole.css">
 </head>
 
 <body>
-    <!-- Splash Overlay -->
-    <div id="splashOverlay" class="splash-overlay">
-        <div class="splash-modal liquid-glass">
+    <div class="app-shell">
+        <!-- Top Docked Workstation Header (52px) -->
+        <header class="app-header">
+            <div class="header-brand-block">
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="brand-mark" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                    <svg class="brand-logo-svg" viewBox="0 0 376 376" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                        <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                    </svg>
+                </a>
+                <div class="header-title-block">
+                    <h1>Dielectric Polarization Lab</h1>
+                    <div class="header-meta">
+                        <span>Bound surface charge · Internal field screening · Capacitor physics</span>
+                        <span class="meta-sep">•</span>
+                        <span><i>Dr. Gerard Joseph Lim</i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <nav class="presets" aria-label="Dielectric material presets">
+                    <button class="preset active" data-material="nonpolar" title="Glass/Silica (κ = 3.8)">Glass</button>
+                    <button class="preset" data-material="polymer" title="Polymer/Mica (κ = 6.0)">Mica</button>
+                    <button class="preset" data-material="polar" title="Water/Polar Liquid (κ = 80)">Water</button>
+                    <button class="preset" data-material="ceramic" title="Barium Titanate (κ = 1200)">Ceramic</button>
+                    <button class="preset" data-material="vacuum" title="Vacuum (κ = 1.0)">Vacuum</button>
+                </nav>
+
+                <div class="header-tools">
+                    <!-- Theme Toggle Button (Light/Dark Mode with SVG Icons) -->
+                    <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light or Dark Mode">
+                        <svg class="theme-icon-svg" id="theme-sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon-svg" id="theme-moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Help / Instructions Modal Trigger -->
+                    <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">?</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workstation Layout (3 Columns) -->
+        <main class="workstation-main">
+            <!-- Left Column: Dielectric Telemetry HUD Card -->
+            <aside class="chassis-card telemetry-card" aria-label="Dielectric Telemetry">
+                <div class="panel-header">
+                    <h2>Dielectric Telemetry</h2>
+                    <span class="panel-subtitle">Macroscopic Field & Charge Balance</span>
+                </div>
+
+                <!-- Field Group -->
+                <div class="telemetry-group">
+                    <span class="group-title">Electric Fields</span>
+                    <div class="metric-row">
+                        <span class="metric-label">Applied Field (E₀)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-e0">0.0</span><span class="metric-unit">kV/m</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Screening Field (E<sub>P</sub>)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-ep">0.0</span><span class="metric-unit">kV/m</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Net Internal Field (E<sub>net</sub>)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-enet">0.0</span><span class="metric-unit">kV/m</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Screening Comparison Bar -->
+                    <div class="field-comparison-bar">
+                        <div class="bar-labels">
+                            <span>Field Reduction Ratio:</span>
+                            <strong id="disp-screening-pct">0%</strong>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill screening-fill" id="bar-screening" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charges Group -->
+                <div class="telemetry-group">
+                    <span class="group-title">Charge Densities</span>
+                    <div class="metric-row">
+                        <span class="metric-label">Free Plate Charge (σ<sub>f</sub>)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-sigmaf">0.00</span><span class="metric-unit">μC/m²</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Bound Surface Charge (σ<sub>b</sub>)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-sigmab">0.00</span><span class="metric-unit">μC/m²</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Polarization Density (P)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-p">0.00</span><span class="metric-unit">μC/m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Material Response Group -->
+                <div class="telemetry-group">
+                    <span class="group-title">Dielectric Response</span>
+                    <div class="metric-row">
+                        <span class="metric-label">Dielectric Constant (κ = ε<sub>r</sub>)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-kappa">3.8</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Susceptibility (χ<sub>e</sub> = κ−1)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-chi">2.8</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Capacitance Gain (C / C₀)</span>
+                        <div class="metric-value-wrap">
+                            <span class="metric-value" id="disp-cap-ratio">3.8×</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Column: Canvas Workstation -->
+            <section class="chassis-card canvas-card" aria-label="Capacitor Canvas">
+                <div class="canvas-toolbar">
+                    <div class="toolbar-status">
+                        <span class="status-dot"></span>
+                        <span id="canvas-status">Dielectric equilibrium solved</span>
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="toolbar-button" id="export-png-btn" type="button" title="Export High-Resolution Canvas PNG">Export PNG</button>
+                    </div>
+                </div>
+
+                <div class="canvas-wrap" id="canvasWrap">
+                    <canvas id="simulationCanvas"></canvas>
+                    
+                    <!-- Bottom Canvas Legend Bar -->
+                    <div class="canvas-legend-bar">
+                        <div class="legend-item"><span class="legend-swatch swatch-e0"></span> E₀ Applied</div>
+                        <div class="legend-item"><span class="legend-swatch swatch-ep"></span> E<sub>P</sub> Screening</div>
+                        <div class="legend-item"><span class="legend-swatch swatch-enet"></span> E<sub>net</sub> Total</div>
+                        <div class="legend-item"><span class="legend-swatch swatch-p"></span> p Dipole Vector</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Parameter Controls Card -->
+            <aside class="chassis-card controls-card" aria-label="Simulation Controls">
+                <div class="panel-header">
+                    <h2>Parameters</h2>
+                    <span class="panel-subtitle">Applied Field & Dielectric Controls</span>
+                </div>
+
+                <!-- External Field Slider -->
+                <div class="control-section">
+                    <label class="field-label" for="eFieldSlider">
+                        <span>Applied Field (E₀)</span>
+                        <span class="field-value" id="readout-e0">100 kV/m</span>
+                    </label>
+                    <div class="range-input-wrap">
+                        <input type="range" id="eFieldSlider" min="-200" max="200" step="1" value="100">
+                    </div>
+                    <p class="field-help">Controls potential difference and charge between capacitor plates.</p>
+                </div>
+
+                <!-- Material Preset Selector -->
+                <div class="control-section">
+                    <label class="field-label" for="materialSelect">Dielectric Material</label>
+                    <select id="materialSelect">
+                        <option value="nonpolar">Glass / Silica (κ = 3.8)</option>
+                        <option value="polymer">Polymer / Mica (κ = 6.0)</option>
+                        <option value="polar">Water / Polar Liquid (κ = 80.0)</option>
+                        <option value="ceramic">Barium Titanate Ceramic (κ = 1200)</option>
+                        <option value="vacuum">Vacuum (κ = 1.0)</option>
+                    </select>
+                    <p class="field-help" id="material-desc">Electronic polarization: electron clouds distort relative to nuclei.</p>
+                </div>
+
+                <!-- Polarization Mechanism -->
+                <div class="control-section">
+                    <label class="field-label" for="polarizationMode">Polarization Type</label>
+                    <select id="polarizationMode">
+                        <option value="induced">Induced (Electronic Distortion)</option>
+                        <option value="permanent">Permanent (Molecular Dipole Rotation)</option>
+                    </select>
+                </div>
+
+                <!-- Temperature Slider (for permanent dipoles) -->
+                <div class="control-section" id="temp-control-section">
+                    <label class="field-label" for="tempSlider">
+                        <span>Temperature (T)</span>
+                        <span class="field-value" id="readout-temp">300 K</span>
+                    </label>
+                    <div class="range-input-wrap">
+                        <input type="range" id="tempSlider" min="50" max="600" step="5" value="300">
+                    </div>
+                    <p class="field-help">Thermal agitation opposes molecular dipole alignment.</p>
+                </div>
+
+                <!-- Grid Density -->
+                <div class="control-section">
+                    <label class="field-label" for="gridSelect">Lattice Array Density</label>
+                    <select id="gridSelect">
+                        <option value="3">3 × 3 Atoms</option>
+                        <option value="4" selected>4 × 4 Atoms</option>
+                        <option value="5">5 × 5 Atoms</option>
+                        <option value="6">6 × 6 Atoms</option>
+                    </select>
+                </div>
+
+                <!-- Display Toggles -->
+                <div class="control-section">
+                    <span class="field-label">Visualization Layers</span>
+                    <label class="toggle-row">
+                        <input type="checkbox" id="toggle-vectors" checked>
+                        <span>Show Field & Polarization Vectors</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" id="toggle-bound-charges" checked>
+                        <span>Show Bound Surface Charges (±σ<sub>b</sub>)</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" id="toggle-field-lines" checked>
+                        <span>Show Electric Field Lines</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" id="toggle-dipole-moments" checked>
+                        <span>Show Atomic Dipole Vectors (p)</span>
+                    </label>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Bottom Docked Workstation Footer (48px) -->
+        <footer class="app-footer">
+            <div class="footer-status-zone">
+                <span>E-Field Screening: <strong id="footer-status-text">Active</strong></span>
+            </div>
+            <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="signature-footer">
+                www.gerardjosephlim.com
+            </a>
+            <button id="footer-reset-btn" class="btn-secondary" type="button">Reset to Default</button>
+        </footer>
+    </div>
+
+    <!-- Instruction & Physics Modal -->
+    <div id="splashOverlay" class="splash-overlay hidden">
+        <div class="splash-modal">
             <header class="splash-header">
-                <h1>Dipole Dynamics</h1>
-                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+                <h2>Dielectric Polarization Lab</h2>
             </header>
             <div class="splash-body">
-                <h3>Instructions</h3>
+                <h3>Physical Principles</h3>
                 <ul>
-                    <li>Adjust the external E-field to observe torque and translation.</li>
-                    <li>Move charges manually to change the dipole orientation.</li>
-                    <li>Observe how the system aligns with the field lines.</li>
-                    <li>Experience physics through Liquid Glass aesthetics.</li>
+                    <li><strong>Applied Field (E₀):</strong> When a voltage is applied to the capacitor plates, free charges (±σ<sub>f</sub>) create an external electric field E₀.</li>
+                    <li><strong>Dielectric Polarization:</strong> The electric field displaces positive nuclei and negative electron clouds, inducing atomic dipoles or aligning permanent molecular dipoles.</li>
+                    <li><strong>Bound Surface Charge (±σ<sub>b</sub>):</strong> Dipole alignment cancels out in the bulk but leaves unneutralized bound charges ±σ<sub>b</sub> = P at the dielectric surfaces.</li>
+                    <li><strong>Internal Screening:</strong> The bound charges set up an opposing depolarization field E<sub>P</sub>. The net field inside the dielectric is reduced to <strong>E<sub>net</sub> = E₀ / κ</strong>.</li>
+                    <li><strong>Capacitance Gain:</strong> Because the internal field (and voltage) drops by a factor of κ, capacitance increases to <strong>C = κ · C₀</strong>.</li>
                 </ul>
             </div>
             <footer class="splash-footer">
-                <button id="startBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">START SIMULATION</button>
+                <button id="startBtn" class="btn-primary" type="button">Enter Workstation</button>
             </footer>
         </div>
     </div>
 
-    <!-- UI Overlay -->
-    <div id="controls" class="liquid-glass">
-        <div class="control-group">
-            <label for="efield">External E-Field</label>
-            <input type="range" id="efield" min="-100" max="100" value="0">
-        </div>
-    </div>
-
-    <div id="helpBtn" class="help-btn liquid-glass">?</div>
-
-    <canvas id="atomCanvas"></canvas>
-
-    <!-- Signature Footer -->
-    <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
-
+    <script src="dipole-physics.js"></script>
     <script src="dipole.js"></script>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+    </script>
 </body>
 
 </html>

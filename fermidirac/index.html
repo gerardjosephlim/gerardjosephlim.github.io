@@ -3,32 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Interactive, quantitative simulation of semiconductor density of states, Fermi–Dirac statistics, and carrier occupation.">
     <title>Semiconductor States Lab</title>
+
+    <!-- FOUC Prevention: Early Theme Detection -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('fermidirac_theme');
+                if (savedTheme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else if (savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    // Default to dark mode for science lab precision unless specified
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="fermidirac.css">
 </head>
 <body>
     <div class="app-shell">
-        <!-- App identity and material presets; presets never change model/axis modes. -->
-        <header class="topbar">
-            <div class="brand">
-                <div class="brand-mark" aria-hidden="true">ψ</div>
-                <div>
+        <!-- Full-Width Docked Top Header (Version 2.0 Workstation Standard, Height 52px) -->
+        <header class="app-header">
+            <div class="header-brand-block">
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="brand-mark" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                    <svg class="brand-logo-svg" viewBox="0 0 376 376" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                        <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                    </svg>
+                </a>
+                <div class="header-title-block">
                     <h1>Semiconductor States Lab</h1>
-                    <p>Density of states · Fermi–Dirac statistics · carrier occupation</p>
+                    <div class="header-meta">
+                        <span>Density of states · Fermi–Dirac statistics · carrier occupation</span>
+                        <span class="meta-sep">•</span>
+                        <span><i>Dr. Gerard Joseph Lim</i></span>
+                    </div>
                 </div>
             </div>
-            <nav class="presets" aria-label="Material presets">
-                <button class="preset active" data-material="Si">Si</button>
-                <button class="preset" data-material="Ge">Ge</button>
-                <button class="preset" data-material="GaAs">GaAs</button>
-            </nav>
+
+            <div class="header-actions">
+                <nav class="presets" aria-label="Material presets">
+                    <button class="preset active" data-material="Si" title="Silicon preset">Si</button>
+                    <button class="preset" data-material="Ge" title="Germanium preset">Ge</button>
+                    <button class="preset" data-material="GaAs" title="Gallium arsenide preset">GaAs</button>
+                </nav>
+
+                <div class="header-tools">
+                    <!-- LabAssist Trigger -->
+                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist" aria-label="Open LabAssist">
+                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Theme Toggle Button (Light/Dark Mode with SVG Icons) -->
+                    <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light or Dark Mode">
+                        <svg class="theme-icon-svg" id="theme-sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon-svg" id="theme-moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Help / Instructions Modal Trigger -->
+                    <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">?</button>
+                </div>
+            </div>
         </header>
 
-        <main>
+        <main class="workstation-main">
             <!-- Solved values and the four synchronized energy panels. -->
             <section class="workspace" aria-label="Simulation results">
                 <div class="summary-grid" aria-live="polite">
@@ -41,20 +102,45 @@
                 </div>
 
                 <!-- Canvas is redrawn from solved data; tooltip and exports are overlays. -->
-                <div class="canvas-card" id="canvas-card">
+                <div class="canvas-card liquid-glass" id="canvas-card">
                     <div class="plot-toolbar">
-                        <div><span class="status-dot" id="status-dot"></span><span id="status-text">Solving equilibrium</span></div>
+                        <div><span class="status-dot" id="status-dot"></span><span id="status-text">Equilibrium</span></div>
                         <div class="plot-actions">
                             <span class="plot-note" id="plot-note">Shared energy scale · hover to inspect</span>
+                            <button class="toolbar-button" id="toggle-hover-fd-btn" type="button" title="Toggle floating Fermi–Dirac probability plot (f vs E)">⤢ f(E) Plot</button>
                             <button class="toolbar-button" id="export-csv" type="button">CSV</button>
                             <button class="toolbar-button" id="export-png" type="button">PNG</button>
                         </div>
                     </div>
                     <canvas id="simulationCanvas" aria-label="Four synchronized semiconductor energy plots"></canvas>
                     <div class="plot-tooltip" id="plot-tooltip" role="status"></div>
+
+                    <!-- Floating Hovering f(E) Probability Plot Card above 4-Plot Canvas -->
+                    <div id="hover-fd-card" class="hover-fd-card hidden liquid-glass">
+                        <div class="hover-card-header">
+                            <div class="hover-card-title-block">
+                                <h3>Fermi–Dirac Distribution & Boltzmann Comparison</h3>
+                                <span class="hover-card-subtitle">Probability f(E) on y-axis · Energy E (eV) on x-axis · Dynamic Reactivity</span>
+                            </div>
+                            <button id="close-hover-fd-btn" class="hover-card-close-btn" title="Close Hover Plot" aria-label="Close Hover Plot">✕</button>
+                        </div>
+                        <div class="hover-card-canvas-wrap">
+                            <canvas id="hoverFdCanvas"></canvas>
+                            <div id="hover-fd-tooltip" class="plot-tooltip" role="status"></div>
+                        </div>
+                        <div class="hover-card-footer">
+                            <div class="hover-card-legend">
+                                <span class="legend-item"><span class="legend-swatch fd-swatch"></span> f(E) Fermi–Dirac</span>
+                                <span class="legend-item"><span class="legend-swatch hole-swatch"></span> 1−f(E) Hole Prob.</span>
+                                <span class="legend-item"><span class="legend-swatch mb-swatch"></span> f<sub>MB</sub>(E) Boltzmann</span>
+                                <span class="legend-item"><span class="legend-swatch ef-swatch"></span> E<sub>F</sub> (f = 0.5)</span>
+                            </div>
+                            <button id="export-hover-png" class="toolbar-button" type="button">Export PNG</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="diagnostics">
+                <div class="diagnostics liquid-glass">
                     <span>Charge residual <strong id="diag-residual">—</strong></span>
                     <span>np/nᵢ² <strong id="diag-mass-action">—</strong></span>
                     <span>Eᵢ <strong id="diag-ei">—</strong></span>
@@ -63,7 +149,7 @@
             </section>
 
             <!-- All user-editable physical and plot-display parameters. -->
-            <aside class="controls" aria-label="Simulation controls">
+            <aside class="controls liquid-glass" aria-label="Simulation controls">
                 <div class="controls-heading">
                     <div><span class="eyebrow">Equilibrium model</span><h2>Parameters</h2></div>
                     <button id="reset-button" class="text-button" type="button">Reset</button>
@@ -109,14 +195,17 @@
                     </div>
                 </section>
 
-                <section class="control-section two-column">
-                    <div class="range-field">
-                        <div class="range-heading"><label for="e-mass">m<sub>e,DOS</sub>*</label><output id="disp-emass">1.08 m₀</output></div>
-                        <input type="range" id="e-mass" min="0.01" max="2" step="0.001" value="1.08">
-                    </div>
-                    <div class="range-field">
-                        <div class="range-heading"><label for="h-mass">m<sub>h,DOS</sub>*</label><output id="disp-hmass">0.56 m₀</output></div>
-                        <input type="range" id="h-mass" min="0.01" max="2" step="0.001" value="0.56">
+                <section class="control-section" id="effective-mass-section">
+                    <div class="section-title"><span>Effective Masses</span><small>density of states (m₀)</small></div>
+                    <div class="two-column" style="margin-top: 10px;">
+                        <div class="range-field">
+                            <div class="range-heading"><label for="e-mass">m<sub>e,DOS</sub>*</label><output id="disp-emass">1.08 m₀</output></div>
+                            <input type="range" id="e-mass" min="0.01" max="2" step="0.001" value="1.08">
+                        </div>
+                        <div class="range-field">
+                            <div class="range-heading"><label for="h-mass">m<sub>h,DOS</sub>*</label><output id="disp-hmass">0.56 m₀</output></div>
+                            <input type="range" id="h-mass" min="0.01" max="2" step="0.001" value="0.56">
+                        </div>
                     </div>
                 </section>
 
@@ -191,15 +280,91 @@
                 </section>
 
                 <div class="model-note"><strong>Model</strong><p>3D parabolic bands, DOS masses, thermal equilibrium, and exact Fermi–Dirac carrier integrals.</p></div>
-
-                <div style="text-align: center; margin-top: 14px; padding-bottom: 8px;">
-                    <a href="https://www.gerardjosephlim.com" target="_blank" style="color: rgba(255, 255, 255, 0.4); font-size: 12px; text-decoration: none; font-family: 'Inter', sans-serif; transition: color 0.2s ease;">www.gerardjosephlim.com</a>
-                </div>
             </aside>
         </main>
+
+        <!-- Full-Width Docked Footer (Version 2.0 Workstation Standard) -->
+        <footer class="app-footer">
+            <div class="footer-center-zone">
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="signature-footer">www.gerardjosephlim.com</a>
+            </div>
+        </footer>
     </div>
+
+    <!-- Standardized Flat Splash Screen Pop-up (Version 2.0 Workstation Standard) -->
+    <div id="splash-overlay" class="splash-overlay hidden">
+        <div class="splash-modal liquid-glass">
+            <div class="splash-header">
+                <h2>Semiconductor States Lab</h2>
+                <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+            </div>
+
+            <div class="splash-body">
+                <h3>Lab Guide & Overview</h3>
+                <ul>
+                    <li><strong>Four Synchronized Panels:</strong> Inspect (1) Band Dispersion $E-k$, (2) Density of States $g(E)$, (3) Fermi–Dirac Probability $f(E)$, and (4) State Occupation on one unified energy axis.</li>
+                    <li><strong>Exact Carrier Integrals:</strong> Electron ($n$) and hole ($p$) concentrations are computed via exact numerical quadrature of $g_c(E)f(E)$ and $g_v(E)[1-f(E)]$ across thermal tails.</li>
+                    <li><strong>Charge Neutrality:</strong> Equilibrium Fermi level $E_F$ is solved by bisection enforcing $p + N_D^+ = n + N_A^- = 0$.</li>
+                    <li><strong>Freeze-Out & Ionization:</strong> Toggle incomplete ionization to observe dopant freeze-out with finite donor ($E_D$) and acceptor ($E_A$) activation depths.</li>
+                    <li><strong>Shared Horizontal Scale:</strong> Panel 4 state distributions share a single, unnormalized physical scale ($\text{cm}^{-3}\,\text{eV}^{-1}$) with auto-fit or locked scale modes.</li>
+                    <li><strong>Dual Theme Engine:</strong> Toggle between Deep Space Dark Mode and Classic PC Beige Workstation via the header icon.</li>
+                </ul>
+            </div>
+
+            <div class="splash-footer">
+                <button id="splash-ok-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    Start Lab
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating LabAssist Card (Resizable, 5px Standard) -->
+    <div id="lab-assistant-card" class="lab-assistant-card hidden" role="dialog" aria-label="LabAssist">
+        <div class="assistant-header">
+            <div class="assistant-title-block">
+                <div class="assistant-title-row">
+                    <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="assistant-logo-icon" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                        <svg class="brand-logo-svg" viewBox="0 0 376 376" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                            <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                        </svg>
+                    </a>
+                    <h3>LabAssist</h3>
+                </div>
+            </div>
+            <button id="close-assistant-btn" class="hover-card-close-btn" title="Close LabAssist" aria-label="Close LabAssist">✕</button>
+        </div>
+
+        <!-- Clickable Starter Question Chips -->
+        <div class="assistant-chips-bar" aria-label="Suggested questions">
+            <button type="button" class="assistant-chip" data-query="Is my sample degenerate?">Is it degenerate?</button>
+            <button type="button" class="assistant-chip" data-query="What is the Fermi level?">What is E<sub>F</sub>?</button>
+            <button type="button" class="assistant-chip" data-query="Why is the 3kT line marked?">Why 3kT line?</button>
+            <button type="button" class="assistant-chip" data-query="Explain the charge residual bar">Explain charge residual</button>
+            <button type="button" class="assistant-chip" data-query="What is carrier freeze-out?">What is freeze-out?</button>
+            <button type="button" class="assistant-chip" data-query="Why is np = ni² not holding?">Why np ≠ nᵢ²?</button>
+        </div>
+
+        <!-- Scrollable Q&A Dialogue Log -->
+        <div class="assistant-log" id="assistant-log" aria-live="polite">
+            <div class="assistant-welcome">
+                <p><strong>Welcome to LabAssist.</strong></p>
+                <p>Ask questions about semiconductor statistics, band structures, degeneracy, and neutrality, or click any suggested question chip above.</p>
+            </div>
+        </div>
+
+        <!-- Input Form -->
+        <form class="assistant-form" id="assistant-form">
+            <span class="prompt-symbol" aria-hidden="true">?</span>
+            <input type="text" id="assistant-input" class="assistant-input" placeholder="Ask a physics question..." autocomplete="off" spellcheck="false">
+            <button type="submit" id="assistant-send-btn" class="assistant-send-btn">Ask</button>
+        </form>
+    </div>
+
     <script src="semiconductor-physics.js"></script>
     <script src="simulation-state.js"></script>
+    <script src="assistant-parser.js"></script>
     <script src="plot-renderer.js"></script>
     <script src="fermidirac.js"></script>
     <script>
