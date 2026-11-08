@@ -4,12 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOSFET Simulator - Dr. Gerard Joseph Lim</title>
+    <title>MOSFET Simulator | Scientific Workstation</title>
+    <!-- FOUC Prevention Theme Script -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <link rel="stylesheet" href="liquid-glass-components.css">
     <link rel="stylesheet" href="mosfet.css">
 </head>
@@ -18,20 +23,61 @@
 
     <div class="mosfet-app-container">
 
-        <!-- Header Bar -->
+        <!-- Header Bar (Workstation Standard 2.0) -->
         <header class="app-header liquid-glass">
             <div class="header-left">
-                <div class="badge-tag">SOLID-STATE DEVICE LAB</div>
-                <h1 class="header-title">MOSFET Visualisation & Simulation</h1>
-                <p class="header-sub">Depletion Regions, Inversion Layer, Pinch-Off & I-V Analytics &bull; <i>Dr. Gerard Joseph Lim</i></p>
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="brand-link" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                    <svg class="brand-logo-svg" viewBox="0 0 376 376" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                        <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                    </svg>
+                </a>
+                <div class="header-title-block">
+                    <h1>MOSFET Semiconductor Laboratory</h1>
+                    <span class="header-subtitle">Depletion Envelopes, Inversion Pinch-Off & I-V Analytics &bull; Dr. Gerard Joseph Lim</span>
+                </div>
             </div>
             <div class="header-right">
                 <div class="mode-badges">
                     <span id="badge-device-type" class="status-badge badge-active">NMOS</span>
                     <span id="badge-mode-type" class="status-badge">Enhancement</span>
-                    <span id="badge-regime" class="status-badge badge-regime">Pinch-Off</span>
+                    <span id="badge-regime" class="status-badge badge-regime" data-tooltip-id="regime">Pinch-Off</span>
                 </div>
-                <button id="btn-help" class="icon-btn liquid-glass" title="Instructions & Theory">?</button>
+                <div class="header-tools">
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle-btn" class="theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                        <svg class="sun-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- LabAssist Copilot Trigger -->
+                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
+                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Standardized SVG Help Button -->
+                    <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">
+                        <svg class="help-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -71,7 +117,7 @@
                 <!-- Dynamic Mathematical Theory HUD Card -->
                 <div class="theory-hud-card">
                     <div class="hud-header">
-                        <div class="regime-indicator">
+                        <div class="regime-indicator" data-tooltip-id="regime">
                             <span class="regime-dot"></span>
                             <span id="hud-regime-name" class="regime-name">Saturation / Pinch-Off</span>
                         </div>
@@ -96,19 +142,19 @@
 
                     <!-- Live Scalar Telemetry Grid -->
                     <div class="telemetry-compact-grid">
-                        <div class="telemetry-cell">
+                        <div class="telemetry-cell" data-tooltip-id="id">
                             <span class="cell-label">Drain Current <span class="math-sym">I<sub>D</sub></span></span>
                             <span id="val-drain-current" class="cell-val highlight">1.42 mA</span>
                         </div>
-                        <div class="telemetry-cell">
+                        <div class="telemetry-cell" data-tooltip-id="pinchoff">
                             <span class="cell-label">Pinch-Off <span class="math-sym">V<sub>DS(sat)</sub></span></span>
                             <span id="val-vds-sat" class="cell-val">1.30 V</span>
                         </div>
-                        <div class="telemetry-cell">
+                        <div class="telemetry-cell" data-tooltip-id="gm">
                             <span class="cell-label">Transconductance <span class="math-sym">g<sub>m</sub></span></span>
                             <span id="val-gm" class="cell-val mono">1.85 mS</span>
                         </div>
-                        <div class="telemetry-cell">
+                        <div class="telemetry-cell" data-tooltip-id="ro">
                             <span class="cell-label">Output Resist. <span class="math-sym">r<sub>o</sub></span></span>
                             <span id="val-ro" class="cell-val mono">45.2 k&Omega;</span>
                         </div>
@@ -136,7 +182,7 @@
         </main>
 
         <!-- BOTTOM CONTROLLER BAR -->
-        <footer class="controls-wrapper">
+        <div class="controls-wrapper">
             <div class="controls liquid-glass">
 
                 <!-- Type Selector (NMOS / PMOS) -->
@@ -199,19 +245,32 @@
                     <button id="btn-reset" class="btn btn-secondary">Reset</button>
                 </div>
             </div>
+        </div>
+
+        <!-- Docked Workstation 2.0 Footer -->
+        <footer class="app-footer chassis-card">
+            <div class="footer-left">
+                <span class="footer-tech-tag">NEAMEN CH. 11 ANALYTICS</span>
+                <span class="footer-build">SOLID-STATE WORKSTATION 2.0</span>
+            </div>
+            <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="footer-portfolio-link">www.gerardjosephlim.com</a>
         </footer>
 
         <!-- Advanced Parameters Modal / Drawer -->
         <div id="advanced-modal" class="modal-overlay" style="display: none;">
-            <div class="modal-card liquid-glass">
+            <div class="modal-card chassis-card">
                 <div class="modal-header">
                     <h3>Semiconductor & Device Parameters</h3>
                     <button id="btn-close-modal" class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="param-row">
-                        <label>Threshold Voltage <span class="math-sym">V<sub>T</sub></span> (V):</label>
+                        <label>Threshold Voltage <span class="math-sym">V<sub>T0</sub></span> (V):</label>
                         <input type="number" id="input-vt" step="0.05" value="0.70">
+                    </div>
+                    <div class="param-row">
+                        <label>Substrate Bias <span class="math-sym">V<sub>SB</sub></span> (V, Body Effect):</label>
+                        <input type="number" id="input-vsb" step="0.10" min="0" max="5.0" value="0.00">
                     </div>
                     <div class="param-row">
                         <label>Channel Modulation <span class="math-sym">λ</span> (V⁻¹):</label>
@@ -233,21 +292,21 @@
             </div>
         </div>
 
-        <!-- Instructions & Theory Splash Modal -->
+        <!-- Instructions & Theory Modal (Launches on First Visit, 5px Radius Standard) -->
         <div id="splash-modal" class="splash-overlay" role="dialog" aria-modal="true">
-            <div class="splash-modal liquid-glass">
+            <div class="splash-modal chassis-card">
                 <header class="splash-header">
-                    <h1>MOSFET Physics & Visualisation</h1>
-                    <p class="author"><i>By Dr. Gerard Joseph Lim</i></p>
+                    <h1>MOSFET Semiconductor Laboratory</h1>
+                    <p class="author"><i>Dr. Gerard Joseph Lim &bull; Solid-State Device Physics</i></p>
                 </header>
                 <div class="splash-body">
                     <h3>Lecture Overview & Instructions</h3>
                     <ul>
-                        <li><b>Physical Cross-Section</b>: Visualises donor/acceptor wells, expanding depletion boundaries, gate oxide, and the mobile inversion channel.</li>
-                        <li><b>Pinch-Off & Channel Modulation</b>: Observe the channel pinching off when <span class="math-sym"><i>V<sub>DS</sub></i> ≥ <i>V<sub>DS(sat)</sub></i> = <i>V<sub>GS</sub></i> - <i>V<sub>T</sub></i></span>, and watch <span class="math-sym">Δ<i>L</i></span> shorten the effective channel length.</li>
+                        <li><b>Physical Cross-Section</b>: Visualises donor/acceptor wells, expanding space-charge depletion boundaries, gate dielectric, and the mobile inversion channel.</li>
+                        <li><b>Pinch-Off & Channel Length Modulation</b>: Observe the channel pinching off when <span class="math-sym"><i>V<sub>DS</sub></i> ≥ <i>V<sub>DS(sat)</sub></i> = <i>V<sub>GS</sub></i> - <i>V<sub>T</sub></i></span>, and watch <span class="math-sym">Δ<i>L</i></span> shorten the conductive channel length.</li>
                         <li><b>NMOS vs PMOS & Modes</b>: Switch between <span class="math-sym"><i>n</i>⁺ - <i>p</i> - <i>n</i>⁺</span> and <span class="math-sym"><i>p</i>⁺ - <i>n</i> - <i>p</i>⁺</span> across both <b>Enhancement</b> (normally-off) and <b>Depletion</b> (normally-on) modes.</li>
-                        <li><b>Energy Band Diagram</b>: Examine conduction (<span class="math-sym"><i>E<sub>C</sub></i></span>) and valence (<span class="math-sym"><i>E<sub>V</sub></i></span>) band bending along the channel and observe Drain-Induced Barrier Lowering (DIBL).</li>
-                        <li><b>Synchronized I-V Curves</b>: Family of output curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>DS</sub></i></span>) and transfer curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>GS</sub></i></span>) with live Q-point tracking.</li>
+                        <li><b>Surface Energy Band Diagram</b>: Track conduction (<span class="math-sym"><i>E<sub>C</sub></i></span>), intrinsic (<span class="math-sym"><i>E<sub>i</sub></i></span>), and valence (<span class="math-sym"><i>E<sub>V</sub></i></span>) bands along the oxide-silicon surface with dynamic barrier lowering.</li>
+                        <li><b>Synchronized I-V Curves</b>: Family of output curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>DS</sub></i></span>) and transfer curves (<span class="math-sym"><i>I<sub>D</sub></i></span> vs <span class="math-sym"><i>V<sub>GS</sub></i></span>) with live Q-point manipulation.</li>
                     </ul>
                 </div>
                 <footer class="splash-footer">
@@ -256,20 +315,58 @@
             </div>
         </div>
 
-        <!-- Signature Footer -->
-        <a href="https://www.gerardjosephlim.com" target="_blank" class="signature-footer">www.gerardjosephlim.com</a>
+        <!-- Floating LabAssist Modal Card (Draggable, Resizable, Standardized Ridges, 5px Precision Standard) -->
+        <div id="lab-assistant-card" class="lab-assistant-card chassis-card hidden" role="dialog" aria-label="LabAssist Guide">
+            <div class="assistant-header" id="lab-assistant-header">
+                <div class="assistant-title-block">
+                    <div class="assistant-title-row">
+                        <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="assistant-logo-icon" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+                            <svg class="brand-logo-svg" viewBox="0 0 376 376" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
+                                <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
+                            </svg>
+                        </a>
+                        <h3>LabAssist</h3>
+                    </div>
+                </div>
+                <button id="close-assistant-btn" class="hover-card-close-btn" title="Close LabAssist" aria-label="Close LabAssist">✕</button>
+            </div>
 
+            <!-- Clickable Starter Question Chips -->
+            <div class="assistant-chips-bar" aria-label="Suggested questions">
+                <button type="button" class="assistant-chip" data-query="Why does the channel pinch off in saturation?">Pinch-off & sat</button>
+                <button type="button" class="assistant-chip" data-query="What is the threshold voltage and strong inversion?">Threshold voltage</button>
+                <button type="button" class="assistant-chip" data-query="What is the subthreshold swing and leakage current?">Subthreshold swing</button>
+                <button type="button" class="assistant-chip" data-query="Explain channel length modulation and Early voltage">Channel modulation</button>
+                <button type="button" class="assistant-chip" data-query="How does substrate bias cause the body effect?">Body effect V_SB</button>
+                <button type="button" class="assistant-chip" data-query="What is the difference between NMOS and PMOS?">NMOS vs PMOS</button>
+                <button type="button" class="assistant-chip" data-query="Show live telemetry status">Live telemetry</button>
+            </div>
+
+            <!-- Scrollable Dialogue Log -->
+            <div class="assistant-log" id="assistant-log" aria-live="polite">
+                <div class="assistant-welcome">
+                    <p><strong>Welcome to LabAssist.</strong></p>
+                    <p>Ask questions about pinch-off, threshold voltage, subthreshold leakage, Early voltage, or body effect, or click any suggested question chip above.</p>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <form class="assistant-form" id="assistant-form">
+                <span class="prompt-symbol" aria-hidden="true">?</span>
+                <input type="text" id="assistant-input" class="assistant-input" placeholder="Ask a semiconductor physics question..." autocomplete="off" spellcheck="false">
+                <button type="submit" id="assistant-send-btn" class="assistant-send-btn">Ask</button>
+            </form>
+        </div>
+
+        <!-- Floating Delayed Hover Tooltip for MOSFET Telemetry -->
+        <div id="metric-tooltip" class="metric-tooltip chassis-card hidden" role="tooltip" aria-hidden="true"></div>
     </div>
 
-    <script src="mosfet.js?v=20261012b"></script>
-    <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function (e) {
-            if (e.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-        };
-    </script>
+    <!-- Scripts -->
+    <script src="mosfet-physics.js"></script>
+    <script src="assistant-parser.js"></script>
+    <script src="mosfet.js"></script>
 </body>
 
 </html>
