@@ -515,10 +515,18 @@ body.glass-simulation-body {
 
 .graph-tabs {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 6px 12px;
   margin-bottom: 6px;
   flex-shrink: 0;
+}
+
+.graph-tab-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .graph-tab {
@@ -531,7 +539,6 @@ body.glass-simulation-body {
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.15s ease;
-  margin-right: 6px;
 }
 
 .graph-tab.active {
@@ -542,6 +549,7 @@ body.glass-simulation-body {
 
 .graph-legend {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   font-size: 0.68rem;
@@ -1453,5 +1461,28 @@ math[display="inline"] {
     left: 8px;
     width: calc(100vw - 16px);
     height: 70vh;
+  }
+}
+
+@media (max-width: 960px) {
+  .header-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .mode-badges {
+    display: none;
+  }
+}
+
+@media (max-height: 850px) {
+  .mosfet-app-container {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  .workspace-grid {
+    min-height: 480px;
   }
 }

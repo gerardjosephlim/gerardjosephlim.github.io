@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOSFET Simulator | Scientific Workstation</title>
+    <!-- Browser Cache Bypass Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- FOUC Prevention Theme Script -->
     <script>
         (function() {
@@ -15,8 +19,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="liquid-glass-components.css">
-    <link rel="stylesheet" href="mosfet.css">
+    <link rel="stylesheet" href="liquid-glass-components.css?v=1794151795656">
+    <link rel="stylesheet" href="mosfet.css?v=1794151795656">
 </head>
 
 <body class="glass-simulation-body">
@@ -164,8 +168,10 @@
                 <!-- I-V Graph Section with Tabs -->
                 <div class="graph-section">
                     <div class="graph-tabs">
-                        <button id="tab-output-curve" class="graph-tab active">Output (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>DS</sub></span>)</button>
-                        <button id="tab-transfer-curve" class="graph-tab">Transfer (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>GS</sub></span>)</button>
+                        <div class="graph-tab-buttons">
+                            <button id="tab-output-curve" class="graph-tab active">Output (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>DS</sub></span>)</button>
+                            <button id="tab-transfer-curve" class="graph-tab">Transfer (<span class="math-sym">I<sub>D</sub></span> vs <span class="math-sym">V<sub>GS</sub></span>)</button>
+                        </div>
                         <div class="graph-legend">
                             <span class="legend-item"><span class="legend-dot" style="background: #38bdf8;"></span> <span class="math-sym">V<sub>GS</sub></span> Family</span>
                             <span class="legend-item"><span class="legend-dot" style="background: #fbbf24;"></span> Pinch-off (<span class="math-sym">V<sub>DS(sat)</sub></span>)</span>
@@ -364,9 +370,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="mosfet-physics.js"></script>
-    <script src="assistant-parser.js"></script>
-    <script src="mosfet.js"></script>
+    <script src="mosfet-physics.js?v=1794151795656"></script>
+    <script src="assistant-parser.js?v=1794151795656"></script>
+    <script src="mosfet.js?v=1794151795656"></script>
 </body>
 
 </html>
