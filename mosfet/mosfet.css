@@ -1242,65 +1242,79 @@ a.signature-footer:hover {
   margin-bottom: 0;
 }
 
-.assistant-msg {
+.assistant-message {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 92%;
 }
 
-.assistant-msg-user {
+.assistant-message.user {
+  align-items: flex-end;
   align-self: flex-end;
+  max-width: 85%;
 }
 
-.assistant-msg-user .msg-bubble {
-  background: var(--primary);
+.user-bubble {
+  background: var(--primary-dark);
   color: #ffffff;
-  padding: 8px 12px;
-  border-radius: var(--card-radius);
-  font-size: 0.82rem;
+  padding: 6px 12px;
+  border-radius: 5px;
+  max-width: 100%;
   font-weight: 500;
+  font-size: 0.80rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
-.assistant-msg-bot {
+[data-theme="light"] .user-bubble {
+  background: var(--primary);
+}
+
+.assistant-message.assistant {
+  align-items: flex-start;
   align-self: flex-start;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: 5px;
+  padding: 10px 12px;
   max-width: 98%;
+  box-sizing: border-box;
 }
 
-.assistant-msg-bot .msg-bubble {
-  background: var(--input-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text-primary);
-  padding: 10px 12px;
-  border-radius: var(--card-radius);
+.assistant-reply-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 4px;
+  width: 100%;
+}
+
+.assistant-reply-body {
+  color: var(--text-main);
   font-size: 0.82rem;
   line-height: 1.5;
 }
 
-.msg-bubble h4 {
-  margin: 8px 0 4px 0;
-  font-size: 0.86rem;
-  color: var(--primary);
-}
-
-.msg-bubble p {
+.assistant-reply-body p {
   margin: 0 0 6px 0;
 }
 
-.msg-bubble p:last-child {
+.assistant-reply-body p:last-child {
   margin-bottom: 0;
 }
 
-.msg-bubble ul {
+.assistant-reply-body ul {
   margin: 4px 0 6px 0;
   padding-left: 18px;
 }
 
-.msg-bubble li {
+.assistant-reply-body li {
   margin-bottom: 3px;
 }
 
-.msg-bubble code {
+.assistant-reply-body code {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   background: var(--btn-bg);
@@ -1310,37 +1324,49 @@ a.signature-footer:hover {
 }
 
 /* 4-Dot Scrolling Thinking Animation */
-.assistant-thinking {
+.assistant-message.assistant-thinking {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 12px;
-  background: var(--input-bg);
+  padding: 10px 14px;
+  background: var(--bg-secondary);
   border: 1px solid var(--card-border);
-  border-radius: var(--card-radius);
+  border-radius: 5px;
+  width: fit-content;
 }
 
-.thinking-dot {
+.thinking-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 14px;
+}
+
+.thinking-dots .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--primary);
-  animation: thinkingWave 1.4s infinite ease-in-out both;
+  background: var(--primary);
+  opacity: 0.3;
+  animation: dot-wave 1.4s ease-in-out infinite;
 }
 
-.thinking-dot:nth-child(1) { animation-delay: -0.32s; }
-.thinking-dot:nth-child(2) { animation-delay: -0.16s; }
-.thinking-dot:nth-child(3) { animation-delay: 0s; }
-.thinking-dot:nth-child(4) { animation-delay: 0.16s; }
+.thinking-dots .dot:nth-child(1) { animation-delay: 0.0s; }
+.thinking-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+.thinking-dots .dot:nth-child(4) { animation-delay: 0.6s; }
 
-@keyframes thinkingWave {
-  0%, 80%, 100% {
-    transform: scale(0.6);
-    opacity: 0.4;
+@keyframes dot-wave {
+  0%, 100% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.3;
   }
-  40% {
-    transform: scale(1.1);
+  30% {
+    transform: translateY(-5px) scale(1.15);
     opacity: 1;
+  }
+  60% {
+    transform: translateY(0) scale(0.95);
+    opacity: 0.45;
   }
 }
 
