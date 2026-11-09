@@ -8,11 +8,11 @@
 [data-theme="dark"] {
   --bg-deep: #030712;
   --bg-primary: #030712;
-  --bg-secondary: #0b1329;
-  --card-bg: rgba(15, 23, 42, 0.85);
-  --card-border: rgba(255, 255, 255, 0.12);
-  --card-border-highlight: rgba(255, 255, 255, 0.28);
-  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
+  --bg-secondary: #0a0a0a;
+  --card-bg: #0d1322;
+  --card-border: #1e293b;
+  --card-border-highlight: #334155;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   --card-radius: 5px;
 
   --primary: #38bdf8;
@@ -24,18 +24,18 @@
   --accent-rose: #fb7185;
   --accent-emerald: #34d399;
 
-  --text-main: #f8fafc;
-  --text-primary: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
-  --text-subtle: rgba(255, 255, 255, 0.35);
+  --text-main: #ffffff;
+  --text-primary: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-dim: rgba(255, 255, 255, 0.45);
+  --text-subtle: rgba(255, 255, 255, 0.3);
 
-  --btn-bg: rgba(255, 255, 255, 0.05);
-  --btn-border: rgba(255, 255, 255, 0.12);
-  --btn-hover-bg: rgba(255, 255, 255, 0.12);
+  --btn-bg: #172033;
+  --btn-border: rgba(255, 255, 255, 0.14);
+  --btn-hover-bg: rgba(255, 255, 255, 0.15);
 
-  --input-bg: rgba(0, 0, 0, 0.35);
-  --input-border: rgba(255, 255, 255, 0.12);
+  --input-bg: #0a0f1d;
+  --input-border: rgba(255, 255, 255, 0.14);
 
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -55,11 +55,11 @@
 [data-theme="light"] {
   --bg-deep: #f5f0e8;
   --bg-primary: #f5f0e8;
-  --bg-secondary: #ede8df;
-  --card-bg: #fdfbf7;
-  --card-border: #e6e0d4;
-  --card-border-highlight: rgba(2, 132, 199, 0.35);
-  --card-shadow: 0 4px 20px rgba(70, 60, 50, 0.10);
+  --bg-secondary: #ede7dc;
+  --card-bg: #e8e2d5;
+  --card-border: rgba(70, 60, 50, 0.25);
+  --card-border-highlight: rgba(70, 60, 50, 0.4);
+  --card-shadow: 0 4px 20px rgba(255, 255, 255, 0.95), 0 1px 4px rgba(255, 255, 255, 0.85);
   --card-radius: 5px;
 
   --primary: #0284c7;
@@ -68,21 +68,21 @@
   --primary-glow: rgba(2, 132, 199, 0.20);
 
   --accent-gold: #d97706;
-  --accent-rose: #e11d48;
+  --accent-rose: #dc2626;
   --accent-emerald: #059669;
 
-  --text-main: #1f2937;
-  --text-primary: #1f2937;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
-  --text-subtle: rgba(70, 60, 50, 0.35);
+  --text-main: #000000;
+  --text-primary: #000000;
+  --text-muted: #2d3748;
+  --text-dim: #4a5568;
+  --text-subtle: #718096;
 
-  --btn-bg: #f5f0e8;
-  --btn-border: #dcd6cb;
-  --btn-hover-bg: #ebe5da;
+  --btn-bg: #dfd8cb;
+  --btn-border: rgba(70, 60, 50, 0.28);
+  --btn-hover-bg: #d4ccbe;
 
-  --input-bg: #f0eae1;
-  --input-border: #dcd6cb;
+  --input-bg: #fcfbf7;
+  --input-border: rgba(70, 60, 50, 0.32);
 }
 
 * {
