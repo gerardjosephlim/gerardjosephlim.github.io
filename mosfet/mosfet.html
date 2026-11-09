@@ -18,19 +18,19 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="liquid-glass-components.css?v=1794151795656">
-    <link rel="stylesheet" href="mosfet.css?v=1794151795656">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="liquid-glass-components.css?v=1794194109454">
+    <link rel="stylesheet" href="mosfet.css?v=1794194109454">
 </head>
 
 <body class="glass-simulation-body">
 
-    <div class="mosfet-app-container">
+    <div class="app-shell">
 
-        <!-- Header Bar (Workstation Standard 2.0) -->
-        <header class="app-header liquid-glass">
-            <div class="header-left">
-                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="brand-link" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
+        <!-- Full-Width Docked Top Header (Version 2.0 Workstation Standard, Height 52px) -->
+        <header class="app-header">
+            <div class="header-brand-block">
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="brand-mark" title="Dr. Gerard Joseph Lim (opens in new tab)" aria-label="Dr. Gerard Joseph Lim's website">
                     <svg class="brand-logo-svg" viewBox="0 0 376 376" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path class="brand-path-top" d="M318 103.72H114.667V213.824H58V103.72L114.667 47H318V103.72Z"/>
                         <path class="brand-path-bottom" d="M318 157.103V287.428L316.389 288.702C299.643 301.777 280.268 311.785 258.267 318.723C235.868 325.574 213.157 329 190.135 329C164.624 329 141.133 324.95 119.667 316.853C103.617 310.474 89.0917 302.21 76.0859 292.067L117.076 251.039C125.627 257.753 135.203 263.189 145.803 267.34C160.113 272.945 175.979 275.75 193.4 275.75C209.578 275.75 225.134 273.258 240.067 268.275C247.077 265.841 253.92 262.674 260.601 258.791V213.823H194.667V157.103H318Z"/>
@@ -38,18 +38,17 @@
                 </a>
                 <div class="header-title-block">
                     <h1>MOSFET Semiconductor Laboratory</h1>
-                    <span class="header-subtitle">Depletion Envelopes, Inversion Pinch-Off & I-V Analytics &bull; Dr. Gerard Joseph Lim</span>
+                    <div class="header-meta">
+                        <span>Depletion envelopes · inversion pinch-off · I-V analytics</span>
+                        <span class="meta-sep">•</span>
+                        <span><i>Dr. Gerard Joseph Lim</i></span>
+                    </div>
                 </div>
             </div>
-            <div class="header-right">
-                <div class="mode-badges">
-                    <span id="badge-device-type" class="status-badge badge-active">NMOS</span>
-                    <span id="badge-mode-type" class="status-badge">Enhancement</span>
-                    <span id="badge-regime" class="status-badge badge-regime" data-tooltip-id="regime">Pinch-Off</span>
-                </div>
+            <div class="header-actions">
                 <div class="header-tools">
-                    <!-- Theme Toggle Button -->
-                    <button id="theme-toggle-btn" class="theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                    <!-- Theme Toggle Button (1st in Standard Order) -->
+                    <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light or Dark Mode">
                         <svg class="sun-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
                             <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -66,14 +65,14 @@
                         </svg>
                     </button>
 
-                    <!-- LabAssist Copilot Trigger -->
+                    <!-- LabAssist Copilot Trigger (2nd in Standard Order) -->
                     <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
                         <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                     </button>
 
-                    <!-- Standardized SVG Help Button -->
+                    <!-- Standardized SVG Help Button (3rd in Standard Order) -->
                     <button id="help-btn" class="help-btn" title="Show Instructions" aria-label="Show Instructions">
                         <svg class="help-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -85,8 +84,9 @@
             </div>
         </header>
 
-        <!-- Main Workspace: Side-by-Side Split View -->
-        <main class="workspace-grid">
+        <!-- Main Workstation Workspace -->
+        <main class="workstation-main">
+            <div class="workspace-grid">
 
             <!-- LEFT PANE: Physical Device Cross-Section & Band Diagram -->
             <section class="left-pane liquid-glass">
@@ -185,81 +185,80 @@
                 </div>
 
             </section>
+            </div>
+
+            <!-- BOTTOM CONTROLLER BAR -->
+            <div class="controls-wrapper">
+                <aside class="controls liquid-glass" aria-label="MOSFET simulation controls">
+
+                    <!-- Type Selector (NMOS / PMOS) -->
+                    <div class="ctrl-group">
+                        <span class="ctrl-title">Channel Type</span>
+                        <div class="segmented-control">
+                            <button id="btn-type-nmos" class="segment-btn active">NMOS (<span class="math-sym">n⁺-p-n⁺</span>)</button>
+                            <button id="btn-type-pmos" class="segment-btn">PMOS (<span class="math-sym">p⁺-n-p⁺</span>)</button>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Mode Selector (Enhancement / Depletion) -->
+                    <div class="ctrl-group">
+                        <span class="ctrl-title">Device Mode</span>
+                        <div class="segmented-control">
+                            <button id="btn-mode-enh" class="segment-btn active">Enhancement (<span class="math-sym">V<sub>T</sub> &gt; 0</span>)</button>
+                            <button id="btn-mode-dep" class="segment-btn">Depletion (<span class="math-sym">V<sub>T</sub> &lt; 0</span>)</button>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Primary Voltage Sliders -->
+                    <div class="ctrl-group slider-group">
+                        <div class="slider-header">
+                            <label for="slider-vgs">Gate Voltage <span class="math-sym">V<sub>GS</sub></span></label>
+                            <span id="disp-vgs" class="slider-badge">2.00 V</span>
+                        </div>
+                        <input type="range" id="slider-vgs" min="-3.0" max="5.0" step="0.05" value="2.00">
+                    </div>
+
+                    <div class="ctrl-group slider-group">
+                        <div class="slider-header">
+                            <label for="slider-vds">Drain Voltage <span class="math-sym">V<sub>DS</sub></span></label>
+                            <span id="disp-vds" class="slider-badge">2.50 V</span>
+                        </div>
+                        <input type="range" id="slider-vds" min="0.0" max="6.0" step="0.05" value="2.50">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Quick Physics Presets -->
+                    <div class="ctrl-group presets-group">
+                        <span class="ctrl-title">Presets</span>
+                        <div class="presets-row">
+                            <button id="preset-cutoff" class="btn btn-preset" title="Subthreshold / Cutoff">Cutoff</button>
+                            <button id="preset-triode" class="btn btn-preset" title="Linear / Ohmic Region">Triode</button>
+                            <button id="preset-pinchoff" class="btn btn-preset" title="Pinch-off Edge (V_DS = V_DS,sat)">Pinch-Off</button>
+                            <button id="preset-saturation" class="btn btn-preset" title="Saturation Region">Saturation</button>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Advanced Options & Reset -->
+                    <div class="ctrl-group">
+                        <button id="btn-advanced" class="btn">⚙ Parameters</button>
+                        <button id="btn-reset" class="btn btn-secondary">Reset</button>
+                    </div>
+                </aside>
+            </div>
         </main>
 
-        <!-- BOTTOM CONTROLLER BAR -->
-        <div class="controls-wrapper">
-            <div class="controls liquid-glass">
-
-                <!-- Type Selector (NMOS / PMOS) -->
-                <div class="ctrl-group">
-                    <span class="ctrl-title">Channel Type</span>
-                    <div class="segmented-control">
-                        <button id="btn-type-nmos" class="segment-btn active">NMOS (<span class="math-sym">n⁺-p-n⁺</span>)</button>
-                        <button id="btn-type-pmos" class="segment-btn">PMOS (<span class="math-sym">p⁺-n-p⁺</span>)</button>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Mode Selector (Enhancement / Depletion) -->
-                <div class="ctrl-group">
-                    <span class="ctrl-title">Device Mode</span>
-                    <div class="segmented-control">
-                        <button id="btn-mode-enh" class="segment-btn active">Enhancement (<span class="math-sym">V<sub>T</sub> &gt; 0</span>)</button>
-                        <button id="btn-mode-dep" class="segment-btn">Depletion (<span class="math-sym">V<sub>T</sub> &lt; 0</span>)</button>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Primary Voltage Sliders -->
-                <div class="ctrl-group slider-group">
-                    <div class="slider-header">
-                        <label for="slider-vgs">Gate Voltage <span class="math-sym">V<sub>GS</sub></span></label>
-                        <span id="disp-vgs" class="slider-badge">2.00 V</span>
-                    </div>
-                    <input type="range" id="slider-vgs" min="-3.0" max="5.0" step="0.05" value="2.00">
-                </div>
-
-                <div class="ctrl-group slider-group">
-                    <div class="slider-header">
-                        <label for="slider-vds">Drain Voltage <span class="math-sym">V<sub>DS</sub></span></label>
-                        <span id="disp-vds" class="slider-badge">2.50 V</span>
-                    </div>
-                    <input type="range" id="slider-vds" min="0.0" max="6.0" step="0.05" value="2.50">
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Quick Physics Presets -->
-                <div class="ctrl-group presets-group">
-                    <span class="ctrl-title">Presets</span>
-                    <div class="presets-row">
-                        <button id="preset-cutoff" class="btn btn-preset" title="Subthreshold / Cutoff">Cutoff</button>
-                        <button id="preset-triode" class="btn btn-preset" title="Linear / Ohmic Region">Triode</button>
-                        <button id="preset-pinchoff" class="btn btn-preset" title="Pinch-off Edge (V_DS = V_DS,sat)">Pinch-Off</button>
-                        <button id="preset-saturation" class="btn btn-preset" title="Saturation Region">Saturation</button>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Advanced Options & Reset -->
-                <div class="ctrl-group">
-                    <button id="btn-advanced" class="btn">⚙ Parameters</button>
-                    <button id="btn-reset" class="btn btn-secondary">Reset</button>
-                </div>
+        <!-- Full-Width Docked Footer (Version 2.0 Workstation Standard, Height 36px) -->
+        <footer class="app-footer">
+            <div class="footer-center-zone">
+                <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="signature-footer">www.gerardjosephlim.com</a>
             </div>
-        </div>
-
-        <!-- Docked Workstation 2.0 Footer -->
-        <footer class="app-footer chassis-card">
-            <div class="footer-left">
-                <span class="footer-tech-tag">NEAMEN CH. 11 ANALYTICS</span>
-                <span class="footer-build">SOLID-STATE WORKSTATION 2.0</span>
-            </div>
-            <a href="https://www.gerardjosephlim.com" target="_blank" rel="noopener noreferrer" class="footer-portfolio-link">www.gerardjosephlim.com</a>
         </footer>
 
         <!-- Advanced Parameters Modal / Drawer -->
@@ -370,9 +369,13 @@
     </div>
 
     <!-- Scripts -->
-    <script src="mosfet-physics.js?v=1794151795656"></script>
-    <script src="assistant-parser.js?v=1794151795656"></script>
-    <script src="mosfet.js?v=1794151795656"></script>
+    <script src="mosfet-physics.js?v=1794194109454"></script>
+    <script src="canvas-math.js?v=1794194109454"></script>
+    <script src="device-renderer.js?v=1794194109454"></script>
+    <script src="band-renderer.js?v=1794194109454"></script>
+    <script src="graph-renderer.js?v=1794194109454"></script>
+    <script src="assistant-parser.js?v=1794194109454"></script>
+    <script src="mosfet.js?v=1794194109454"></script>
 </body>
 
 </html>

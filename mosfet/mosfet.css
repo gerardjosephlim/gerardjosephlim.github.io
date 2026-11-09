@@ -37,10 +37,19 @@
   --input-bg: rgba(0, 0, 0, 0.35);
   --input-border: rgba(255, 255, 255, 0.12);
 
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-main: var(--font-family);
   --font-math: 'Cambria Math', 'STIX Two Math', 'Latin Modern Math', 'Times New Roman', serif;
   --font-math-roman: 'Cambria', 'STIX Two Text', 'Latin Modern Roman', 'Times New Roman', serif;
+
+  /* Standard Workstation Spacing Tokens */
+  --header-height: 52px;
+  --footer-height: 36px;
+  --spacing-header-gap: 16px;
+  --spacing-footer-gap: 16px;
+  --spacing-viewport-edge: 20px;
+  --spacing-card-gap: 16px;
 }
 
 [data-theme="light"] {
@@ -85,7 +94,7 @@
 body.glass-simulation-body {
   background-color: var(--bg-deep);
   color: var(--text-primary);
-  font-family: var(--font-main);
+  font-family: var(--font-family);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -93,42 +102,77 @@ body.glass-simulation-body {
   -webkit-user-select: none;
 }
 
-/* App Container (Sequential Flex Layout, Zero Overlap) */
+/* App Shell (Version 2.0 Workstation Full-Viewport Shell) */
+.app-shell,
 .mosfet-app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  padding: 8px 16px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   position: relative;
   overflow: hidden;
   background: var(--bg-deep);
 }
 
 /* ========================================================================== */
-/* TOP HEADER (Workstation 2.0 Standard, 52px, Strict 5px Radius)             */
+/* TOP HEADER (Workstation Standard, 52px Full-Width Docked Framing)          */
 /* ========================================================================== */
 
 .app-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 52px;
-  min-height: 52px;
-  padding: 0 16px;
-  border-radius: var(--card-radius);
+  height: var(--header-height);
+  min-height: var(--header-height);
+  padding: 0 var(--spacing-viewport-edge);
+  border-radius: 0;
   background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  margin-bottom: 8px;
+  border: none;
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  margin: 0;
   flex-shrink: 0;
-  z-index: 20;
+  z-index: 100;
+  box-sizing: border-box;
+  width: 100%;
 }
 
+.header-brand-block,
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.brand-mark,
+.brand-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.brand-mark:hover,
+.brand-link:hover {
+  transform: scale(1.05);
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.meta-sep {
+  opacity: 0.5;
+}
 }
 
 /* Dr. Lim's Vector Brand Mark */
@@ -180,35 +224,6 @@ body.glass-simulation-body {
   gap: 12px;
 }
 
-.mode-badges {
-  display: flex;
-  gap: 6px;
-}
-
-.status-badge {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.status-badge.badge-active {
-  background: rgba(56, 189, 248, 0.15);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.status-badge.badge-regime {
-  background: rgba(251, 191, 36, 0.15);
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
-  cursor: pointer;
-}
-
 .header-tools {
   display: flex;
   align-items: center;
@@ -248,15 +263,29 @@ body.glass-simulation-body {
 }
 
 /* ========================================================================== */
-/* WORKSPACE GRID: Side-by-Side Split View                                    */
+/* WORKSTATION WORKSPACE: Main Layout & Card Spacing                          */
 /* ========================================================================== */
 
-.workspace-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.95fr;
-  gap: 8px;
+.workstation-main {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-card-gap);
+  padding: var(--spacing-header-gap) var(--spacing-viewport-edge) var(--spacing-footer-gap) var(--spacing-viewport-edge);
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.workspace-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: var(--spacing-card-gap);
+  flex: 1;
+  min-height: 0;
+  margin: 0;
 }
 
 .left-pane,
@@ -316,7 +345,7 @@ body.glass-simulation-body {
 /* Semiconductor Cross-Section Canvas */
 .canvas-wrapper {
   flex: 1.25;
-  min-height: 180px;
+  min-height: 120px;
   position: relative;
   background: var(--input-bg);
   border-radius: var(--card-radius);
@@ -333,7 +362,7 @@ body.glass-simulation-body {
 /* Energy Band Diagram Canvas */
 .band-diagram-wrapper {
   flex: 1;
-  min-height: 175px;
+  min-height: 120px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
@@ -591,10 +620,9 @@ body.glass-simulation-body {
   justify-content: center;
   flex-shrink: 0;
   z-index: 10;
-  margin-top: 6px;
-  margin-bottom: 6px;
+  margin: 0;
   box-sizing: border-box;
-  padding: 0 8px;
+  padding: 0;
 }
 
 .controls {
@@ -792,51 +820,59 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ========================================================================== */
-/* DOCKED WORKSTATION 2.0 FOOTER                                              */
+/* DOCKED WORKSTATION FOOTER (Centered Signature Standard)                    */
 /* ========================================================================== */
 
 .app-footer {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 28px;
-  min-height: 28px;
-  padding: 0 14px;
+  height: var(--footer-height);
+  min-height: var(--footer-height);
+  padding: 0 var(--spacing-viewport-edge);
   background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--card-radius);
+  border: none;
+  border-top: 1px solid var(--card-border);
+  border-radius: 0;
   flex-shrink: 0;
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
+  box-sizing: border-box;
+  margin: 0;
+  z-index: 100;
+  width: 100%;
 }
 
-.footer-left {
+.footer-center-zone {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 }
 
-.footer-tech-tag {
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--primary);
-}
-
-.footer-build {
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  color: var(--text-dim);
-}
-
-.footer-portfolio-link {
-  color: var(--text-dim);
+.signature-footer,
+a.signature-footer {
+  color: var(--text-muted);
   text-decoration: none;
   font-family: var(--font-mono);
-  transition: color 0.15s ease;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
-.footer-portfolio-link:hover {
+.signature-footer:hover,
+a.signature-footer:hover {
   color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .signature-footer:hover,
+[data-theme="light"] a.signature-footer:hover {
+  color: var(--primary-dark);
+  background: rgba(70, 60, 50, 0.08);
 }
 
 /* ========================================================================== */
@@ -1331,7 +1367,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-radius: var(--card-radius);
   color: var(--text-primary);
   padding: 7px 10px;
-  font-family: var(--font-main);
+  font-family: var(--font-family);
   font-size: 0.82rem;
   outline: none;
 }
@@ -1373,7 +1409,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-radius: var(--card-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   color: var(--text-primary);
-  font: 500 0.78rem/1.55 var(--font-main);
+  font: 500 0.78rem/1.55 var(--font-family);
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -1465,24 +1501,25 @@ math[display="inline"] {
 }
 
 @media (max-width: 960px) {
+  .header-meta,
   .header-subtitle {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
-  .mode-badges {
-    display: none;
-  }
-}
-
-@media (max-height: 850px) {
+@media (max-height: 750px) {
+  .app-shell,
   .mosfet-app-container {
     overflow-y: auto;
     height: auto;
     min-height: 100vh;
   }
+  .workstation-main {
+    overflow: visible;
+    height: auto;
+    min-height: 0;
+  }
   .workspace-grid {
-    min-height: 480px;
+    min-height: 460px;
   }
 }
