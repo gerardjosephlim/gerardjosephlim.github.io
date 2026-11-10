@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dielectric Polarization Lab | Scientific Workstation</title>
     <meta name="description" content="Quantitative physics simulation of dielectric polarization, bound surface charge, and internal electric field screening in a parallel-plate capacitor.">
-    <link rel="stylesheet" href="dipole.css?v=1794299369382">
+    <link rel="stylesheet" href="dipole.css?v=1794311685725">
 </head>
 
 <body>
@@ -44,7 +44,14 @@
                 </nav>
 
                 <div class="header-tools">
-                    <!-- Theme Toggle Button (Light/Dark Mode with SVG Icons) -->
+                    <!-- LabAssist Trigger Button (1st in Standard Order) -->
+                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
+                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Theme Toggle Button (2nd in Standard Order) -->
                     <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light or Dark Mode">
                         <svg class="theme-icon-svg" id="theme-sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -59,13 +66,6 @@
                         </svg>
                         <svg class="theme-icon-svg" id="theme-moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </button>
-
-                    <!-- LabAssist Trigger Button (34x34px, 5px radius standard) -->
-                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
-                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                     </button>
 
@@ -358,9 +358,9 @@
         </div>
     </div>
 
-    <script src="dipole-physics.js?v=1794299369382"></script>
-    <script src="assistant-parser.js?v=1794299369382"></script>
-    <script src="dipole.js?v=1794299369382"></script>
+    <script src="dipole-physics.js?v=1794311685725"></script>
+    <script src="assistant-parser.js?v=1794311685725"></script>
+    <script src="dipole.js?v=1794311685725"></script>
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function (e) {

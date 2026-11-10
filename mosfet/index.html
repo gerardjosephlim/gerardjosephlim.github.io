@@ -19,8 +19,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="liquid-glass-components.css?v=1794299372033">
-    <link rel="stylesheet" href="mosfet.css?v=1794299372033">
+    <link rel="stylesheet" href="liquid-glass-components.css?v=1794311688417">
+    <link rel="stylesheet" href="mosfet.css?v=1794311688417">
 </head>
 
 <body class="glass-simulation-body">
@@ -47,7 +47,14 @@
             </div>
             <div class="header-actions">
                 <div class="header-tools">
-                    <!-- Theme Toggle Button (1st in Standard Order) -->
+                    <!-- LabAssist Copilot Trigger (1st in Standard Order) -->
+                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
+                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Theme Toggle Button (2nd in Standard Order) -->
                     <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Light or Dark Mode">
                         <svg class="sun-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -62,13 +69,6 @@
                         </svg>
                         <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </button>
-
-                    <!-- LabAssist Copilot Trigger (2nd in Standard Order) -->
-                    <button id="assistant-toggle-btn" class="assistant-btn" title="Open LabAssist Guide" aria-label="Open LabAssist Guide">
-                        <svg class="assistant-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                     </button>
 
@@ -321,7 +321,7 @@
         </div>
 
         <!-- Floating LabAssist Modal Card (Draggable, Resizable, Standardized Ridges, 5px Precision Standard) -->
-        <div id="lab-assistant-card" class="lab-assistant-card chassis-card hidden" role="dialog" aria-label="LabAssist Guide">
+        <div id="lab-assistant-card" class="lab-assistant-card hidden" role="dialog" aria-label="LabAssist Guide">
             <div class="assistant-header" id="lab-assistant-header">
                 <div class="assistant-title-block">
                     <div class="assistant-title-row">
@@ -369,14 +369,14 @@
     </div>
 
     <!-- Scripts (with cache-busting version stamps) -->
-    <script src="mosfet-physics.js?v=1794299372033"></script>
-    <script src="canvas-math.js?v=1794299372033"></script>
-    <script src="device-renderer.js?v=1794299372033"></script>
-    <script src="band-renderer.js?v=1794299372033"></script>
-    <script src="graph-renderer.js?v=1794299372033"></script>
-    <script src="labassist-core.js?v=1794299372033"></script>
-    <script src="assistant-parser.js?v=1794299372033"></script>
-    <script src="mosfet.js?v=1794299372033"></script>
+    <script src="mosfet-physics.js?v=1794311688417"></script>
+    <script src="canvas-math.js?v=1794311688417"></script>
+    <script src="device-renderer.js?v=1794311688417"></script>
+    <script src="band-renderer.js?v=1794311688417"></script>
+    <script src="graph-renderer.js?v=1794311688417"></script>
+    <script src="labassist-core.js?v=1794311688417"></script>
+    <script src="assistant-parser.js?v=1794311688417"></script>
+    <script src="mosfet.js?v=1794311688417"></script>
 </body>
 
 </html>

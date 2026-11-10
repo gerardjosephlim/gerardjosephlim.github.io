@@ -939,98 +939,150 @@ input:checked + .slider:before {
     animation: none; /* Instant appearance */
 }
 
+/* Message Bubbles - Strict Left/Right Alignment (Workstation 2.0 Standard) */
+.assistant-message,
+.assistant-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: none;
+}
+
+.assistant-message.user,
 .assistant-msg-user {
+    align-items: flex-end;
     align-self: flex-end;
+    max-width: 85%;
 }
 
+.user-bubble,
 .assistant-msg-user .msg-bubble {
-    background: var(--primary);
+    background: var(--primary-dark, #0284c7);
     color: #ffffff;
-    padding: 8px 12px;
+    padding: 6px 12px;
     border-radius: var(--card-radius);
-    font-size: 0.85rem;
+    max-width: 100%;
     font-weight: 500;
+    font-size: 0.80rem;
+    line-height: 1.4;
+    word-break: break-word;
 }
 
+[data-theme="light"] .user-bubble,
+[data-theme="light"] .assistant-msg-user .msg-bubble {
+    background: var(--primary);
+}
+
+.assistant-message.assistant,
 .assistant-msg-bot {
+    align-items: flex-start;
     align-self: flex-start;
-    max-width: 96%;
-}
-
-.assistant-msg-bot .msg-bubble {
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    color: var(--text-main);
-    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--card-border);
     border-radius: var(--card-radius);
-    font-size: 0.85rem;
-    line-height: 1.5;
+    padding: 10px 12px;
+    max-width: 98%;
+    box-sizing: border-box;
 }
 
-.msg-bubble h4 {
-    margin: 10px 0 4px 0;
-    font-size: 0.90rem;
+.assistant-reply-title {
+    font-size: 0.82rem;
+    font-weight: 700;
     color: var(--primary);
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 4px;
+    width: 100%;
 }
 
-.msg-bubble p {
-    margin: 0 0 8px 0;
+.assistant-reply-body,
+.assistant-msg-bot .msg-bubble {
+    color: var(--text-main);
+    line-height: 1.5;
+    font-size: 0.85rem;
 }
 
-.msg-bubble p:last-child {
+.assistant-reply-body p,
+.assistant-msg-bot .msg-bubble p {
+    margin: 0 0 6px 0;
+}
+
+.assistant-reply-body p:last-child,
+.assistant-msg-bot .msg-bubble p:last-child {
     margin-bottom: 0;
 }
 
-.msg-bubble ul {
-    margin: 4px 0 8px 0;
-    padding-left: 20px;
+.assistant-reply-body ul,
+.assistant-msg-bot .msg-bubble ul {
+    margin: 4px 0 6px 0;
+    padding-left: 18px;
 }
 
-.msg-bubble li {
-    margin-bottom: 4px;
+.assistant-reply-body li,
+.assistant-msg-bot .msg-bubble li {
+    margin-bottom: 3px;
 }
 
-.msg-bubble code {
+.assistant-reply-body code,
+.assistant-msg-bot .msg-bubble code {
     font-family: var(--font-mono);
-    font-size: 0.80rem;
+    font-size: 0.78rem;
     background: var(--btn-bg);
     border: 1px solid var(--btn-border);
     padding: 1px 4px;
     border-radius: 3px;
 }
 
-/* 4-Dot Scrolling "Thinking" Wave Animation */
+/* 4-Dot Scrolling "Thinking" Wave Animation (Workstation 2.0 Canonical) */
+.assistant-message.assistant-thinking,
 .assistant-thinking {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 8px 14px;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--card-border);
     border-radius: var(--card-radius);
+    width: fit-content;
 }
 
+.thinking-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 14px;
+}
+
+.thinking-dots .dot,
 .thinking-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: var(--primary);
-    animation: thinkingWave 1.4s infinite ease-in-out both;
+    background: var(--primary);
+    opacity: 0.3;
+    animation: dot-wave 1.4s ease-in-out infinite;
 }
 
-.thinking-dot:nth-child(1) { animation-delay: -0.32s; }
-.thinking-dot:nth-child(2) { animation-delay: -0.16s; }
-.thinking-dot:nth-child(3) { animation-delay: 0s; }
-.thinking-dot:nth-child(4) { animation-delay: 0.16s; }
+.thinking-dots .dot:nth-child(1),
+.thinking-dot:nth-child(1) { animation-delay: 0.0s; }
+.thinking-dots .dot:nth-child(2),
+.thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots .dot:nth-child(3),
+.thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+.thinking-dots .dot:nth-child(4),
+.thinking-dot:nth-child(4) { animation-delay: 0.6s; }
 
-@keyframes thinkingWave {
-    0%, 80%, 100% {
-        transform: scale(0.6);
-        opacity: 0.4;
+@keyframes dot-wave {
+    0%, 100% {
+        transform: translateY(0) scale(0.85);
+        opacity: 0.3;
     }
-    40% {
-        transform: scale(1.1);
+    30% {
+        transform: translateY(-5px) scale(1.15);
         opacity: 1;
+    }
+    60% {
+        transform: translateY(0) scale(0.95);
+        opacity: 0.45;
     }
 }
 
