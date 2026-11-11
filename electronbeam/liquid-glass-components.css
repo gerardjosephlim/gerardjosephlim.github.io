@@ -28,11 +28,11 @@
   --warning: #fbbf24;
   --error: #ef4444;
   
-  /* Solid Chassis Cards & Panels (5px Precision Radius) */
+  /* Solid Chassis Cards & Panels (5px Precision Radius, No Glass or Glow) */
   --card-bg: #0d1322;
   --card-border: #1e293b;
   --card-border-light: #334155;
-  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   --card-radius: 5px;
 
   /* Inputs & Buttons */
@@ -47,11 +47,12 @@
 
   /* Layout Spacing Tokens */
   --header-height: 52px;
+  --footer-height: 48px;
   --spacing-header-gap: 16px;
   --spacing-footer-gap: 16px;
   --spacing-viewport-edge: 20px;
   --spacing-card-gap: 16px;
-  --footer-height-approx: 96px;
+  --footer-height-approx: 48px;
 }
 
 [data-theme="light"] {
@@ -75,11 +76,11 @@
   --warning: #d97706;
   --error: #b91c1c;
   
-  /* Solid PC Beige Chassis Cards */
+  /* Solid PC Beige Chassis Cards (Zero Glow) */
   --card-bg: #e8e2d5;
   --card-border: rgba(70, 60, 50, 0.25);
   --card-border-light: rgba(70, 60, 50, 0.4);
-  --card-shadow: 0 4px 20px rgba(255, 255, 255, 0.95), 0 1px 4px rgba(255, 255, 255, 0.85);
+  --card-shadow: 0 1px 3px rgba(70, 60, 50, 0.12), 0 1px 2px rgba(70, 60, 50, 0.08);
   
   /* Inputs & Buttons */
   --input-bg: #fcfbf7;
@@ -292,7 +293,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
 
-/* Flat Startup & Help Screen Modal */
+/* Flat Startup & Help Screen Modal (Zero Glass / Transparency) */
 .splash-overlay {
   position: fixed;
   top: 0;
@@ -300,8 +301,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
   justify-content: center;

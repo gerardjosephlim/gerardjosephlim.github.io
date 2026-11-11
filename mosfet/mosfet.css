@@ -12,13 +12,12 @@
   --card-bg: #0d1322;
   --card-border: #1e293b;
   --card-border-highlight: #334155;
-  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   --card-radius: 5px;
 
   --primary: #38bdf8;
   --primary-hover: #7dd3fc;
   --primary-cyan: #38bdf8;
-  --primary-glow: rgba(56, 189, 248, 0.35);
 
   --accent-gold: #fbbf24;
   --accent-rose: #fb7185;
@@ -40,12 +39,11 @@
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-main: var(--font-family);
-  --font-math: 'Cambria Math', 'STIX Two Math', 'Latin Modern Math', 'Times New Roman', serif;
-  --font-math-roman: 'Cambria', 'STIX Two Text', 'Latin Modern Roman', 'Times New Roman', serif;
+  --font-math: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
 
   /* Standard Workstation Spacing Tokens */
   --header-height: 52px;
-  --footer-height: 36px;
+  --footer-height: 48px;
   --spacing-header-gap: 16px;
   --spacing-footer-gap: 16px;
   --spacing-viewport-edge: 20px;
@@ -59,13 +57,12 @@
   --card-bg: #e8e2d5;
   --card-border: rgba(70, 60, 50, 0.25);
   --card-border-highlight: rgba(70, 60, 50, 0.4);
-  --card-shadow: 0 4px 20px rgba(255, 255, 255, 0.95), 0 1px 4px rgba(255, 255, 255, 0.85);
+  --card-shadow: 0 1px 3px rgba(70, 60, 50, 0.12), 0 1px 2px rgba(70, 60, 50, 0.08);
   --card-radius: 5px;
 
   --primary: #0284c7;
   --primary-hover: #0369a1;
   --primary-cyan: #0284c7;
-  --primary-glow: rgba(2, 132, 199, 0.20);
 
   --accent-gold: #d97706;
   --accent-rose: #dc2626;
@@ -271,8 +268,8 @@ body.glass-simulation-body {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-card-gap);
-  padding: var(--spacing-header-gap) var(--spacing-viewport-edge) var(--spacing-footer-gap) var(--spacing-viewport-edge);
+  gap: 8px;
+  padding: 8px var(--spacing-viewport-edge);
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
@@ -282,7 +279,7 @@ body.glass-simulation-body {
   position: relative;
   display: grid;
   grid-template-columns: 1.15fr 0.95fr;
-  gap: var(--spacing-card-gap);
+  gap: 8px;
   flex: 1;
   min-height: 0;
   margin: 0;
@@ -297,7 +294,7 @@ body.glass-simulation-body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 10px 14px;
+  padding: 8px 12px;
 }
 
 .pane-header {
@@ -453,31 +450,33 @@ body.glass-simulation-body {
 .math-display-box {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-  padding: 6px 8px;
-  background: var(--card-bg);
+  gap: 3px;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: var(--input-bg);
   border-radius: 4px;
   border: 1px solid var(--card-border);
 }
 
 .formula-row {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 0.74rem;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  line-height: 1.25;
   min-width: 0;
 }
 
 .math-label {
   font-weight: 600;
   color: var(--primary);
-  width: 80px;
+  width: 76px;
   flex-shrink: 0;
+  font-size: 0.70rem;
 }
 
 .math-expr {
-  font-family: var(--font-math-roman);
+  font-family: var(--font-math);
   color: var(--text-primary);
   letter-spacing: 0.01em;
   min-width: 0;
@@ -491,14 +490,14 @@ body.glass-simulation-body {
 .telemetry-compact-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: 4px;
 }
 
 .telemetry-cell {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 4px;
-  padding: 5px 8px;
+  padding: 3px 6px;
   display: flex;
   flex-direction: column;
   cursor: help;
@@ -510,13 +509,13 @@ body.glass-simulation-body {
 }
 
 .cell-label {
-  font-size: 0.65rem;
+  font-size: 0.60rem;
   color: var(--text-muted);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .cell-val {
-  font-size: 0.85rem;
+  font-size: 0.80rem;
   font-weight: 700;
   color: var(--text-primary);
   font-family: var(--font-mono);
@@ -631,8 +630,8 @@ body.glass-simulation-body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px 12px;
-  padding: 6px 14px;
+  gap: 5px 10px;
+  padding: 4px 10px;
   border-radius: var(--card-radius);
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -834,6 +833,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--card-bg);
   border: none;
   border-top: 1px solid var(--card-border);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.35);
   border-radius: 0;
   flex-shrink: 0;
   font-size: 0.76rem;
@@ -844,22 +844,28 @@ input[type="range"]::-webkit-slider-thumb:hover {
   width: 100%;
 }
 
+[data-theme="light"] .app-footer {
+  box-shadow: 0 -1px 3px rgba(70, 60, 50, 0.10);
+}
+
 .footer-center-zone {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .signature-footer,
 a.signature-footer {
   color: var(--text-muted);
   text-decoration: none;
-  font-family: var(--font-mono);
+  font-family: var(--font-family);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.05em;
-  padding: 4px 12px;
-  border-radius: 4px;
+  padding: 4px 14px;
+  border-radius: var(--card-radius);
   transition: all 0.2s ease;
 }
 
@@ -885,9 +891,7 @@ a.signature-footer:hover {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -975,7 +979,7 @@ a.signature-footer:hover {
   cursor: pointer;
 }
 
-/* Splash Modal (Launches on First Visit, 5px Radius) */
+/* Splash Modal (Launches on First Visit, 5px Radius, Zero Glass/Transparency) */
 .splash-overlay {
   position: fixed;
   top: 0;
@@ -983,8 +987,6 @@ a.signature-footer:hover {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
   align-items: center;
