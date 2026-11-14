@@ -30,8 +30,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="fermidirac.css?v=1794408821849">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=STIX+Two+Math&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fermidirac.css?v=1794670241033">
 </head>
 <body>
     <div class="app-shell">
@@ -101,12 +101,12 @@
             <!-- Solved values and the four synchronized energy panels. -->
             <section class="workspace" aria-label="Simulation results">
                 <div class="summary-grid" aria-live="polite">
-                    <div class="metric" data-tooltip-id="fermi-level"><span>Fermi level</span><strong id="result-ef">—</strong><small id="result-regime">—</small></div>
-                    <div class="metric electron" data-tooltip-id="electrons"><span>Electrons, n</span><strong id="result-n">—</strong><small>cm⁻³</small></div>
-                    <div class="metric hole" data-tooltip-id="holes"><span>Holes, p</span><strong id="result-p">—</strong><small>cm⁻³</small></div>
-                    <div class="metric" data-tooltip-id="intrinsic"><span>Intrinsic, nᵢ</span><strong id="result-ni">—</strong><small>cm⁻³</small></div>
-                    <div class="metric" data-tooltip-id="ncnv"><span>N<sub>c</sub> / N<sub>v</sub></span><strong id="result-ncnv">—</strong><small>cm⁻³</small></div>
-                    <div class="metric" data-tooltip-id="ionized"><span>Ionized dopants</span><strong id="result-ionized">—</strong><small>N<sub>D</sub>⁺ / N<sub>A</sub>⁻</small></div>
+                    <div class="metric" data-tooltip-id="fermi-level"><span>Fermi level, <math display="inline"><msub><mi>E</mi><mi>F</mi></msub></math></span><strong id="result-ef">—</strong><small id="result-regime">—</small></div>
+                    <div class="metric electron" data-tooltip-id="electrons"><span>Electrons, <math display="inline"><mi>n</mi></math></span><strong id="result-n">—</strong><small>cm⁻³</small></div>
+                    <div class="metric hole" data-tooltip-id="holes"><span>Holes, <math display="inline"><mi>p</mi></math></span><strong id="result-p">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="intrinsic"><span>Intrinsic, <math display="inline"><msub><mi>n</mi><mi>i</mi></msub></math></span><strong id="result-ni">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="ncnv"><span><math display="inline"><msub><mi>N</mi><mi>c</mi></msub><mo>/</mo><msub><mi>N</mi><mi>v</mi></msub></math></span><strong id="result-ncnv">—</strong><small>cm⁻³</small></div>
+                    <div class="metric" data-tooltip-id="ionized"><span>Ionized dopants</span><strong id="result-ionized">—</strong><small><math display="inline"><msubsup><mi>N</mi><mi>D</mi><mo>+</mo></msubsup><mo>/</mo><msubsup><mi>N</mi><mi>A</mi><mo>−</mo></msubsup></math></small></div>
                 </div>
 
                 <!-- Canvas is redrawn from solved data; tooltip and exports are overlays. -->
@@ -138,10 +138,10 @@
                         </div>
                         <div class="hover-card-footer">
                             <div class="hover-card-legend">
-                                <span class="legend-item"><span class="legend-swatch fd-swatch"></span> f(E) Fermi–Dirac</span>
-                                <span class="legend-item"><span class="legend-swatch hole-swatch"></span> 1−f(E) Hole Prob.</span>
-                                <span class="legend-item"><span class="legend-swatch mb-swatch"></span> f<sub>MB</sub>(E) Boltzmann</span>
-                                <span class="legend-item"><span class="legend-swatch ef-swatch"></span> E<sub>F</sub> (f = 0.5)</span>
+                                <span class="legend-item"><span class="legend-swatch fd-swatch"></span> <math display="inline"><mi>f</mi><mo>(</mo><mi>E</mi><mo>)</mo></math> Fermi–Dirac</span>
+                                <span class="legend-item"><span class="legend-swatch hole-swatch"></span> <math display="inline"><mn>1</mn><mo>−</mo><mi>f</mi><mo>(</mo><mi>E</mi><mo>)</mo></math> Hole Prob.</span>
+                                <span class="legend-item"><span class="legend-swatch mb-swatch"></span> <math display="inline"><msub><mi>f</mi><mrow><mi>M</mi><mi>B</mi></mrow></msub><mo>(</mo><mi>E</mi><mo>)</mo></math> Boltzmann</span>
+                                <span class="legend-item"><span class="legend-swatch ef-swatch"></span> <math display="inline"><msub><mi>E</mi><mi>F</mi></msub></math> (<math display="inline"><mi>f</mi><mo>=</mo><mn>0.5</mn></math>)</span>
                             </div>
                             <button id="export-hover-png" class="toolbar-button" type="button">Export PNG</button>
                         </div>
@@ -150,8 +150,8 @@
 
                 <div class="diagnostics liquid-glass">
                     <span class="diag-item" data-tooltip-id="residual">Charge residual <strong id="diag-residual">—</strong></span>
-                    <span class="diag-item" data-tooltip-id="mass-action">np/nᵢ² <strong id="diag-mass-action">—</strong></span>
-                    <span class="diag-item" data-tooltip-id="ei">Eᵢ <strong id="diag-ei">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="mass-action"><math display="inline"><mi>n</mi><mi>p</mi><mo>/</mo><msubsup><mi>n</mi><mi>i</mi><mn>2</mn></msubsup></math> <strong id="diag-mass-action">—</strong></span>
+                    <span class="diag-item" data-tooltip-id="ei"><math display="inline"><msub><mi>E</mi><mi>i</mi></msub></math> <strong id="diag-ei">—</strong></span>
                     <span class="diag-item" data-tooltip-id="time">Solve time <strong id="diag-time">—</strong></span>
                 </div>
             </section>
@@ -198,20 +198,20 @@
                     </div>
                     <p class="field-help" id="energy-scale-help">Fixed Eg uses a locked vertical energy scale during temperature sweeps.</p>
                     <div class="range-field">
-                        <div class="range-heading"><label for="bandgap">Bandgap, E<sub>g</sub></label><output id="disp-bandgap">1.12 eV</output></div>
+                        <div class="range-heading"><label for="bandgap">Bandgap, <math display="inline"><msub><mi>E</mi><mi>g</mi></msub></math></label><output id="disp-bandgap">1.12 eV</output></div>
                         <input type="range" id="bandgap" min="0.1" max="4" step="0.001" value="1.12">
                     </div>
                 </section>
 
                 <section class="control-section" id="effective-mass-section">
-                    <div class="section-title"><span>Effective Masses</span><small>density of states (m₀)</small></div>
+                    <div class="section-title"><span>Effective Masses</span><small>density of states (<math display="inline"><msub><mi>m</mi><mn>0</mn></msub></math>)</small></div>
                     <div class="two-column" style="margin-top: 10px;">
                         <div class="range-field">
-                            <div class="range-heading"><label for="e-mass">m<sub>e,DOS</sub>*</label><output id="disp-emass">1.08 m₀</output></div>
+                            <div class="range-heading"><label for="e-mass"><math display="inline"><msubsup><mi>m</mi><mrow><mi>e</mi><mo>,</mo><mi mathvariant="normal">DOS</mi></mrow><mo>*</mo></msubsup></math></label><output id="disp-emass">1.08 m₀</output></div>
                             <input type="range" id="e-mass" min="0.01" max="2" step="0.001" value="1.08">
                         </div>
                         <div class="range-field">
-                            <div class="range-heading"><label for="h-mass">m<sub>h,DOS</sub>*</label><output id="disp-hmass">0.56 m₀</output></div>
+                            <div class="range-heading"><label for="h-mass"><math display="inline"><msubsup><mi>m</mi><mrow><mi>h</mi><mo>,</mo><mi mathvariant="normal">DOS</mi></mrow><mo>*</mo></msubsup></math></label><output id="disp-hmass">0.56 m₀</output></div>
                             <input type="range" id="h-mass" min="0.01" max="2" step="0.001" value="0.56">
                         </div>
                     </div>
@@ -221,21 +221,21 @@
                 <section class="control-section doping-section" id="doping-section">
                     <div class="section-title"><span>Dopants</span><small>logarithmic concentration</small></div>
                     <div class="dopant-control donor">
-                        <label class="check-row"><input type="checkbox" id="donors-enabled"><span>Donors, N<sub>D</sub></span><output id="disp-nd">off</output></label>
+                        <label class="check-row"><input type="checkbox" id="donors-enabled"><span>Donors, <math display="inline"><msub><mi>N</mi><mi>D</mi></msub></math></span><output id="disp-nd">off</output></label>
                         <input type="range" id="donor-log" min="10" max="21" step="0.1" value="16" disabled>
                     </div>
                     <div class="dopant-control acceptor">
-                        <label class="check-row"><input type="checkbox" id="acceptors-enabled"><span>Acceptors, N<sub>A</sub></span><output id="disp-na">off</output></label>
+                        <label class="check-row"><input type="checkbox" id="acceptors-enabled"><span>Acceptors, <math display="inline"><msub><mi>N</mi><mi>A</mi></msub></math></span><output id="disp-na">off</output></label>
                         <input type="range" id="acceptor-log" min="10" max="21" step="0.1" value="16" disabled>
                     </div>
                     <label class="check-row"><input type="checkbox" id="incomplete-ionization"><span>Include incomplete ionization</span></label>
                     <div class="ionization-controls" id="ionization-controls">
                         <div class="range-field">
-                            <div class="range-heading"><label for="donor-depth">E<sub>c</sub>−E<sub>D</sub></label><output id="disp-donor-depth">45 meV</output></div>
+                            <div class="range-heading"><label for="donor-depth"><math display="inline"><msub><mi>E</mi><mi>c</mi></msub><mo>−</mo><msub><mi>E</mi><mi>D</mi></msub></math></label><output id="disp-donor-depth">45 meV</output></div>
                             <input type="range" id="donor-depth" min="0.001" max="0.2" step="0.001" value="0.045">
                         </div>
                         <div class="range-field">
-                            <div class="range-heading"><label for="acceptor-depth">E<sub>A</sub>−E<sub>v</sub></label><output id="disp-acceptor-depth">45 meV</output></div>
+                            <div class="range-heading"><label for="acceptor-depth"><math display="inline"><msub><mi>E</mi><mi>A</mi></msub><mo>−</mo><msub><mi>E</mi><mi>v</mi></msub></math></label><output id="disp-acceptor-depth">45 meV</output></div>
                             <input type="range" id="acceptor-depth" min="0.001" max="0.2" step="0.001" value="0.045">
                         </div>
                     </div>
@@ -243,7 +243,7 @@
 
                 <section class="control-section" id="manual-ef-section">
                     <div class="range-field">
-                        <div class="range-heading"><label for="fermi-level">Manual E<sub>F</sub></label><output id="disp-ef">0.55 eV</output></div>
+                        <div class="range-heading"><label for="fermi-level">Manual <math display="inline"><msub><mi>E</mi><mi>F</mi></msub></math></label><output id="disp-ef">0.55 eV</output></div>
                         <input type="range" id="fermi-level" min="-0.5" max="1.7" step="0.001" value="0.55">
                     </div>
                     <p class="field-help">Manual mode reports net charge without enforcing neutrality.</p>
@@ -266,10 +266,10 @@
                             <option value="custom">Custom</option>
                         </select>
                         <div class="occupation-custom" id="occupation-custom">
-                            <label class="check-row"><input type="checkbox" id="show-conduction-electrons"><span>Conduction electrons, gᶜf</span></label>
-                            <label class="check-row"><input type="checkbox" id="show-conduction-empty"><span>Empty conduction states, gᶜ(1−f)</span></label>
-                            <label class="check-row"><input type="checkbox" id="show-valence-electrons"><span>Valence electrons, gᵥf</span></label>
-                            <label class="check-row"><input type="checkbox" id="show-valence-holes"><span>Valence holes, gᵥ(1−f)</span></label>
+                            <label class="check-row"><input type="checkbox" id="show-conduction-electrons"><span>Conduction electrons, <math display="inline"><msub><mi>g</mi><mi>c</mi></msub><mi>f</mi></math></span></label>
+                            <label class="check-row"><input type="checkbox" id="show-conduction-empty"><span>Empty conduction states, <math display="inline"><msub><mi>g</mi><mi>c</mi></msub><mo>(</mo><mn>1</mn><mo>−</mo><mi>f</mi><mo>)</mo></math></span></label>
+                            <label class="check-row"><input type="checkbox" id="show-valence-electrons"><span>Valence electrons, <math display="inline"><msub><mi>g</mi><mi>v</mi></msub><mi>f</mi></math></span></label>
+                            <label class="check-row"><input type="checkbox" id="show-valence-holes"><span>Valence holes, <math display="inline"><msub><mi>g</mi><mi>v</mi></msub><mo>(</mo><mn>1</mn><mo>−</mo><mi>f</mi><mo>)</mo></math></span></label>
                         </div>
                     </div>
 
@@ -310,11 +310,11 @@
             <div class="splash-body">
                 <h3>Lab Guide & Overview</h3>
                 <ul>
-                    <li><strong>Four Synchronized Panels:</strong> Inspect (1) Band Dispersion $E-k$, (2) Density of States $g(E)$, (3) Fermi–Dirac Probability $f(E)$, and (4) State Occupation on one unified energy axis.</li>
-                    <li><strong>Exact Carrier Integrals:</strong> Electron ($n$) and hole ($p$) concentrations are computed via exact numerical quadrature of $g_c(E)f(E)$ and $g_v(E)[1-f(E)]$ across thermal tails.</li>
-                    <li><strong>Charge Neutrality:</strong> Equilibrium Fermi level $E_F$ is solved by bisection enforcing $p + N_D^+ = n + N_A^- = 0$.</li>
-                    <li><strong>Freeze-Out & Ionization:</strong> Toggle incomplete ionization to observe dopant freeze-out with finite donor ($E_D$) and acceptor ($E_A$) activation depths.</li>
-                    <li><strong>Shared Horizontal Scale:</strong> Panel 4 state distributions share a single, unnormalized physical scale ($\text{cm}^{-3}\,\text{eV}^{-1}$) with auto-fit or locked scale modes.</li>
+                    <li><strong>Four Synchronized Panels:</strong> Inspect (1) Band Dispersion <math display="inline"><mi>E</mi><mo>−</mo><mi>k</mi></math>, (2) Density of States <math display="inline"><mi>g</mi><mo>(</mo><mi>E</mi><mo>)</mo></math>, (3) Fermi–Dirac Probability <math display="inline"><mi>f</mi><mo>(</mo><mi>E</mi><mo>)</mo></math>, and (4) State Occupation on one unified energy axis.</li>
+                    <li><strong>Exact Carrier Integrals:</strong> Electron (<math display="inline"><mi>n</mi></math>) and hole (<math display="inline"><mi>p</mi></math>) concentrations are computed via exact numerical quadrature of <math display="inline"><msub><mi>g</mi><mi>c</mi></msub><mo>(</mo><mi>E</mi><mo>)</mo><mi>f</mi><mo>(</mo><mi>E</mi><mo>)</mo></math> and <math display="inline"><msub><mi>g</mi><mi>v</mi></msub><mo>(</mo><mi>E</mi><mo>)</mo><mo>[</mo><mn>1</mn><mo>−</mo><mi>f</mi><mo>(</mo><mi>E</mi><mo>)</mo><mo>]</mo></math> across thermal tails.</li>
+                    <li><strong>Charge Neutrality:</strong> Equilibrium Fermi level <math display="inline"><msub><mi>E</mi><mi>F</mi></msub></math> is solved by bisection enforcing <math display="inline"><mi>p</mi><mo>+</mo><msubsup><mi>N</mi><mi>D</mi><mo>+</mo></msubsup><mo>−</mo><mi>n</mi><mo>−</mo><msubsup><mi>N</mi><mi>A</mi><mo>−</mo></msubsup><mo>=</mo><mn>0</mn></math>.</li>
+                    <li><strong>Freeze-Out & Ionization:</strong> Toggle incomplete ionization to observe dopant freeze-out with finite donor (<math display="inline"><msub><mi>E</mi><mi>D</mi></msub></math>) and acceptor (<math display="inline"><msub><mi>E</mi><mi>A</mi></msub></math>) activation depths.</li>
+                    <li><strong>Shared Horizontal Scale:</strong> Panel 4 state distributions share a single, unnormalized physical scale (<math display="inline"><msup><mtext>cm</mtext><mrow><mo>−</mo><mn>3</mn></mrow></msup><msup><mtext>eV</mtext><mrow><mo>−</mo><mn>1</mn></mrow></msup></math>) with auto-fit or locked scale modes.</li>
                     <li><strong>Dual Theme Engine:</strong> Toggle between Deep Space Dark Mode and Classic PC Beige Workstation via the header icon.</li>
                 </ul>
             </div>
@@ -374,12 +374,12 @@
     <!-- Floating Delayed Metric Tooltip (0.5s Hover Delay, 5px Radius Standard) -->
     <div id="metric-tooltip" class="metric-tooltip hidden" role="tooltip" aria-hidden="true"></div>
 
-    <script src="semiconductor-physics.js?v=1794408821849"></script>
-    <script src="simulation-state.js?v=1794408821849"></script>
-    <script src="labassist-core.js?v=1794408821849"></script>
-    <script src="assistant-parser.js?v=1794408821849"></script>
-    <script src="plot-renderer.js?v=1794408821849"></script>
-    <script src="fermidirac.js?v=1794408821849"></script>
+    <script src="semiconductor-physics.js?v=1794670241033"></script>
+    <script src="simulation-state.js?v=1794670241033"></script>
+    <script src="labassist-core.js?v=1794670241033"></script>
+    <script src="assistant-parser.js?v=1794670241033"></script>
+    <script src="plot-renderer.js?v=1794670241033"></script>
+    <script src="fermidirac.js?v=1794670241033"></script>
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function (e) {

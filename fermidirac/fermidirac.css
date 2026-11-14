@@ -41,6 +41,7 @@
 
     --font-family: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-math: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
 
     /* Spacing & Layout Tokens */
     --header-height: 52px;
@@ -469,7 +470,7 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 
 .metric span {
     color: var(--text-muted);
-    font-size: 0.78rem;
+    font-size: 0.84rem;
     white-space: nowrap;
     font-weight: 600;
 }
@@ -477,13 +478,13 @@ button:focus-visible, select:focus-visible, input:focus-visible {
 .metric strong {
     overflow: hidden;
     text-overflow: ellipsis;
-    font: 700 0.94rem var(--font-mono);
+    font: 700 1.02rem var(--font-mono);
     color: var(--text-main);
 }
 
 .metric small {
     color: var(--text-subtle);
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 500;
 }
 
@@ -771,7 +772,7 @@ canvas {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--card-radius);
-    font-size: 0.80rem;
+    font-size: 0.84rem;
     font-weight: 500;
     flex-shrink: 0;
 }
@@ -826,8 +827,8 @@ canvas {
     position: fixed;
     z-index: 9999;
     pointer-events: none;
-    max-width: 340px;
-    padding: 11px 15px;
+    max-width: 380px;
+    padding: 12px 16px;
     background: var(--card-bg);
     border: 1px solid var(--primary);
     border-radius: var(--card-radius);
@@ -877,12 +878,25 @@ canvas {
 }
 
 /* Authentic OMML / Cambria MathML Typography */
-math, .math-omml {
-    font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Cambria", "Times New Roman", serif;
+math, .math-omml, .math-text {
+    font-family: var(--font-math);
     font-size: 1.08em;
     letter-spacing: 0.01em;
     font-style: normal;
     color: var(--text-main);
+}
+
+.metric span math,
+.metric small math,
+.diag-item math,
+.range-heading label math,
+.field-label math,
+.check-row math,
+.section-title math,
+.splash-body math {
+    font-family: var(--font-math);
+    font-size: 1.04em;
+    vertical-align: -0.06em;
 }
 
 math[display="block"], .math-omml-block {
@@ -914,12 +928,22 @@ math mfrac, .math-omml .frac {
 }
 
 .math-eq-row {
-    display: block;
-    margin: 6px 0;
-    padding: 4px 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 9px 0;
+    padding: 8px 12px;
     background: var(--input-bg);
-    border-radius: 4px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
     text-align: center;
+}
+
+.math-eq-row math,
+.math-eq-row .math-omml {
+    font-size: 1.35em;
+    line-height: 1.35;
+    color: var(--text-main);
 }
 
 /* Parameter Controls Panel */
@@ -999,7 +1023,7 @@ math mfrac, .math-omml .frac {
 
 .field-label, .range-heading label {
     color: var(--text-main);
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 600;
 }
 
@@ -1011,7 +1035,7 @@ math mfrac, .math-omml .frac {
 }
 
 .model-selects select {
-    font-size: 0.80rem;
+    font-size: 0.84rem;
     font-weight: 500;
 }
 
@@ -1023,7 +1047,7 @@ select {
     border: 1px solid var(--input-border);
     border-radius: var(--card-radius);
     background: var(--input-bg);
-    font-size: 0.80rem;
+    font-size: 0.84rem;
     outline: none;
     transition: border-color 0.2s;
 }
@@ -1050,7 +1074,7 @@ select:focus {
 
 output {
     color: var(--text-main);
-    font: 700 0.82rem var(--font-mono);
+    font: 700 0.86rem var(--font-mono);
     white-space: nowrap;
 }
 
@@ -1098,7 +1122,7 @@ input[type="range"]:disabled {
     align-items: center;
     gap: 8px;
     color: var(--text-muted);
-    font-size: 0.80rem;
+    font-size: 0.84rem;
     font-weight: 500;
 }
 
@@ -1125,14 +1149,14 @@ input[type="checkbox"] {
 }
 
 .section-title span {
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--text-main);
 }
 
 .section-title small {
     color: var(--text-muted);
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     font-weight: 500;
 }
 
