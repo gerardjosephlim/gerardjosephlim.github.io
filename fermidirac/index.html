@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=STIX+Two+Math&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="fermidirac.css?v=1794670241033">
+    <link rel="stylesheet" href="fermidirac.css?v=1794670666017">
 </head>
 <body>
     <div class="app-shell">
@@ -346,6 +346,7 @@
 
         <!-- Clickable Starter Question Chips -->
         <div class="assistant-chips-bar" aria-label="Suggested questions">
+            <button type="button" class="assistant-chip" data-query="What is an indirect bandgap?">Direct vs Indirect Gap</button>
             <button type="button" class="assistant-chip" data-query="Is my sample degenerate?">Is it degenerate?</button>
             <button type="button" class="assistant-chip" data-query="What is the Fermi level?">What is E<sub>F</sub>?</button>
             <button type="button" class="assistant-chip" data-query="Why is the Fermi level not in the middle when the band gap is small?">Why E<sub>F</sub> not midgap?</button>
@@ -374,12 +375,12 @@
     <!-- Floating Delayed Metric Tooltip (0.5s Hover Delay, 5px Radius Standard) -->
     <div id="metric-tooltip" class="metric-tooltip hidden" role="tooltip" aria-hidden="true"></div>
 
-    <script src="semiconductor-physics.js?v=1794670241033"></script>
-    <script src="simulation-state.js?v=1794670241033"></script>
-    <script src="labassist-core.js?v=1794670241033"></script>
-    <script src="assistant-parser.js?v=1794670241033"></script>
-    <script src="plot-renderer.js?v=1794670241033"></script>
-    <script src="fermidirac.js?v=1794670241033"></script>
+    <script src="semiconductor-physics.js?v=1794670666017"></script>
+    <script src="simulation-state.js?v=1794670666017"></script>
+    <script src="labassist-core.js?v=1794670666017"></script>
+    <script src="assistant-parser.js?v=1794670666017"></script>
+    <script src="plot-renderer.js?v=1794670666017"></script>
+    <script src="fermidirac.js?v=1794670666017"></script>
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function (e) {
