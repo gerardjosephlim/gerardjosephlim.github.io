@@ -16,6 +16,8 @@
   --card-radius: 5px;
 
   --primary: #38bdf8;
+  --primary-dark: #0284c7;
+  --primary-light: #7dd3fc;
   --primary-hover: #7dd3fc;
   --primary-cyan: #38bdf8;
 
@@ -25,9 +27,9 @@
 
   --text-main: #ffffff;
   --text-primary: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-muted: #cbd5e1;
   --text-dim: rgba(255, 255, 255, 0.45);
-  --text-subtle: rgba(255, 255, 255, 0.3);
+  --text-subtle: #94a3b8;
 
   --btn-bg: #172033;
   --btn-border: rgba(255, 255, 255, 0.14);
@@ -61,6 +63,8 @@
   --card-radius: 5px;
 
   --primary: #0284c7;
+  --primary-dark: #0369a1;
+  --primary-light: #0ea5e9;
   --primary-hover: #0369a1;
   --primary-cyan: #0284c7;
 
@@ -70,9 +74,9 @@
 
   --text-main: #000000;
   --text-primary: #000000;
-  --text-muted: #2d3748;
+  --text-muted: #1e293b;
   --text-dim: #4a5568;
-  --text-subtle: #718096;
+  --text-subtle: #334155;
 
   --btn-bg: #dfd8cb;
   --btn-border: rgba(70, 60, 50, 0.28);
@@ -1066,6 +1070,11 @@ a.signature-footer:hover {
   color: var(--primary);
 }
 
+.splash-footer {
+  display: flex;
+  justify-content: center;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1456,8 +1465,13 @@ a.signature-footer:hover {
   font-size: 0.95rem;
 }
 
-.assistant-input {
+.assistant-input,
+.lab-assistant-card input[type="text"].assistant-input,
+.assistant-form .assistant-input {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
   background: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: var(--card-radius);
@@ -1465,17 +1479,23 @@ a.signature-footer:hover {
   padding: 7px 12px;
   font-size: 0.82rem;
   font-family: var(--font-family, 'Inter', system-ui, -apple-system, sans-serif);
+  line-height: 1.4;
   outline: none;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.assistant-input:focus {
+.assistant-input:focus,
+.lab-assistant-card input[type="text"].assistant-input:focus,
+.assistant-form .assistant-input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary);
   outline: none;
 }
 
-[data-theme="light"] .assistant-input:focus {
+[data-theme="light"] .assistant-input:focus,
+[data-theme="light"] .lab-assistant-card input[type="text"].assistant-input:focus,
+[data-theme="light"] .assistant-form .assistant-input:focus {
   border-color: var(--primary-dark);
   box-shadow: 0 0 0 1px var(--primary-dark);
 }

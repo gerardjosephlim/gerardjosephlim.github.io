@@ -14,8 +14,8 @@
   --bg-secondary: #0a0a0a;
   
   --text-main: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.6);
-  --text-subtle: rgba(255, 255, 255, 0.3);
+  --text-muted: #cbd5e1;
+  --text-subtle: #94a3b8;
   
   --primary: #38bdf8;
   --primary-dark: #0284c7;
@@ -60,8 +60,8 @@
   --bg-secondary: #ede7dc;
   
   --text-main: #000000;
-  --text-muted: #2d3748;
-  --text-subtle: #4a5568;
+  --text-muted: #1e293b;
+  --text-subtle: #334155;
   
   --primary: #0284c7;
   --primary-dark: #0369a1;
@@ -294,7 +294,7 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* Input Fields (Text, Number, Dropdowns) */
-input[type="text"],
+input[type="text"]:not(.assistant-input),
 input[type="number"],
 select {
   background: #0a0f1d;
@@ -1802,7 +1802,7 @@ canvas {
 
 [data-theme="light"] select,
 [data-theme="light"] .compact-select,
-[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="text"]:not(.assistant-input),
 [data-theme="light"] input[type="number"] {
   background: var(--input-bg) !important;
   color: var(--text-main) !important;
@@ -2327,8 +2327,13 @@ canvas {
   font-size: 0.95rem;
 }
 
-.assistant-input {
+.assistant-input,
+.lab-assistant-card input[type="text"].assistant-input,
+.assistant-form .assistant-input {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
   background: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: var(--card-radius);
@@ -2336,17 +2341,23 @@ canvas {
   padding: 7px 12px;
   font-size: 0.82rem;
   font-family: var(--font-family, 'Inter', system-ui, -apple-system, sans-serif);
+  line-height: 1.4;
   outline: none;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.assistant-input:focus {
+.assistant-input:focus,
+.lab-assistant-card input[type="text"].assistant-input:focus,
+.assistant-form .assistant-input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary);
   outline: none;
 }
 
-[data-theme="light"] .assistant-input:focus {
+[data-theme="light"] .assistant-input:focus,
+[data-theme="light"] .lab-assistant-card input[type="text"].assistant-input:focus,
+[data-theme="light"] .assistant-form .assistant-input:focus {
   border-color: var(--primary-dark);
   box-shadow: 0 0 0 1px var(--primary-dark);
 }

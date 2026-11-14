@@ -1787,8 +1787,13 @@ input[type="checkbox"] {
   font-size: 0.95rem;
 }
 
-.assistant-input {
+.assistant-input,
+.lab-assistant-card input[type="text"].assistant-input,
+.assistant-form .assistant-input {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
   background: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: var(--card-radius);
@@ -1796,17 +1801,23 @@ input[type="checkbox"] {
   padding: 7px 12px;
   font-size: 0.82rem;
   font-family: var(--font-family, 'Inter', system-ui, -apple-system, sans-serif);
+  line-height: 1.4;
   outline: none;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.assistant-input:focus {
+.assistant-input:focus,
+.lab-assistant-card input[type="text"].assistant-input:focus,
+.assistant-form .assistant-input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary);
   outline: none;
 }
 
-[data-theme="light"] .assistant-input:focus {
+[data-theme="light"] .assistant-input:focus,
+[data-theme="light"] .lab-assistant-card input[type="text"].assistant-input:focus,
+[data-theme="light"] .assistant-form .assistant-input:focus {
   border-color: var(--primary-dark);
   box-shadow: 0 0 0 1px var(--primary-dark);
 }
