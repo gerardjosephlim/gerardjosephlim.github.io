@@ -1407,7 +1407,7 @@ input[type="checkbox"] {
 
 .lab-assistant-card {
     position: fixed;
-    top: 58px;
+    top: 60px;
     left: max(20px, calc(50vw - 310px));
     width: 620px;
     max-width: calc(100vw - 40px);
@@ -1415,7 +1415,7 @@ input[type="checkbox"] {
     max-height: calc(100vh - 80px);
     min-width: 320px;
     min-height: 280px;
-    z-index: 90;
+    z-index: 100;
     display: flex;
     flex-direction: column;
     background: var(--card-bg);
@@ -1616,6 +1616,7 @@ input[type="checkbox"] {
     height: 14px;
 }
 
+.thinking-dots span,
 .thinking-dots .dot {
     width: 6px;
     height: 6px;
@@ -1625,9 +1626,13 @@ input[type="checkbox"] {
     animation: dot-wave 1.4s ease-in-out infinite;
 }
 
+.thinking-dots span:nth-child(1),
 .thinking-dots .dot:nth-child(1) { animation-delay: 0.0s; }
+.thinking-dots span:nth-child(2),
 .thinking-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3),
 .thinking-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+.thinking-dots span:nth-child(4),
 .thinking-dots .dot:nth-child(4) { animation-delay: 0.6s; }
 
 @keyframes dot-wave {
@@ -1697,10 +1702,10 @@ input[type="checkbox"] {
     border: 1px solid var(--primary-dark);
     border-radius: var(--card-radius);
     padding: 7px 16px;
-    font-size: 0.80rem;
-    font-weight: 700;
+    font-size: 0.82rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
 }
 
 .assistant-send-btn:hover {
